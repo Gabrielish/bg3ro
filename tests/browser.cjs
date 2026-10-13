@@ -21,7 +21,8 @@ const path = require('node:path');
   assert(await page.locator('.brand').evaluate(el => getComputedStyle(el).fontFamily.includes('Cinzel')));
   assert.equal(await page.locator('.dot-grid i').count(), 9);
   assert.equal(await page.locator('.menu-toggle').isVisible(), false, 'No phone menu on desktop');
-  for (const selector of ['.hero-actions .button-gold', '.hero-actions .button-glass', '.nav-download']) {
+  assert.equal(await page.locator('.hero-actions .button').count(), 1);
+  for (const selector of ['.hero-actions .button-gold', '.nav-download']) {
     const button = page.locator(selector).first();
     assert.equal(await button.evaluate(el => getComputedStyle(el).clipPath), 'none');
     assert.equal(await button.evaluate(el => getComputedStyle(el).backdropFilter), 'none');
