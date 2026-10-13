@@ -33,6 +33,13 @@ const path = require('node:path');
   assert.equal((await page.locator('.nav-download').textContent()).trim(), 'Susține proiectul');
   assert.equal(await page.locator('#sustinere a').first().getAttribute('href'), 'https://www.patreon.com/cw/Gabrielish');
   assert.equal(await page.locator('#sustinere a').nth(1).getAttribute('href'), 'https://ko-fi.com/gabrielish');
+  assert.equal(await page.locator('.support-dice-art, .button svg, .button img, .button [aria-hidden="true"]').count(), 0, 'Text-only CTA buttons; no donation logo');
+  const supportLayout = await page.locator('.support-panel').evaluate(el => {
+    const copy = el.querySelector('.support-copy').getBoundingClientRect();
+    const actions = el.querySelector('.support-actions').getBoundingClientRect();
+    return actions.left >= copy.right && Math.abs(actions.top - copy.top) < 200;
+  });
+  assert(supportLayout, 'Support text left; donation buttons right');
   assert(await page.locator('.journal-wrap').evaluate(el => getComputedStyle(el, '::before').backgroundImage.includes('corner-small-left-top.svg')));
   assert(!(await page.locator('#instalare').evaluate(el => getComputedStyle(el, '::before').backgroundImage)).includes('url('), 'Closing section stays image-free');
   assert.equal(await page.locator('.brand').evaluate(el => getComputedStyle(el).fontFamily), await page.locator('.hero-title').evaluate(el => getComputedStyle(el).fontFamily));
@@ -43,12 +50,18 @@ const path = require('node:path');
     const button = page.locator(selector).first();
     assert.equal(await button.evaluate(el => getComputedStyle(el).clipPath), 'none');
     assert.equal(await button.evaluate(el => getComputedStyle(el).backdropFilter), 'none');
-    assert(await button.evaluate(el => getComputedStyle(el, '::before').backgroundImage.includes('button-')));
+    assert(await button.evaluate((el, nav) => getComputedStyle(el, '::before').backgroundImage.includes(nav ? 'radial-gradient' : 'button-'), selector === '.nav-download'));
     await button.hover();
     await page.waitForTimeout(450);
     assert.equal(await button.evaluate(el => getComputedStyle(el).transform), 'none');
     assert.equal(await button.evaluate(el => getComputedStyle(el, '::after').opacity), '1', 'Hover reveals the filled cream shape');
-    assert(await button.evaluate((el, expected) => getComputedStyle(el, '::after').backgroundImage.includes(expected), selector === '.nav-download' ? 'button-white.svg' : 'button-filled.svg'));
+    if (selector === '.nav-download') {
+      assert.equal(await button.evaluate(el => getComputedStyle(el, '::after').backgroundColor), 'rgb(255, 255, 255)');
+      assert.equal(await button.evaluate(el => getComputedStyle(el, '::before').opacity), '1', 'Parchment base stays visible during hover');
+      assert.equal(await button.evaluate(el => getComputedStyle(el, '::before').filter), 'none', 'No second brightness hover');
+      assert.equal(await button.evaluate(el => getComputedStyle(el, '::after').filter), 'none');
+      assert(await button.evaluate(el => getComputedStyle(el, '::after').maskImage.includes('diamond-hover-mask-corner')));
+    } else assert(await button.evaluate(el => getComputedStyle(el, '::after').backgroundImage.includes('button-filled.svg')));
     if (selector.includes('hero-actions')) assert.equal(await button.evaluate(el => getComputedStyle(el).color), 'rgb(23, 21, 19)');
   }
   const navItem = page.locator('#navigation a[href="#proiect"]');

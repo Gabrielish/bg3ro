@@ -1,9 +1,9 @@
 /* The donation section follows the wide, painterly official merch banner. */
 .support-section { max-width: 1520px; padding-inline: 35px; padding-bottom: 85px; }
 .support-panel {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr);
-  grid-template-rows: auto auto; gap: 28px 0; align-items: start;
-  min-height: 640px; padding: 74px 70px; border: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-rows: auto; gap: 60px; align-items: center;
+  min-height: 430px; padding: 62px 70px; border: 0;
   background: #0d0b0a; overflow: hidden;
 }
 .support-panel.ornate-frame::before, .support-panel.ornate-frame::after { content: none; }
@@ -11,14 +11,14 @@
 .support-scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #0d0b0af5 5%, #0d0b0ae8 30%, #0d0b0a70 60%, #0d0b0a22), linear-gradient(transparent 50%, #0d0b0ac0); }
 .support-dice-art { position: absolute; right: 8%; top: 16%; width: 330px; height: 330px; object-fit: contain; opacity: .95; filter: drop-shadow(0 0 40px #d7ab4427); z-index: 0; pointer-events: none; }
 .support-symbol { display: none; }
-.support-copy { grid-column: 1; grid-row: 1; max-width: 530px; position: relative; z-index: 2; }
+.support-copy { grid-column: 1; grid-row: 1; max-width: 680px; position: relative; z-index: 2; }
 .support-copy .eyebrow { font-family: var(--serif); font-size: 12px; letter-spacing: 2.5px; font-weight: 600; }
-.support-copy h2 { font-size: clamp(40px, 4.1vw, 57px); text-transform: uppercase; font-weight: 600; line-height: 1.1; margin-block: 19px 27px; }
+.support-copy h2 { font-size: clamp(36px, 3.3vw, 48px); text-transform: uppercase; font-weight: 600; line-height: 1.1; margin-block: 19px 27px; }
 .support-copy h2 em { color: #e8d5ae; }
 .support-copy p { font-size: 13px; line-height: 1.9; color: #c0bbb3; }
 .support-copy .support-free { font-size: 11px; color: #cfb786; margin-top: 21px; }
-.support-actions { grid-column: 1; grid-row: 2; position: relative; z-index: 2; flex-direction: row; flex-wrap: wrap; gap: 12px; max-width: 530px; }
-.support-actions .button { width: auto; min-width: 175px; flex: 1; font-size: 18px; min-height: 67px; padding-inline: 22px; }
+.support-actions { grid-column: 2; grid-row: 1; position: relative; z-index: 2; flex-direction: column; gap: 18px; width: 100%; max-width: 320px; justify-self: end; }
+.support-actions .button { width: 100%; min-width: 0; flex: none; font-size: 21px; min-height: 70px; padding-inline: 22px; }
 .support-actions .button::before { background-image: url('./assets/edition-outline.svg'); }
 .support-actions .button::after { background-image: url('./assets/edition-filled.svg'); }
 .support-actions .button-gold { color: #efdfbd; }
@@ -52,19 +52,19 @@
 .topic-tabs button { flex: 1; padding: 15px 17px; min-height: 55px; font-size: 15px; }
 .segmented button { padding: 10px 18px; min-height: 41px; font-size: 11px; }
 @media (max-width: 1100px) {
-  .support-panel { padding: 65px 50px; min-height: 650px; grid-template-columns: minmax(0, 1fr) minmax(0, .55fr); }
+  .support-panel { padding: 50px 40px; min-height: 430px; gap: 35px; grid-template-columns: minmax(0, 1fr) 260px; }
   .support-dice-art { width: 240px; height: 240px; right: 5%; top: 28%; }
-  .support-copy h2 { font-size: 43px; }
+  .support-copy h2 { font-size: 37px; }
   .topic-tabs button { font-size: 13px; padding-inline: 14px; }
 }
 @media (max-width: 780px) {
   .support-section { padding-inline: 20px; padding-bottom: 60px; }
-  .support-panel { grid-template-columns: minmax(0, 1fr); padding: 40px 28px 240px; gap: 28px; min-height: 0; }
+  .support-panel { grid-template-columns: minmax(0, 1fr); padding: 40px 28px; gap: 28px; min-height: 0; }
   .support-copy h2 { font-size: 35px; }
   .support-copy .eyebrow { font-size: 9px; letter-spacing: 1.4px; }
   .support-copy p { font-size: 12px; }
   .support-copy .support-free { font-size: 10px; }
-  .support-actions { width: 100%; gap: 12px; }
+  .support-actions { grid-column: 1; grid-row: 2; justify-self: start; width: 100%; gap: 12px; }
   .support-actions .button { flex-basis: 100%; width: 100%; min-width: 0; font-size: 18px; min-height: 62px; }
   .support-dice-art { width: 180px; height: 180px; right: calc(50% - 90px); top: auto; bottom: 30px; }
   .support-backdrop { object-position: 70% bottom; opacity: .65; }

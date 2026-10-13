@@ -160,3 +160,27 @@
   .button, .button::before, .button::after, .nav-download::before, .nav-download::after, .dot-grid i,
   .site-header nav > a::after { transition: none; }
 }
+/* BUY NOW inverted style: a stable parchment base and one white overlay.
+   Official corner/diamond masks define the silhouette. No brightness effect. */
+.site-header .nav-download::before,
+.site-header .nav-download::after {
+  mask-image: url('./assets/diamond-hover-mask-decor-top.svg'), url('./assets/diamond-hover-mask-decor-bottom.svg'), url('./assets/diamond-hover-mask-corner-1.svg'), url('./assets/diamond-hover-mask-corner-2.svg'), url('./assets/diamond-hover-mask-corner-3.svg'), url('./assets/diamond-hover-mask-corner-4.svg');
+  mask-position: center top, center bottom, left top, right top, left bottom, right bottom;
+  mask-size: 800px 800px;
+  mask-repeat: no-repeat;
+  mask-composite: intersect;
+}
+.site-header .nav-download::before,
+.site-header .nav-download:hover::before,
+.site-header .nav-download:focus-visible::before {
+  background: radial-gradient(circle, #fff 0, #ddc9a7);
+  opacity: 1; filter: none; transition: none;
+}
+.site-header .nav-download::after {
+  background: #fff; filter: none; transition: opacity .4s ease;
+}
+.site-header .nav-download:hover::after,
+.site-header .nav-download:focus-visible::after { opacity: 1; filter: none; }
+@media (prefers-reduced-motion: reduce) {
+  .site-header .nav-download::after { transition: none; }
+}

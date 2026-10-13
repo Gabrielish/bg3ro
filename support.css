@@ -1,9 +1,4 @@
 /* Navbar: the official reference changes cream -> solid white, not brightness. */
-.site-header .nav-download::after {
-  background-image: url('./assets/button-white.svg');
-  filter: none; transition: opacity .4s ease;
-}
-.site-header .nav-download::before { transition: opacity .4s ease; }
 .site-header nav > .nav-download,
 .site-header nav > .nav-download:hover,
 .site-header nav > .nav-download:focus-visible { color: #000; }
