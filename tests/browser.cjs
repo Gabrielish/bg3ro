@@ -19,6 +19,18 @@ const path = require('node:path');
   assert(await page.locator('.journal-wrap').evaluate(el => getComputedStyle(el, '::before').backgroundImage.includes('corner-small-left-top.svg')));
   assert(!(await page.locator('#instalare').evaluate(el => getComputedStyle(el, '::before').backgroundImage)).includes('url('), 'Closing section stays image-free');
   assert(await page.locator('.brand').evaluate(el => getComputedStyle(el).fontFamily.includes('Cinzel')));
+  for (const [id, name] of [['gale', 'GALE'], ['astarion', 'ASTARION'], ['laezel', 'LAE’ZEL'], ['wyll', 'WYLL'], ['karlach', 'KARLACH'], ['shadowheart', 'SHADOWHEART']]) {
+    await page.locator(`[data-companion="${id}"]`).click();
+    await page.waitForFunction(expected => document.getElementById('companion-name').textContent === expected, name);
+    assert((await page.locator('.companion-art').getAttribute('src')).endsWith(`hero-${id}.png`));
+    assert((await page.locator('.companion-backdrop').getAttribute('src')).endsWith(`bg-${id}.png`));
+    assert.equal(await page.locator(`[data-companion="${id}"]`).getAttribute('aria-pressed'), 'true');
+  }
+  await page.locator('[data-companion="gale"]').focus();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'ASTARION');
+  await page.locator('[data-companion="shadowheart"]').click();
+  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'SHADOWHEART');
   await page.locator('[data-gender="male"]').click();
   assert.equal(await page.locator('[data-line="heal"]').textContent(), 'l-a vindecat');
   assert.equal(await page.locator('[data-line="passive"]').textContent(), 'vindecat');
@@ -46,6 +58,11 @@ const path = require('node:path');
   await page.waitForTimeout(900);
   await page.screenshot({ path: path.join(output, 'desktop.png'), fullPage: true });
   await page.screenshot({ path: path.join(output, 'hero-desktop.png') });
+  await page.locator('[data-companion="gale"]').click();
+  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'GALE');
+  await page.locator('#detalii').screenshot({ path: path.join(output, 'companions-desktop.png') });
+  await page.locator('[data-companion="shadowheart"]').click();
+  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'SHADOWHEART');
   assert(await page.locator('.companion-art').evaluate(img => img.complete && img.naturalWidth > 0), 'Official companion artwork must load during QA');
 
   for (const width of [390, 320, 768, 1024]) {
@@ -68,6 +85,7 @@ const path = require('node:path');
       await page.waitForTimeout(800);
       await page.screenshot({ path: path.join(output, 'mobile.png'), fullPage: true });
       await page.screenshot({ path: path.join(output, 'hero-mobile.png') });
+      await page.locator('#detalii').screenshot({ path: path.join(output, 'companions-mobile.png') });
     }
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });

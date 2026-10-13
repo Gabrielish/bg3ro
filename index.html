@@ -17,9 +17,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=EB+Garamond:wght@400;500;600;700&family=Gothic+A1:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://baldursgate3.game">
-  <link rel="stylesheet" href="./styles.css?v=20261013-ornate">
-  <link rel="stylesheet" href="./theme-bg3.css?v=20261013-ornate">
-  <script src="./app.js" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=20261013-companions">
+  <link rel="stylesheet" href="./theme-bg3.css?v=20261013-companions">
+  <link rel="stylesheet" href="./companions.css?v=20261013-companions">
+  <script src="./app.js?v=20261013-companions" defer></script>
   <title>Baldur’s Gate 3 — în limba română</title>
 </head>
 <body>
@@ -35,10 +36,10 @@
   </header>
   <main>
     <section class="hero" id="acasa" aria-label="Baldur’s Gate 3 — traducere română, Early Access">
-      <img class="hero-art" src="./assets/camp-romania.webp" width="1920" height="1056" alt="Companionii din Baldur’s Gate 3 în jurul focului de tabără, la apus. Un zar albastru, galben și roșu deasupra titlului Traducere Română, Early Access." fetchpriority="high">
+      <img class="hero-art" src="./assets/camp-romania-clean.webp" width="1677" height="938" alt="O tabără lângă ruine, la apus, și un zar luminos albastru, galben și roșu, în culorile României." fetchpriority="high">
       <div class="hero-vignette"></div><div class="embers" aria-hidden="true"></div>
       <div class="hero-topline"><span class="status-dot"></span> PROIECT COMUNITAR <i></i> EARLY ACCESS</div>
-      <div class="hero-bottom"><p>O lume legendară. O limbă care ne aduce mai aproape.</p><div class="hero-actions"><a class="button button-gold" href="https://www.nexusmods.com/baldursgate3/mods/24379" target="_blank" rel="noopener noreferrer">Începe aventura în română <span aria-hidden="true">↗</span></a><a class="button button-glass" href="#proiect">Descoperă proiectul <span aria-hidden="true">↓</span></a></div></div>
+      <div class="hero-bottom"><h2 class="hero-title">Baldur’s Gate <span>3</span></h2><p class="hero-language">În limba română</p><p class="hero-tagline">O lume legendară. O limbă care ne aduce mai aproape.</p><div class="hero-actions"><a class="button button-gold" href="https://www.nexusmods.com/baldursgate3/mods/24379" target="_blank" rel="noopener noreferrer">Începe aventura în română <span aria-hidden="true">↗</span></a><a class="button button-glass" href="#proiect">Descoperă proiectul <span aria-hidden="true">↓</span></a></div></div>
       <a class="scroll-cue" href="#proiect" aria-label="Derulează spre proiect"><span></span></a>
       <span class="hero-side" aria-hidden="true">FAERÛN / ROMÂNIA</span>
     </section>
@@ -67,11 +68,20 @@
       </section>
     </div>
     <section class="voices" id="detalii">
-      <div class="voice-orbit" aria-hidden="true"></div>
+      <img class="companion-backdrop" src="https://baldursgate3.game/heros/bg-shadowheart.png" alt="" loading="lazy" aria-hidden="true">
+      <div class="companion-scrim" aria-hidden="true"></div>
       <img class="companion-art" src="https://baldursgate3.game/heros/hero-shadowheart.png" alt="Ilustrație oficială a lui Shadowheart" loading="lazy" width="900" height="1100">
       <div class="section-shell voices-layout">
         <div class="voices-copy reveal"><div class="eyebrow"><span>03</span> SENSUL RĂMÂNE. LIMBA SE SCHIMBĂ.</div><h2>Vocile lor.<br><em>Limba noastră.</em></h2><p>Ironia, ezitarea, curajul. O traducere bună păstrează mai mult decât definiția unui cuvânt.</p><p>Scopul nostru: dialoguri care sună firesc, o terminologie coerentă și descrieri care te ajută să joci, nu te scot din poveste.</p><div class="topic-tabs" role="group" aria-label="Explorează direcțiile proiectului"><button data-topic="dialog" aria-pressed="true">Dialoguri</button><button data-topic="inventory" aria-pressed="false">Inventar</button><button data-topic="interface" aria-pressed="false">Interfață</button></div><div class="topic-content ornate-frame" aria-live="polite"><span class="topic-kicker" id="topic-kicker">FIECARE REPLICĂ ARE UN CONTEXT</span><h3 id="topic-title">O voce, nu o traducere mecanică.</h3><p id="topic-text">Dialogurile sunt traduse manual și revizuite pentru ton, sens și acord. Obiectivul este ca personajele să rămână ele însele, și în română.</p></div></div>
-        <div class="character-caption"><span>SHADOWHEART</span><small>O poveste nu se traduce cuvânt cu cuvânt.</small></div>
+        <div class="character-caption" aria-live="polite" aria-atomic="true"><small class="companion-role" id="companion-role">Între credință și îndoială</small><span id="companion-name">SHADOWHEART</span><small id="companion-note">Nuanțele unei replici contează la fel de mult ca sensul ei.</small></div>
+      </div>
+      <div class="companion-picker" role="group" aria-label="Alege un companion"><span class="picker-label">ALEGE UN COMPANION</span>
+        <button data-companion="shadowheart" aria-pressed="true" aria-label="Alege Shadowheart"><img src="https://baldursgate3.game/heros/avatar/shadowheart.png" alt="" loading="lazy" width="84" height="94"><span>Shadowheart</span></button>
+        <button data-companion="gale" aria-pressed="false" aria-label="Alege Gale"><img src="https://baldursgate3.game/heros/avatar/gale.png" alt="" loading="lazy" width="84" height="94"><span>Gale</span></button>
+        <button data-companion="astarion" aria-pressed="false" aria-label="Alege Astarion"><img src="https://baldursgate3.game/heros/avatar/astarion.png" alt="" loading="lazy" width="84" height="94"><span>Astarion</span></button>
+        <button data-companion="laezel" aria-pressed="false" aria-label="Alege Lae’zel"><img src="https://baldursgate3.game/heros/avatar/laezel.png" alt="" loading="lazy" width="84" height="94"><span>Lae’zel</span></button>
+        <button data-companion="wyll" aria-pressed="false" aria-label="Alege Wyll"><img src="https://baldursgate3.game/heros/avatar/wyll.png" alt="" loading="lazy" width="84" height="94"><span>Wyll</span></button>
+        <button data-companion="karlach" aria-pressed="false" aria-label="Alege Karlach"><img src="https://baldursgate3.game/heros/avatar/karlach.png" alt="" loading="lazy" width="84" height="94"><span>Karlach</span></button>
       </div>
       <a class="art-credit" href="https://baldursgate3.game/" target="_blank" rel="noopener noreferrer">Ilustrație de personaj © Larian Studios ↗</a>
     </section>

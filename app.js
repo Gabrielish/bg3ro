@@ -109,5 +109,61 @@
     }
   }
   const companion = document.querySelector('.companion-art');
+  const backdrop = document.querySelector('.companion-backdrop');
+  const voices = document.querySelector('.voices');
+  const companions = {
+    shadowheart: ['Shadowheart', 'Între credință și îndoială', 'Nuanțele unei replici contează la fel de mult ca sensul ei.', '#af909c'],
+    gale: ['Gale', 'Magie, ambiție și cuvinte alese', 'O voce erudită merită o traducere care îi păstrează eleganța.', '#689ac9'],
+    astarion: ['Astarion', 'Farmecul stă și în subtext', 'Ironia nu se traduce mecanic. Se înțelege în context.', '#c0a08b'],
+    laezel: ['Lae’zel', 'Directă. Hotărâtă. Fără ocolișuri.', 'O replică fermă trebuie să rămână fermă și în română.', '#a3ad80'],
+    wyll: ['Wyll', 'Curajul are propria voce', 'Păstrăm intenția din spatele cuvintelor, nu doar forma lor.', '#a2b4c2'],
+    karlach: ['Karlach', 'Energie care trece dincolo de cuvinte', 'Spontaneitatea și căldura unei voci merită păstrate.', '#dc916d']
+  };
+  let selectionRequest = 0;
+  function loadArt(src) {
+    return new Promise(resolve => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = () => resolve(null);
+      image.src = src;
+    });
+  }
+  async function selectCompanion(button) {
+    const id = button.dataset.companion;
+    const request = ++selectionRequest;
+    const [name, role, note, accent] = companions[id];
+    document.querySelectorAll('[data-companion]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+    voices.classList.add('switching');
+    const [newArt, newBackdrop] = await Promise.all([
+      loadArt(`https://baldursgate3.game/heros/hero-${id}.png`),
+      loadArt(`https://baldursgate3.game/heros/bg-${id}.png`)
+    ]);
+    if (request !== selectionRequest) return; // Rapid choices cannot show an older response.
+    if (newArt) { companion.src = newArt.src; companion.hidden = false; }
+    else { companion.hidden = true; }
+    if (newBackdrop) { backdrop.src = newBackdrop.src; backdrop.hidden = false; }
+    else { backdrop.hidden = true; }
+    companion.alt = `Ilustrație oficială a personajului ${name}`;
+    document.getElementById('companion-name').textContent = name.toLocaleUpperCase('ro');
+    document.getElementById('companion-role').textContent = role;
+    document.getElementById('companion-note').textContent = note;
+    voices.style.setProperty('--companion-accent', accent);
+    voices.classList.remove('switching');
+  }
+  document.querySelectorAll('[data-companion]').forEach(button => {
+    button.addEventListener('click', () => selectCompanion(button));
+  });
+  const picker = document.querySelector('.companion-picker');
+  picker.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
+    const buttons = [...picker.querySelectorAll('button')];
+    const index = buttons.indexOf(document.activeElement);
+    if (index < 0) return;
+    event.preventDefault();
+    let next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 :
+      (index + (['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1) + buttons.length) % buttons.length;
+    buttons[next].focus(); buttons[next].click();
+  });
   companion.addEventListener('error', () => { companion.hidden = true; });
+  backdrop.addEventListener('error', () => { backdrop.hidden = true; });
 })();
