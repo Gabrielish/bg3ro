@@ -107,12 +107,17 @@
   }
   if (!reducedMotion.matches) {
     const embers = document.querySelector('.embers');
-    for (let i = 0; i < 14; i++) {
+    const count = window.innerWidth <= 780 ? 22 : 34;
+    for (let i = 0; i < count; i++) {
       const spark = document.createElement('span');
       spark.className = 'ember';
-      spark.style.setProperty('--left', `${25 + (i * 17 % 60)}%`);
-      spark.style.setProperty('--duration', `${5 + i % 5}s`);
-      spark.style.setProperty('--delay', `${-i * 0.8}s`);
+      spark.style.setProperty('--left', `${2 + i * 96 / (count - 1)}%`);
+      spark.style.setProperty('--top', `${22 + (i * 29 % 73)}%`);
+      spark.style.setProperty('--size', `${2.5 + (i % 4) * 0.5}px`);
+      spark.style.setProperty('--drift', `${(i % 2 ? -1 : 1) * (16 + i % 39)}px`);
+      spark.style.setProperty('--lift', `${-(125 + i * 17 % 160)}px`);
+      spark.style.setProperty('--duration', `${6.5 + (i % 7) * 0.7}s`);
+      spark.style.setProperty('--delay', `${-i * 1.37}s`);
       embers.appendChild(spark);
     }
   }

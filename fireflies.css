@@ -1,0 +1,22 @@
+/* Broad, luminous fireflies; decorative only and never intercept clicks. */
+.hero .embers { inset: 12% 4% 7%; overflow: hidden; z-index: 1; pointer-events: none; }
+.hero .ember {
+  left: var(--left); top: var(--top); width: var(--size); height: var(--size);
+  border-radius: 50%; background: #fff4c7;
+  box-shadow: 0 0 5px 1px #fff0b6, 0 0 13px 3px #edbf705f, 0 0 27px 6px #e3a74628;
+  animation: firefly-drift var(--duration) var(--delay) infinite ease-in-out;
+}
+.hero-bottom, .hero-topline, .scroll-cue { z-index: 2; }
+@keyframes firefly-drift {
+  0% { opacity: 0; transform: translate(0, 12px); }
+  15% { opacity: .8; }
+  35% { opacity: .95; }
+  55% { opacity: .45; }
+  75% { opacity: .85; }
+  100% { opacity: 0; transform: translate(var(--drift), var(--lift)); }
+}
+@media (max-width: 780px) {
+  .hero .embers { inset: 14% 4% 8%; }
+  .hero .ember { box-shadow: 0 0 4px 1px #fff0b6, 0 0 11px 2px #edbf7060, 0 0 20px 4px #e3a74624; }
+}
+@media (prefers-reduced-motion: reduce) { .hero .embers { display: none; } }
