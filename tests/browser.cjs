@@ -88,6 +88,7 @@ const path = require('node:path');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     assert(overflow <= 1, `Horizontal overflow at ${width}px: ${overflow}`);
     if (width <= 768) {
+      assert((await page.locator('.hero-actions .button-gold').boundingBox()).height <= 65, 'Mobile CTA must stay on one line');
       await page.locator('.menu-toggle').click();
       assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
       await page.keyboard.press('Escape');
