@@ -46,7 +46,7 @@
   document.addEventListener('click', event => {
     if (menu.getAttribute('aria-expanded') === 'true' && !header.contains(event.target)) closeMenu();
   });
-  window.matchMedia('(max-width: 980px)').addEventListener('change', closeMenu);
+  window.matchMedia('(max-width: 780px)').addEventListener('change', closeMenu);
   navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {

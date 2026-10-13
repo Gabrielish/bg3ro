@@ -20,17 +20,18 @@ const path = require('node:path');
   assert(!(await page.locator('#instalare').evaluate(el => getComputedStyle(el, '::before').backgroundImage)).includes('url('), 'Closing section stays image-free');
   assert(await page.locator('.brand').evaluate(el => getComputedStyle(el).fontFamily.includes('Cinzel')));
   assert.equal(await page.locator('.dot-grid i').count(), 9);
-  await page.locator('.menu-toggle').click();
-  assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
-  await page.keyboard.press('Escape');
-  assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
+  assert.equal(await page.locator('.menu-toggle').isVisible(), false, 'No phone menu on desktop');
   for (const selector of ['.hero-actions .button-gold', '.hero-actions .button-glass', '.nav-download']) {
     const button = page.locator(selector).first();
     assert.equal(await button.evaluate(el => getComputedStyle(el).clipPath), 'none');
     assert.equal(await button.evaluate(el => getComputedStyle(el).backdropFilter), 'none');
     assert(await button.evaluate(el => getComputedStyle(el, '::before').backgroundImage.includes('button-')));
     await button.hover();
+    await page.waitForTimeout(250);
     assert.equal(await button.evaluate(el => getComputedStyle(el).transform), 'none');
+    assert.equal(await button.evaluate(el => getComputedStyle(el, '::after').opacity), '1', 'Hover reveals the filled cream shape');
+    assert(await button.evaluate(el => getComputedStyle(el, '::after').backgroundImage.includes('button-filled.svg')));
+    if (selector.includes('hero-actions')) assert.equal(await button.evaluate(el => getComputedStyle(el).color), 'rgb(23, 21, 19)');
   }
   const navItem = page.locator('#navigation a[href="#proiect"]');
   await navItem.hover();
@@ -82,7 +83,7 @@ const path = require('node:path');
   await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'SHADOWHEART');
   assert(await page.locator('.companion-art').evaluate(img => img.complete && img.naturalWidth > 0), 'Official companion artwork must load during QA');
 
-  for (const width of [390, 320, 768, 1024]) {
+  for (const width of [390, 320, 768, 781, 820, 980, 1024]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto(url, { waitUntil: 'networkidle' });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
@@ -96,6 +97,10 @@ const path = require('node:path');
       await page.locator('.menu-toggle').click();
       await page.locator('#navigation a[href="#acord"]').click();
       assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
+    }
+    if (width > 780) {
+      assert.equal(await page.locator('.menu-toggle').isVisible(), false);
+      assert.equal(await page.locator('#navigation').isVisible(), true, 'Desktop/tablet navbar stays visible');
     }
     if (width === 390) {
       for (const section of await page.locator('.reveal').all()) { await section.scrollIntoViewIfNeeded(); await page.waitForTimeout(70); }
