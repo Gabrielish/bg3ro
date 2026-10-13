@@ -21,6 +21,8 @@ const path = require('node:path');
   assert((await page.locator('link[rel="icon"]').getAttribute('href')).endsWith('favicon-96.png'));
   assert.equal(await page.locator('.brand img, .brand small').count(), 0, 'Text-only navbar brand');
   assert.equal((await page.locator('.brand').textContent()).trim(), 'BG3RO');
+  assert.equal(await page.locator('.download-dice, .footer-brand img').count(), 0, 'No D20 logo in the download section or footer');
+  assert((await page.locator('.introduction').textContent()).includes('realizată de mine, Gabrielish'), 'Translation has a single named author');
   assert(await page.locator('.hero-art').evaluate(img => img.complete && img.naturalWidth > 0));
   assert.equal(await page.locator('.embers .ember').count(), 34, 'Brighter broad firefly field on desktop');
   const fireflyCoverage = await page.locator('.embers').evaluate(el => el.getBoundingClientRect().width / window.innerWidth);

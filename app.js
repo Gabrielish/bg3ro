@@ -74,7 +74,7 @@
 
   const topics = {
     dialog: ['FIECARE REPLICĂ ARE UN CONTEXT', 'O voce, nu o traducere mecanică.', 'Dialogurile sunt traduse manual și revizuite pentru ton, sens și acord. Obiectivul este ca personajele să rămână ele însele, și în română.'],
-    inventory: ['DETALII MICI. O DIFERENȚĂ REALĂ.', 'Ordine firească, sens păstrat.', 'Numele obiectelor, etichetele de raritate și starea „echipat” merită aceeași atenție ca dialogurile. Lucrăm la formulări clare și consecvente, nu doar la cuvinte înlocuite.'],
+    inventory: ['DETALII MICI. O DIFERENȚĂ REALĂ.', 'Ordine firească, sens păstrat.', 'Numele obiectelor, etichetele de raritate și starea „echipat” merită aceeași atenție ca dialogurile. Lucrez la formulări clare și consecvente, nu doar la cuvinte înlocuite.'],
     interface: ['MAI PUȚINĂ FRICȚIUNE. MAI MULT JOC.', 'Înțelegi. Alegi. Continui.', 'Meniuri, descrieri de vrăji și indicii de interfață cu terminologie coerentă. O traducere utilă trebuie să te ajute să înțelegi și mecanicile, nu doar povestea.']
   };
   document.querySelectorAll('[data-topic]').forEach(button => {
