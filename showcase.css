@@ -1,0 +1,80 @@
+/* The donation section follows the wide, painterly official merch banner. */
+.support-section { max-width: 1520px; padding-inline: 35px; padding-bottom: 85px; }
+.support-panel {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .8fr);
+  grid-template-rows: auto auto; gap: 28px 0; align-items: start;
+  min-height: 640px; padding: 74px 70px; border: 0;
+  background: #0d0b0a; overflow: hidden;
+}
+.support-panel.ornate-frame::before, .support-panel.ornate-frame::after { content: none; }
+.support-backdrop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 70% center; opacity: .85; z-index: -2; }
+.support-scrim { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, #0d0b0af5 5%, #0d0b0ae8 30%, #0d0b0a70 60%, #0d0b0a22), linear-gradient(transparent 50%, #0d0b0ac0); }
+.support-dice-art { position: absolute; right: 8%; top: 16%; width: 330px; height: 330px; object-fit: contain; opacity: .95; filter: drop-shadow(0 0 40px #d7ab4427); z-index: 0; pointer-events: none; }
+.support-symbol { display: none; }
+.support-copy { grid-column: 1; grid-row: 1; max-width: 530px; position: relative; z-index: 2; }
+.support-copy .eyebrow { font-family: var(--serif); font-size: 12px; letter-spacing: 2.5px; font-weight: 600; }
+.support-copy h2 { font-size: clamp(40px, 4.1vw, 57px); text-transform: uppercase; font-weight: 600; line-height: 1.1; margin-block: 19px 27px; }
+.support-copy h2 em { color: #e8d5ae; }
+.support-copy p { font-size: 13px; line-height: 1.9; color: #c0bbb3; }
+.support-copy .support-free { font-size: 11px; color: #cfb786; margin-top: 21px; }
+.support-actions { grid-column: 1; grid-row: 2; position: relative; z-index: 2; flex-direction: row; flex-wrap: wrap; gap: 12px; max-width: 530px; }
+.support-actions .button { width: auto; min-width: 175px; flex: 1; font-size: 18px; min-height: 67px; padding-inline: 22px; }
+.support-actions .button::before { background-image: url('./assets/edition-outline.svg'); }
+.support-actions .button::after { background-image: url('./assets/edition-filled.svg'); }
+.support-actions .button-gold { color: #efdfbd; }
+.support-actions .button:hover, .support-actions .button:focus-visible { color: #18140e; }
+.support-arrow { display: none; }
+.support-feedback { flex-basis: 100%; text-align: left; margin-top: 8px; color: #c0b6a6; }
+.support-frame { position: absolute; inset: 13px; border-inline: 1px solid #b49469; z-index: 3; pointer-events: none; }
+.support-frame::before, .support-frame::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, #b49469, #68543a calc(50% - 210px), transparent calc(50% - 190px), transparent calc(50% + 190px), #68543a calc(50% + 210px), #b49469); }
+.support-frame::after { top: auto; bottom: 0; }
+.frame-corner { position: absolute; width: 30px; height: 30px; background: url('./assets/frame-point-corner.svg') center/contain no-repeat; }
+.frame-corner.top-left { top: -9px; left: -9px; }
+.frame-corner.top-right { top: -9px; right: -9px; transform: scaleX(-1); }
+.frame-corner.bottom-left { bottom: -9px; left: -9px; transform: scaleY(-1); }
+.frame-corner.bottom-right { bottom: -9px; right: -9px; transform: scale(-1); }
+.frame-ornament { position: absolute; width: 420px; max-width: 80%; height: 20px; left: 50%; background: url('https://baldursgate3.game/svg/frame-decor.svg') center/contain no-repeat; }
+.frame-ornament.top { top: -10px; transform: translateX(-50%); }
+.frame-ornament.bottom { bottom: -10px; transform: translateX(-50%) scaleY(-1); }
+/* Edition-style secondary controls. Anchor/button itself is never clipped. */
+.topic-tabs { gap: 11px; margin-bottom: 25px; }
+.topic-tabs button, .segmented button {
+  position: relative; isolation: isolate; overflow: visible; clip-path: none;
+  border: 0; background: none; box-shadow: none;
+  font-family: var(--serif); font-weight: 600; text-transform: uppercase;
+  color: #dfcaa3; transition: color .2s;
+}
+.topic-tabs button::before, .segmented button::before { content: ''; position: absolute; inset: 0; background: url('./assets/edition-outline.svg') center/100% 100% no-repeat; z-index: -1; pointer-events: none; }
+.topic-tabs button::after, .segmented button::after { content: ''; position: absolute; inset: 0; background: url('./assets/edition-filled.svg') center/100% 100% no-repeat; opacity: 0; transition: opacity .2s; z-index: -1; pointer-events: none; }
+.topic-tabs button[aria-pressed=true], .segmented button[aria-pressed=true], .topic-tabs button:hover, .segmented button:hover { color: #15120d; background: none; border: 0; }
+.topic-tabs button[aria-pressed=true]::after, .segmented button[aria-pressed=true]::after, .topic-tabs button:hover::after, .segmented button:hover::after, .topic-tabs button:focus-visible::after, .segmented button:focus-visible::after { opacity: 1; }
+.topic-tabs button:focus-visible, .segmented button:focus-visible { color: #15120d; outline: 2px solid #e4c68b; outline-offset: 4px; }
+.topic-tabs button { flex: 1; padding: 15px 17px; min-height: 55px; font-size: 15px; }
+.segmented button { padding: 10px 18px; min-height: 41px; font-size: 11px; }
+@media (max-width: 1100px) {
+  .support-panel { padding: 65px 50px; min-height: 650px; grid-template-columns: minmax(0, 1fr) minmax(0, .55fr); }
+  .support-dice-art { width: 240px; height: 240px; right: 5%; top: 28%; }
+  .support-copy h2 { font-size: 43px; }
+  .topic-tabs button { font-size: 13px; padding-inline: 14px; }
+}
+@media (max-width: 780px) {
+  .support-section { padding-inline: 20px; padding-bottom: 60px; }
+  .support-panel { grid-template-columns: minmax(0, 1fr); padding: 40px 28px 240px; gap: 28px; min-height: 0; }
+  .support-copy h2 { font-size: 35px; }
+  .support-copy .eyebrow { font-size: 9px; letter-spacing: 1.4px; }
+  .support-copy p { font-size: 12px; }
+  .support-copy .support-free { font-size: 10px; }
+  .support-actions { width: 100%; gap: 12px; }
+  .support-actions .button { flex-basis: 100%; width: 100%; min-width: 0; font-size: 18px; min-height: 62px; }
+  .support-dice-art { width: 180px; height: 180px; right: calc(50% - 90px); top: auto; bottom: 30px; }
+  .support-backdrop { object-position: 70% bottom; opacity: .65; }
+  .support-scrim { background: linear-gradient(#0d0b0afa, #0d0b0ae8 58%, #0d0b0a44); }
+  .support-frame { inset: 10px; }
+  .support-frame::before, .support-frame::after { background: linear-gradient(90deg, #b49469, transparent calc(50% - 55px), transparent calc(50% + 55px), #b49469); }
+  .frame-ornament { width: 150px; height: 16px; background-image: url('https://baldursgate3.game/svg/frame-decor-mobile.svg'); }
+  .frame-ornament.top { top: -8px; }.frame-ornament.bottom { bottom: -8px; }
+  .topic-tabs { gap: 8px; }.topic-tabs button { font-size: 13px; min-height: 52px; padding-inline: 10px; }
+  .segmented button { font-size: 11px; padding-inline: 15px; }
+}
+@media (max-width: 380px) { .topic-tabs button { font-size: 11px; padding-inline: 8px; }.support-copy h2 { font-size: 31px; } }
+@media (prefers-reduced-motion: reduce) { .topic-tabs button, .topic-tabs button::after, .segmented button, .segmented button::after { transition: none; } }
