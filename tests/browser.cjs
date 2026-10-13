@@ -19,6 +19,23 @@ const path = require('node:path');
   assert(await page.locator('.journal-wrap').evaluate(el => getComputedStyle(el, '::before').backgroundImage.includes('corner-small-left-top.svg')));
   assert(!(await page.locator('#instalare').evaluate(el => getComputedStyle(el, '::before').backgroundImage)).includes('url('), 'Closing section stays image-free');
   assert(await page.locator('.brand').evaluate(el => getComputedStyle(el).fontFamily.includes('Cinzel')));
+  assert.equal(await page.locator('.dot-grid i').count(), 9);
+  await page.locator('.menu-toggle').click();
+  assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'true');
+  await page.keyboard.press('Escape');
+  assert.equal(await page.locator('.menu-toggle').getAttribute('aria-expanded'), 'false');
+  for (const selector of ['.hero-actions .button-gold', '.hero-actions .button-glass', '.nav-download']) {
+    const button = page.locator(selector).first();
+    assert.equal(await button.evaluate(el => getComputedStyle(el).clipPath), 'none');
+    assert.equal(await button.evaluate(el => getComputedStyle(el).backdropFilter), 'none');
+    assert(await button.evaluate(el => getComputedStyle(el, '::before').backgroundImage.includes('button-')));
+    await button.hover();
+    assert.equal(await button.evaluate(el => getComputedStyle(el).transform), 'none');
+  }
+  const navItem = page.locator('#navigation a[href="#proiect"]');
+  await navItem.hover();
+  await page.waitForTimeout(250);
+  assert.equal(await navItem.evaluate(el => getComputedStyle(el, '::after').opacity), '1');
   for (const [id, name] of [['gale', 'GALE'], ['astarion', 'ASTARION'], ['laezel', 'LAE’ZEL'], ['wyll', 'WYLL'], ['karlach', 'KARLACH'], ['shadowheart', 'SHADOWHEART']]) {
     await page.locator(`[data-companion="${id}"]`).click();
     await page.waitForFunction(expected => document.getElementById('companion-name').textContent === expected, name);

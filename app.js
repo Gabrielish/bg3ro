@@ -11,6 +11,9 @@
   function updateScroll() {
     const y = window.scrollY;
     header.classList.toggle('scrolled', y > 30);
+    if (y < document.querySelector('.hero').offsetHeight - 150) {
+      navigation.querySelectorAll('a.active').forEach(link => link.classList.remove('active'));
+    }
     const available = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.transform = `scaleX(${available > 0 ? Math.min(y / available, 1) : 0})`;
     if (!reducedMotion.matches && window.innerWidth > 780 && y < 1100) {
@@ -38,7 +41,12 @@
     menu.setAttribute('aria-expanded', String(open));
     menu.setAttribute('aria-label', open ? 'Închide meniul' : 'Deschide meniul');
     navigation.classList.toggle('open', open);
+    if (open) navigation.querySelector('a').focus();
   });
+  document.addEventListener('click', event => {
+    if (menu.getAttribute('aria-expanded') === 'true' && !header.contains(event.target)) closeMenu();
+  });
+  window.matchMedia('(max-width: 980px)').addEventListener('change', closeMenu);
   navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
