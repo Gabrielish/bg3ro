@@ -1,0 +1,185 @@
+/* BG3-inspired refinement. Public decorative art is served by its official host.
+   Quadraat/Gilam binaries are NOT redistributed: open fonts provide the typography. */
+:root {
+  --serif: 'EB Garamond', Georgia, serif;
+  --sans: 'Gothic A1', Arial, sans-serif;
+  --display: 'Cinzel', Georgia, serif;
+  --gold: #d7bc8a;
+  --line: rgba(185, 151, 108, .29);
+  --corner-size: 80px;
+}
+h1, h2, h3 { font-weight: 500; }
+.eyebrow, .stage, .journal-top, .character-caption > span {
+  font-family: var(--display);
+  font-weight: 500;
+}
+.brand { font-family: var(--display); font-size: 27px; }
+.site-header nav { gap: 27px; font-family: var(--display); font-size: 11px; }
+.site-header nav > a:not(.nav-download) { text-transform: uppercase; }
+.site-header nav > a:not(.nav-download):hover { text-shadow: 0 0 15px #e4c39160; }
+.nav-download {
+  position: relative;
+  padding: 12px 23px;
+  background: #0a101bbb;
+  color: #eee1c2;
+  border: 1px solid #b99a6a;
+  clip-path: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);
+}
+.site-header { border-bottom-color: #ad8d573d; }
+.site-header::after {
+  content: '◇'; position: absolute; bottom: -14px; left: 50%;
+  font-family: Georgia, serif; font-size: 20px; line-height: 22px;
+  color: #ae8f62; text-shadow: 0 0 7px #080e16; pointer-events: none;
+}
+.button {
+  position: relative;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  min-height: 58px;
+  padding: 17px 32px;
+  border: 0;
+  clip-path: polygon(0 11px, 8px 6px, 12px 0, calc(50% - 9px) 0, 50% 5px, calc(50% + 9px) 0, calc(100% - 12px) 0, calc(100% - 8px) 6px, 100% 11px, 100% calc(100% - 11px), calc(100% - 8px) calc(100% - 6px), calc(100% - 12px) 100%, calc(50% + 9px) 100%, 50% calc(100% - 5px), calc(50% - 9px) 100%, 12px 100%, 8px calc(100% - 6px), 0 calc(100% - 11px));
+  transition: transform .25s, background-color .25s, filter .25s;
+}
+.button::before {
+  content: ''; position: absolute; inset: 5px 9px;
+  border-block: 1px solid currentColor; opacity: .19; pointer-events: none;
+}
+.button-gold {
+  background: linear-gradient(115deg, #efdfb9, #c6ac78);
+  color: #1a1811;
+}
+.button-gold:hover { background: #f4e6c9; filter: drop-shadow(0 0 12px #ddb47230); }
+.button-glass {
+  background: linear-gradient(#151920aa, #090c11f5), url('https://baldursgate3.game/jpg/texture-button.jpg') center/cover;
+  color: #e8d6af;
+  box-shadow: inset 0 0 0 1px #ad8b58;
+}
+.button-glass:hover { background-color: #2a2419; filter: brightness(1.25); }
+.button:focus-visible, .nav-download:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px #fff4d4;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.ornate-frame {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid #ae906341;
+  background: radial-gradient(ellipse at 10% 0, #a4885d0b, transparent 65%), linear-gradient(130deg, #0e1723f2, #070b12fa);
+}
+.ornate-frame::before {
+  content: ''; position: absolute; inset: -5px;
+  background-image: url('https://baldursgate3.game/faq/corner-small-left-top.svg'), url('https://baldursgate3.game/faq/corner-small-right-top.svg'), url('https://baldursgate3.game/faq/corner-small-left-bottom.svg'), url('https://baldursgate3.game/faq/corner-small-right-bottom.svg');
+  background-position: top left, top right, bottom left, bottom right;
+  background-size: var(--corner-size) var(--corner-size);
+  background-repeat: no-repeat;
+  width: auto; height: auto;
+  opacity: .85; z-index: -1; pointer-events: none;
+}
+.ornate-frame::after {
+  content: ''; position: absolute; inset: 6px;
+  border: 1px solid #a88c5745;
+  background: none; pointer-events: none; z-index: -1;
+}
+.journal-wrap { padding: 16px; box-shadow: 0 20px 65px #0006; }
+.journal-top { font-size: 10px; padding: 17px 18px; }
+.journal-controls { padding-inline: 18px; }
+.journal-content { padding-inline: 18px; font-size: 23px; }
+.journal-explanation { margin-inline: 12px; padding-inline: 8px; }
+.demo-disclaimer { padding: 15px 18px 10px; }
+.live-label { font-family: var(--sans); font-size: 7px; }
+.segmented { border: 0; padding: 0; gap: 7px; }
+.segmented button {
+  min-height: 36px; padding-inline: 11px;
+  border: 1px solid #ad8e5940;
+  font-size: 10px; font-family: var(--serif);
+  clip-path: polygon(5px 0, calc(100% - 5px) 0, 100% 5px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0 calc(100% - 5px), 0 5px);
+}
+.segmented button[aria-pressed=true] { border-color: #c3a574; background: #af8e6229; color: #f0d6a7; }
+.topic-tabs { gap: 10px; border: 0; margin-bottom: 24px; }
+.topic-tabs button {
+  font-family: var(--display); font-size: 10px; padding: 12px 18px;
+  border: 1px solid #af946244; background: #090e16aa;
+}
+.topic-tabs button[aria-pressed=true] { border-color: #b69a68; color: #f0d6a7; background: #a98b5418; }
+.topic-content { --corner-size: 54px; padding: 28px; min-height: 212px; }
+.topic-content h3 { font-size: 27px; line-height: 1.15; }
+.voices-copy { padding-top: 80px; }
+.voice-orbit { border-color: #b6956259; box-shadow: 0 0 0 13px #b99b6410, inset 0 0 90px #c8a4650a; }
+.voice-orbit::after {
+  content: '◇'; position: absolute; top: -19px; left: 50%; transform: translateX(-50%);
+  font-size: 26px; color: #ad9164;
+}
+.principles h2 { font-size: 28px; }
+.principles article { border-top: 1px solid #ad8e591f; padding-top: 23px; }
+.principle-icon { color: #d7bc8a; text-shadow: 0 0 15px #ddbd7633; }
+.installation { --corner-size: 70px; padding: 38px; }
+.installation > h3 { font-size: 33px; }
+.installation h4 { font-family: var(--serif); font-size: 21px; line-height: 1.25; font-weight: 500; }
+.installation li > span { padding-top: 1px; }
+.download-layout { gap: 70px; }
+.download-dice { left: 390px; }
+.faq-list { --corner-size: 60px; padding: 17px 30px; }
+.faq-list summary { font-family: var(--serif); font-size: 20px; line-height: 1.35; }
+.faq-list details:first-child { border-top: 0; }
+.faq-list details:last-child { border-bottom: 0; }
+.timeline h3 { font-size: 30px; }
+.timeline article { padding-top: 38px; }
+.timeline-dot { box-shadow: 0 0 0 4px var(--night), 0 0 0 5px #ae926238; }
+.last-word .ornament { font-family: var(--display); color: #b89b69; }
+@media (max-width: 1100px) {
+  .site-header nav { gap: 17px; font-size: 10px; }
+  .journal-wrap { padding: 13px; }
+  .journal-content { font-size: 21px; }
+  .download-dice { display: none; }
+  .installation { padding: 30px; }
+}
+@media (max-width: 780px) {
+  :root { --corner-size: 58px; }
+  .brand { font-size: 23px; }
+  .site-header nav { font-size: 13px; }
+  .site-header::after { display: none; }
+  .hero-bottom > p { font-size: 21px; line-height: 1.8; }
+  .hero-bottom { bottom: 65px; }
+  .hero-actions { margin-top: 13px; gap: 10px; }
+  .hero-actions .button { min-height: 53px; padding: 14px 23px; font-size: 9px; }
+  .scroll-cue { bottom: 14px; }
+  .introduction h1 { font-size: 49px; }
+  .agreement h2, .voices h2, .journey h2 { font-size: 47px; }
+  .journal-wrap { padding: 12px; }
+  .journal-top { font-size: 8px; padding-inline: 10px; }
+  .journal-controls { padding-inline: 10px; }
+  .journal-content { font-size: 21px; padding-inline: 10px; }
+  .demo-disclaimer { padding-inline: 10px; }
+  .topic-tabs { gap: 7px; }
+  .topic-tabs button { padding: 12px; font-size: 9px; }
+  .topic-content { padding: 25px; max-width: 350px; min-height: 245px; }
+  .voices, .voices-layout { min-height: 930px; }
+  .voices-copy { padding-top: 60px; }
+  .companion-art { opacity: .32; }
+  .timeline article, .timeline article + article { padding-top: 0; }
+  .download-layout { gap: 45px; }
+  .download-copy h2 { font-size: 56px; }
+  .download-copy .button { padding-inline: 24px; font-size: 10px; gap: 16px; }
+  .installation { --corner-size: 54px; padding: 29px 22px; }
+  .installation > h3 { font-size: 30px; }
+  .installation h4 { font-size: 20px; }
+  .installation li { gap: 15px; }
+  .faq-list { --corner-size: 46px; padding: 14px 21px; }
+  .faq-list summary { font-size: 19px; }
+  .faq h2 { font-size: 43px; }
+}
+@media (max-width: 380px) {
+  .introduction h1 { font-size: 43px; }
+  .journal-content { font-size: 19px; }
+  .journal-top { flex-wrap: wrap; gap: 5px; }
+  .journal-controls { gap: 9px; }
+  .segmented button { padding-inline: 8px; }
+  .topic-tabs button { font-size: 8px; padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button, .nav-download { transition: none; }
+}

@@ -20,7 +20,8 @@ GitHub Pages: branch `main`, director `/`. Modificările aprobate de proprietar 
 
 - Imaginea de tabără este furnizată de proprietarul proiectului.
 - Shadowheart este o ilustrație oficială încărcată de pe `https://baldursgate3.game/heros/hero-shadowheart.png`, cu atribuire vizibilă către Larian. Dacă sursa nu este disponibilă, pagina funcționează fără ea.
-- Fonturile Cormorant Garamond și Manrope sunt încărcate prin Google Fonts; există alternative locale serif/sans-serif.
+- Fonturile EB Garamond, Cinzel și Gothic A1 sunt încărcate prin Google Fonts; există alternative locale serif/sans-serif. Gothic A1 este folosit și pe site-ul oficial. Fonturile comerciale Quadraat/Gilam de pe site-ul oficial nu sunt redistribuite.
+- Tema ornamentală `theme-bg3.css` folosește colțurile decorative publice `/faq/corner-small-*.svg` și textura `/jpg/texture-button.jpg` de pe hostul oficial, fără a copia site-ul sau pachetele sale. Aceste materiale aparțin Larian / titularilor respectivi. Ramele au și borduri locale, pentru cazul în care sursa externă nu este disponibilă.
 - Demo-ul de acord este un exemplu ilustrativ care rulează doar în browser, nu o execuție a modului și nu o măsurare a performanței sale.
 - Pagina separă obiectivele proiectului, versiunea publică Early Access și prototipul experimental de jurnal v10 / SE33. Nu pretinde traducere integrală finalizată.
 
