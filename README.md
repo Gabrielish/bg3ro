@@ -8,6 +8,8 @@ Logo tricolor: `assets/logo-d20-romania.png` (1024px, transparent), master în `
 
 Descărcare: https://www.nexusmods.com/baldursgate3/mods/24379
 
+Susținere opțională: https://www.patreon.com/cw/Gabrielish și https://ko-fi.com/gabrielish — aceleași URL-uri din secțiunea support a paginii Polyhedron. Butonul din navbar duce la `#sustinere`, nu la descărcare. Hoverul acestuia trece de la crem la alb pur, verificat pe referința oficială; hoverul hero-ului este păstrat separat.
+
 ## Dezvoltare
 
 HTML, CSS și JavaScript fără framework, build sau dependențe obligatorii. Servește rădăcina cu un server HTTP static. Toate căile locale sunt relative pentru GitHub Pages la `/bg3ro/`.
