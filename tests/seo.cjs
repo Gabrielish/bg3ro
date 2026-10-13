@@ -1,0 +1,41 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const sharp = require('sharp');
+const root = path.join(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+(async () => {
+  const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1];
+  const structured = JSON.parse(json);
+  assert.equal(structured['@context'], 'https://schema.org');
+  const ids = structured['@graph'].map(item => item['@id']);
+  assert.equal(new Set(ids).size, ids.length);
+  function checkRefs(value) {
+    if (Array.isArray(value)) value.forEach(checkRefs);
+    else if (value && typeof value === 'object') {
+      if (value['@id']) assert(ids.includes(value['@id']), `Broken JSON-LD reference: ${value['@id']}`);
+      Object.values(value).forEach(checkRefs);
+    }
+  }
+  checkRefs(structured['@graph']);
+  assert(!html.includes('name="keywords"'), 'Avoid keyword stuffing');
+  assert(!json.includes('aggregateRating'), 'No fabricated ratings');
+  assert.equal((html.match(/rel="canonical"/g) || []).length, 1);
+  const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+  assert(sitemap.includes('<loc>https://gabrielish.github.io/bg3ro/</loc>'));
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 1);
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'site.webmanifest'), 'utf8'));
+  assert.equal(manifest.start_url, '/bg3ro/');
+  for (const icon of manifest.icons) assert(fs.existsSync(path.join(root, icon.src)));
+  for (const [file, dimension] of [['assets/logo-d20-romania.png', 1024], ['assets/favicon-96.png', 96], ['assets/apple-touch-icon.png', 180]]) {
+    const metadata = await sharp(path.join(root, file)).metadata();
+    assert.equal(metadata.width, dimension);
+    assert.equal(metadata.height, dimension);
+    assert(metadata.hasAlpha);
+    const stats = await sharp(path.join(root, file)).stats();
+    assert.equal(stats.channels[3].min, 0);
+  }
+  const localLinks = [...html.matchAll(/(?:href|src)="\.\/([^"?]+)(?:\?[^"]*)?"/g)].map(match => match[1]);
+  for (const asset of localLinks) assert(fs.existsSync(path.join(root, asset)), `Missing local asset ${asset}`);
+  console.log('PASS: structured data references, canonical, sitemap, manifest, PNG sizes/alpha, local assets, no fake ratings/keyword stuffing.');
+})().catch(error => { console.error(error); process.exitCode = 1; });

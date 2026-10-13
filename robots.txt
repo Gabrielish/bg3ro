@@ -1,0 +1,5 @@
+# Project-level copy. Google reads robots.txt at the HOST ROOT, not /bg3ro/.
+# Copy these directives to the domain root only when you control that site.
+User-agent: *
+Allow: /
+Sitemap: https://gabrielish.github.io/bg3ro/sitemap.xml
