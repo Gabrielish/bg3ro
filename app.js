@@ -11,10 +11,12 @@
 
   function updateActiveSection() {
     const anchorInset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-    const activationLine = Math.max(header.getBoundingClientRect().bottom, anchorInset) + 12;
+    const activationLine = Math.max(header.getBoundingClientRect().bottom, anchorInset) + Math.min(160, innerHeight * .18);
     let activeId = null;
     for (const section of navSections) {
-      if (section.getBoundingClientRect().top <= activationLine) activeId = section.id;
+      // Match each anchor's visible content inset, not its padded outer box.
+      const inset = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
+      if (section.getBoundingClientRect().top - inset <= activationLine) activeId = section.id;
     }
     if (document.getElementById('sustinere').getBoundingClientRect().top <= activationLine) activeId = null;
     navigation.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -45,6 +47,8 @@
   window.addEventListener('resize', queueScroll, { passive: true });
   window.addEventListener('hashchange', queueScroll);
   reducedMotion.addEventListener('change', queueScroll);
+  if ('ResizeObserver' in window) new ResizeObserver(queueScroll).observe(document.querySelector('main'));
+  document.fonts.ready.then(queueScroll);
   updateScroll();
 
   function closeMenu() {
@@ -146,6 +150,7 @@
     const height = stage.offsetHeight;
     slides.forEach((slide, i) => { slide.hidden = states[i].hidden; slide.style.visibility = states[i].visibility; });
     stage.style.minHeight = `${height}px`;
+    queueScroll();
   }
   sizeStage();
   document.fonts.ready.then(sizeStage);

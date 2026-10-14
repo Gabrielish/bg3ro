@@ -38,6 +38,30 @@ const assert = require('node:assert/strict');
       assert(Math.abs(fromMouse - fromNavbar) < 2, 'Mouse and navbar use the same destination');
       await page.evaluate(() => document.getElementById('acord').scrollIntoView());
       await page.waitForFunction(() => document.querySelector('#navigation a[href="#acord"]').classList.contains('active'));
+      for (const id of ['acord', 'parcurs', 'instalare', 'proiect']) {
+        if (width <= 780) await page.locator('.menu-toggle').click();
+        await page.locator(`#navigation a[href="#${id}"]`).click();
+        await page.waitForFunction(expected => {
+          const el = document.getElementById(expected);
+          const target = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) + parseFloat(getComputedStyle(el).scrollMarginTop);
+          return Math.abs(el.getBoundingClientRect().top - target) < 2;
+        }, id);
+        await page.waitForTimeout(800);
+        await page.mouse.move(5, 400);
+        assert.equal(await page.locator('#navigation a.active').getAttribute('href'), `#${id}`);
+        assert.equal(await page.locator('#navigation a[aria-current="location"]').count(), 1);
+        const eyebrowY = await page.locator(`#${id} .eyebrow`).first().evaluate(el => el.getBoundingClientRect().top);
+        const paddingY = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop));
+        assert(Math.abs(eyebrowY - paddingY) < 3, `${id} heading has the same navbar inset at ${width}px: ${eyebrowY}`);
+      }
+      // Regression: the incoming section already fills the upper viewport,
+      // but its edge has not yet reached the fixed header.
+      await page.evaluate(() => {
+        const el = document.getElementById('acord');
+        const inset = parseFloat(getComputedStyle(el).scrollMarginTop) || 0;
+        window.scrollTo({ top: scrollY + el.getBoundingClientRect().top - inset - 205, behavior: 'instant' });
+      });
+      await page.waitForFunction(() => document.querySelector('#navigation a[href="#acord"]').classList.contains('active'));
       await page.close();
     }
     console.log('PASS: one-click mouse navigation, active ornament without hover, matching navbar target, manual scroll tracking, mobile and reduced motion.');

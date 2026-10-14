@@ -162,25 +162,42 @@
 }
 /* BUY NOW inverted style: a stable parchment base and one white overlay.
    Official corner/diamond masks define the silhouette. No brightness effect. */
-.site-header .nav-download::before,
-.site-header .nav-download::after {
+.parchment-button,
+.site-header nav > .parchment-button,
+.download-copy > .parchment-button {
+  display: inline-flex; align-items: center; justify-content: center;
+  max-width: 100%; min-height: 60px; padding: 16px 24px;
+  font-family: var(--serif); font-size: 19px; font-weight: 500; line-height: 1.2;
+  color: #000; letter-spacing: 0;
+}
+.parchment-button:hover, .parchment-button:focus-visible { color: #000; }
+.parchment-button::before,
+.parchment-button::after {
   mask-image: url('./assets/diamond-hover-mask-decor-top.svg'), url('./assets/diamond-hover-mask-decor-bottom.svg'), url('./assets/diamond-hover-mask-corner-1.svg'), url('./assets/diamond-hover-mask-corner-2.svg'), url('./assets/diamond-hover-mask-corner-3.svg'), url('./assets/diamond-hover-mask-corner-4.svg');
   mask-position: center top, center bottom, left top, right top, left bottom, right bottom;
   mask-size: 800px 800px;
   mask-repeat: no-repeat;
   mask-composite: intersect;
 }
-.site-header .nav-download::before,
-.site-header .nav-download:hover::before,
-.site-header .nav-download:focus-visible::before {
+.parchment-button::before,
+.parchment-button:hover::before,
+.parchment-button:focus-visible::before {
   background: radial-gradient(circle, #fff 0, #ddc9a7);
   opacity: 1; filter: none; transition: none;
 }
-.site-header .nav-download::after {
+.parchment-button::after {
   background: #fff; filter: none; transition: opacity .4s ease;
 }
-.site-header .nav-download:hover::after,
-.site-header .nav-download:focus-visible::after { opacity: 1; filter: none; }
+.parchment-button:hover::after,
+.parchment-button:focus-visible::after { opacity: 1; filter: none; }
 @media (prefers-reduced-motion: reduce) {
-  .site-header .nav-download::after { transition: none; }
+  .parchment-button::after { transition: none; }
+}
+@media (min-width: 781px) and (max-width: 1180px) {
+  .site-header nav > .parchment-button,
+  .download-copy > .parchment-button { font-size: 16px; }
+}
+@media (min-width: 781px) and (max-width: 980px) {
+  .site-header nav > .parchment-button,
+  .download-copy > .parchment-button { font-size: 15px; }
 }

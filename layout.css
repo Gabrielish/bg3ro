@@ -1,0 +1,15 @@
+/* Half of the shared section gap on either side of a section boundary. */
+:root { --section-gap: 96px; --section-edge: 48px; --intro-inset: 96px; }
+.introduction { padding-top: var(--intro-inset); padding-bottom: var(--section-edge); scroll-margin-top: calc(-1 * var(--intro-inset)); }
+.agreement.feature-carousel { padding-block: var(--section-edge); scroll-margin-top: calc(-1 * var(--section-edge)); }
+.journey { padding-block: var(--section-edge); scroll-margin-top: calc(-1 * var(--section-edge)); }
+.journey .section-heading { margin-bottom: 48px; }
+.download-layout { padding-block: var(--section-edge); }
+#instalare { scroll-margin-top: calc(-1 * var(--section-edge) - 1px); }
+.faq { padding-block: var(--section-edge); }
+.support-section { padding-block: var(--section-edge); scroll-margin-top: calc(-1 * var(--section-edge)); }
+.last-word { padding-top: var(--section-edge); padding-bottom: var(--section-gap); }
+@media (max-width: 780px) {
+  :root { --section-gap: 64px; --section-edge: 32px; --intro-inset: 64px; }
+  .journey .section-heading { margin-bottom: 32px; }
+}
