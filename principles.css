@@ -1,0 +1,18 @@
+.principles article { padding-top: 32px; }
+.principles .principle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #ddc9a7;
+  text-shadow: none;
+}
+.principle-icon svg { display: block; width: 40px; height: 40px; flex: none; }
+.principles h2 { font-size: clamp(25px, 2.2vw, 28px); line-height: 1.15; }
+.principles p { text-wrap: pretty; }
+@media (max-width: 780px) {
+  .principles article,
+  .principles article + article { padding-top: 32px; }
+  .principles h2 { font-size: 28px; }
+}
