@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="7">
+  <defs>
+    <linearGradient id="gold"><stop stop-color="#e0ccb1"/><stop offset="1" stop-color="#b78f6d"/></linearGradient>
+    <mask id="ends" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="7"><rect width="100%" height="7" fill="white"/><rect width="5" height="7" fill="black"/><rect x="100%" width="5" height="7" transform="translate(-5 0)" fill="black"/></mask>
+  </defs>
+  <rect y="3" width="100%" height="1" fill="url(#gold)" mask="url(#ends)"/>
+  <svg width="6" height="7" overflow="visible"><path fill="#ddc9a7" d="M5.407 3 2.992.589l-2.9 2.905L2.33 5.729l.682.683 1.53-1.535-.96-.963-.571.573-.995-.993.978-.981L4.483 4H6V3z"/></svg>
+  <svg x="100%" width="6" height="7" overflow="visible"><g transform="scale(-1 1)"><path fill="#b78f6d" d="M5.407 3 2.992.589l-2.9 2.905L2.33 5.729l.682.683 1.53-1.535-.96-.963-.571.573-.995-.993.978-.981L4.483 4H6V3z"/></g></svg>
+</svg>

@@ -1,0 +1,42 @@
+/* Closed at both ends, with the lighter official decorative-line gradient.
+   A single SVG canvas keeps each cap aligned with its horizontal rule. */
+:root { --ornamental-divider: url('./assets/divider-double-gold.svg'); }
+.principles { position: relative; }
+.principles article { border-top: 0; }
+.principles::before,
+.feature-footnote::before,
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: var(--ornamental-divider) center / 100% 7px no-repeat;
+  pointer-events: none;
+}
+.feature-footnote { position: relative; border-top: 0; }
+.journal-rule {
+  height: 7px;
+  background: var(--ornamental-divider) center / 100% 7px no-repeat;
+}
+.last-word .ornament {
+  width: min(420px, 100%);
+  height: 7px;
+  margin-inline: auto;
+  background: var(--ornamental-divider) center / 100% 7px no-repeat;
+}
+.footer { position: relative; border-top: 0; }
+@media (max-width: 780px) {
+  .principles article + article { border-top: 0; }
+  .principles article + article::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 7px;
+    background: var(--ornamental-divider) center / 100% 7px no-repeat;
+    pointer-events: none;
+  }
+}

@@ -32,6 +32,10 @@ const path = require('node:path');
   assert(fireflyCoverage >= .8, 'Fireflies cover at least 80% of page width');
   assert.equal(await page.locator('.hero-actions a span').count(), 0, 'No diagonal arrow inside the hero button');
   assert.equal(await page.locator('.ornate-frame').count(), 5);
+  for (const selector of ['.journal-rule', '.last-word .ornament']) {
+    assert(await page.locator(selector).evaluate(el => getComputedStyle(el).backgroundImage.includes('divider-double-gold.svg')));
+  }
+  assert(await page.locator('.principles').evaluate(el => getComputedStyle(el,'::before').backgroundImage.includes('divider-double-gold.svg')));
   assert.equal(await page.locator('.nav-download').getAttribute('href'), '#sustinere');
   assert.equal((await page.locator('.nav-download').textContent()).trim(), 'Susține proiectul');
   assert.equal(await page.locator('#sustinere a').first().getAttribute('href'), 'https://www.patreon.com/cw/Gabrielish');
