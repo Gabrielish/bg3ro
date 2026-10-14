@@ -22,9 +22,11 @@
   top: calc(100% - 2px);
   left: 50%;
   transform: translateX(-50%);
-  background-image: url('./assets/nav-center-official.svg'), linear-gradient(90deg, #b78f6d, #ddc9a7), linear-gradient(90deg, #ddc9a7, #b78f6d);
-  background-position: center center, left center, right center;
-  background-size: 34px 10px, calc(50% - 17px) 1px, calc(50% - 17px) 1px;
+  /* One vector canvas gives the center and side lines the same baseline,
+     without separately rasterized CSS layers or fractional-pixel seams. */
+  background-image: url('./assets/nav-underline.svg');
+  background-position: center;
+  background-size: 100% 10px;
   background-repeat: no-repeat;
   transition: opacity .4s ease;
 }

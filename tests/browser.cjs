@@ -72,7 +72,7 @@ const path = require('node:path');
   await page.waitForTimeout(450);
   assert.equal(await navItem.evaluate(el => getComputedStyle(el, '::after').opacity), '1');
   assert.equal(await navItem.evaluate(el => getComputedStyle(el).color), 'rgb(255, 255, 255)');
-  assert(await navItem.evaluate(el => getComputedStyle(el, '::after').backgroundImage.includes('nav-center-official.svg')));
+  assert(await navItem.evaluate(el => getComputedStyle(el, '::after').backgroundImage.includes('nav-underline.svg')));
   for (const [id, name] of [['gale', 'GALE'], ['astarion', 'ASTARION'], ['laezel', 'LAE’ZEL'], ['wyll', 'WYLL'], ['karlach', 'KARLACH'], ['shadowheart', 'SHADOWHEART']]) {
     await page.locator(`[data-companion="${id}"]`).click();
     await page.waitForFunction(expected => document.getElementById('companion-name').textContent === expected, name);
