@@ -29,10 +29,13 @@ const path = require('node:path');
   assert((await page.locator('.intro-copy').first().textContent()).includes('Sunt Gabrielish'));
   assert.equal(await page.locator('.tricolor-divider').count(), 0, 'No tricolor decoration under the introduction');
   const objectiveLines = await page.locator('.intro-objective').evaluate(el => {
-    const range = document.createRange(); range.selectNodeContents(el);
-    return new Set([...range.getClientRects()].map(rect => Math.round(rect.top))).size;
+    return [...el.querySelectorAll('span')].reduce((count, span) => {
+      const range = document.createRange(); range.selectNodeContents(span);
+      return count + new Set([...range.getClientRects()].map(rect => Math.round(rect.top))).size;
+    }, 0);
   });
   assert.equal(objectiveLines, 2, 'Objective paragraph uses two lines on desktop');
+  assert.equal(await page.locator('.intro-objective > span').count(), 2, 'Each objective sentence has its own desktop line');
   assert((await page.locator('.intro-scope').textContent()).includes('nu un dublaj'));
   assert(!(await page.locator('body').textContent()).includes('Vocile lor.'));
   assert(await page.locator('.hero-art').evaluate(img => img.complete && img.naturalWidth > 0));
