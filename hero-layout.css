@@ -1,6 +1,12 @@
 /* Keep hero artwork and parallax inside their own stacking context. */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .hero { isolation: isolate; z-index: 0; }
+.hero-art {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
 .world-background { z-index: 1; }
 .introduction { position: relative; clear: both; }
 .introduction > .eyebrow { position: relative; z-index: 1; }
