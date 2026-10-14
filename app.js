@@ -89,7 +89,7 @@
   });
 
   const topics = {
-    dialog: ['FIECARE REPLICĂ ARE UN CONTEXT', 'O voce, nu o traducere mecanică.', 'Dialogurile sunt traduse manual și revizuite pentru ton, sens și acord. Obiectivul este ca personajele să rămână ele însele, și în română.'],
+    dialog: ['FIECARE REPLICĂ ARE UN CONTEXT', 'Replici firești, sens păstrat.', 'Dialogurile sunt traduse manual și revizuite pentru ton, sens și acord. Obiectivul este ca personajele să rămână ele însele, și în română.'],
     inventory: ['DETALII MICI. O DIFERENȚĂ REALĂ.', 'Ordine firească, sens păstrat.', 'Numele obiectelor, etichetele de raritate și starea „echipat” merită aceeași atenție ca dialogurile. Lucrez la formulări clare și consecvente, nu doar la cuvinte înlocuite.'],
     interface: ['MAI PUȚINĂ FRICȚIUNE. MAI MULT JOC.', 'Înțelegi. Alegi. Continui.', 'Meniuri, descrieri de vrăji și indicii de interfață cu terminologie coerentă. O traducere utilă trebuie să te ajute să înțelegi și mecanicile, nu doar povestea.']
   };
@@ -134,11 +134,11 @@
   const voices = document.querySelector('.voices');
   const companions = {
     shadowheart: ['Shadowheart', 'Între credință și îndoială', 'Nuanțele unei replici contează la fel de mult ca sensul ei.', '#af909c'],
-    gale: ['Gale', 'Magie, ambiție și cuvinte alese', 'O voce erudită merită o traducere care îi păstrează eleganța.', '#689ac9'],
+    gale: ['Gale', 'Magie, ambiție și cuvinte alese', 'Replicile lui Gale trebuie să păstreze eleganța și precizia personajului.', '#689ac9'],
     astarion: ['Astarion', 'Farmecul stă și în subtext', 'Ironia nu se traduce mecanic. Se înțelege în context.', '#c0a08b'],
     laezel: ['Lae’zel', 'Directă. Hotărâtă. Fără ocolișuri.', 'O replică fermă trebuie să rămână fermă și în română.', '#a3ad80'],
-    wyll: ['Wyll', 'Curajul are propria voce', 'Păstrăm intenția din spatele cuvintelor, nu doar forma lor.', '#a2b4c2'],
-    karlach: ['Karlach', 'Energie care trece dincolo de cuvinte', 'Spontaneitatea și căldura unei voci merită păstrate.', '#dc916d']
+    wyll: ['Wyll', 'Curaj și onoare', 'Intenția din spatele cuvintelor contează la fel de mult ca forma lor.', '#a2b4c2'],
+    karlach: ['Karlach', 'Energie care trece dincolo de cuvinte', 'Replici care păstrează spontaneitatea și căldura personajului.', '#dc916d']
   };
   let selectionRequest = 0;
   function loadArt(src) {

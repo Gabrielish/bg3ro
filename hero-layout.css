@@ -10,6 +10,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .world-background { z-index: 1; overflow: clip; }
 .introduction { position: relative; clear: both; scroll-margin-top: -100px; }
 .introduction > .eyebrow { position: relative; z-index: 1; }
+.introduction > .intro-copy + .intro-copy { margin-top: 16px; }
+.introduction > .intro-scope { font-size: 12px; color: #cfbb91; }
 
 @media (max-width: 780px) {
   .hero {
