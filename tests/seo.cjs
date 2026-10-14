@@ -5,6 +5,8 @@ const sharp = require('sharp');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 (async () => {
+  assert(html.includes('<meta name="google-site-verification" content="FcReElyhAtWzvlXGjBjV4val1GF9FIsaZtGZnLf8BD0">'));
+  assert.equal(fs.readFileSync(path.join(root, 'google104396851d87c68b.html'), 'utf8').trim(), 'google-site-verification: google104396851d87c68b.html');
   const json = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1];
   const structured = JSON.parse(json);
   assert.equal(structured['@context'], 'https://schema.org');
