@@ -7,8 +7,8 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   -webkit-user-drag: none;
   pointer-events: none;
 }
-.world-background { z-index: 1; }
-.introduction { position: relative; clear: both; }
+.world-background { z-index: 1; overflow: clip; }
+.introduction { position: relative; clear: both; scroll-margin-top: -100px; }
 .introduction > .eyebrow { position: relative; z-index: 1; }
 
 @media (max-width: 780px) {
@@ -73,7 +73,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     font-size: 18px;
   }
   .scroll-cue { bottom: 13px; height: 27px; }
-  .introduction { padding-top: 52px; }
+  .introduction { padding-top: 52px; scroll-margin-top: -52px; }
   .site-header nav.open {
     align-items: center;
     text-align: center;

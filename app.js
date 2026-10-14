@@ -6,14 +6,29 @@
   const menu = document.querySelector('.menu-toggle');
   const progress = document.querySelector('.scroll-progress');
   const art = document.querySelector('.hero-art');
+  const navSections = ['proiect', 'acord', 'parcurs', 'instalare'].map(id => document.getElementById(id));
   let scheduled = false;
+
+  function updateActiveSection() {
+    const anchorInset = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const activationLine = Math.max(header.getBoundingClientRect().bottom, anchorInset) + 12;
+    let activeId = null;
+    for (const section of navSections) {
+      if (section.getBoundingClientRect().top <= activationLine) activeId = section.id;
+    }
+    if (document.getElementById('sustinere').getBoundingClientRect().top <= activationLine) activeId = null;
+    navigation.querySelectorAll('a[href^="#"]').forEach(link => {
+      const active = link.hash === `#${activeId}`;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  }
 
   function updateScroll() {
     const y = window.scrollY;
     header.classList.toggle('scrolled', y > 30);
-    if (y < document.querySelector('.hero').offsetHeight - 150) {
-      navigation.querySelectorAll('a.active').forEach(link => link.classList.remove('active'));
-    }
+    updateActiveSection();
     const available = document.documentElement.scrollHeight - window.innerHeight;
     progress.style.transform = `scaleX(${available > 0 ? Math.min(y / available, 1) : 0})`;
     if (!reducedMotion.matches && window.innerWidth > 780 && y < 1100) {
@@ -28,6 +43,7 @@
   }
   window.addEventListener('scroll', queueScroll, { passive: true });
   window.addEventListener('resize', queueScroll, { passive: true });
+  window.addEventListener('hashchange', queueScroll);
   reducedMotion.addEventListener('change', queueScroll);
   updateScroll();
 
@@ -96,14 +112,6 @@
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
     document.documentElement.classList.add('js-enabled');
-    const navObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navigation.querySelectorAll('a[href^="#"]').forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
-        }
-      });
-    }, { rootMargin: '-15% 0px -60% 0px' });
-    ['proiect', 'acord', 'parcurs', 'instalare'].forEach(id => navObserver.observe(document.getElementById(id)));
   }
   if (!reducedMotion.matches) {
     const embers = document.querySelector('.embers');
