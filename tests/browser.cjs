@@ -151,6 +151,7 @@ const path = require('node:path');
   await page.goto(url, { waitUntil: 'networkidle' });
   assert.equal(await page.locator('.embers .ember').count(), 0);
   assert.equal(await page.locator('.scroll-cue svg').evaluate(el => getComputedStyle(el).animationName), 'none', 'Mouse hint respects reduced motion');
+  assert.equal(await page.locator('.scroll-wheel').evaluate(el => getComputedStyle(el).animationName), 'none');
   assert.equal(await page.locator('.reveal').first().evaluate(el => getComputedStyle(el).opacity), '1');
   const noJS = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   await noJS.goto(url);

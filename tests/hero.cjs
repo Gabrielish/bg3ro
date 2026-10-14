@@ -18,7 +18,17 @@ const fs = require('node:fs');
     assert.equal(await page.locator('.scroll-cue svg').count(), 1);
     assert.equal(await page.locator('#scroll-mouse-gradient stop').first().getAttribute('stop-color'), '#DDC9A7');
     assert.equal(await page.locator('#scroll-mouse-gradient stop').last().getAttribute('stop-color'), '#B78F6D');
-    assert.equal(await page.locator('.scroll-cue svg').evaluate(el => getComputedStyle(el).animationName), 'scroll-mouse-hint');
+    assert.equal(await page.locator('.scroll-cue svg').evaluate(el => getComputedStyle(el).animationName), 'none', 'Mouse body stays still');
+    assert.equal(await page.locator('.scroll-wheel').evaluate(el => getComputedStyle(el).animationName), 'scroll-wheel-hint');
+    assert(await page.locator('.scroll-wheel').evaluate(el => {
+      const animation = el.getAnimations()[0];
+      animation.pause(); animation.currentTime = 0;
+      const first = getComputedStyle(el).transform;
+      animation.currentTime = 1380;
+      const second = getComputedStyle(el).transform;
+      animation.play();
+      return first !== second;
+    }), 'Only the inner line moves');
     const cue = await page.locator('.scroll-cue').boundingBox();
     assert(cue.width >= 44 && cue.height >= 44, 'Scroll cue keeps a touch-friendly target');
     const rects = await page.evaluate(() => {

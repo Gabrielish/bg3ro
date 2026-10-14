@@ -16,13 +16,17 @@
   height: 30px;
   overflow: visible;
   pointer-events: none;
-  animation: scroll-mouse-hint 2.3s ease-in-out infinite;
+  animation: none;
+  transform: none;
 }
-@keyframes scroll-mouse-hint {
-  0%, 100% { transform: translateY(-2px); }
-  60% { transform: translateY(3px); }
+.scroll-cue .scroll-wheel {
+  animation: scroll-wheel-hint 2.3s ease-in-out infinite;
+}
+@keyframes scroll-wheel-hint {
+  0%, 100% { transform: translateY(0); }
+  60% { transform: translateY(4px); }
 }
 @media (max-width: 780px) { .scroll-cue { bottom: 4px; } }
 @media (prefers-reduced-motion: reduce) {
-  .scroll-cue svg { animation: none; }
+  .scroll-cue svg, .scroll-cue .scroll-wheel { animation: none; }
 }
