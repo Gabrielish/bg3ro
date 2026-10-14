@@ -1,0 +1,60 @@
+.agreement.feature-carousel { display: block; padding-bottom: 100px; }
+.feature-carousel > .eyebrow { margin-bottom: 30px; }
+.feature-stage { position: relative; display: grid; touch-action: pan-y; }
+.feature-slide { grid-area: 1 / 1; display: grid; grid-template-columns: 1fr 1.2fr; gap: 65px; align-items: center; min-width: 0; padding-block: 12px; }
+.feature-slide[hidden] { display: none !important; }
+.feature-slide + .feature-slide { margin-top: 50px; }
+.carousel-ready .feature-slide { margin-top: 0; min-height: 490px; }
+.feature-slide .agreement-copy h2 { font-size: clamp(42px, 4.6vw, 62px); margin-top: 15px; }
+.feature-state { display: inline-block; color: #ddc9a7; font-size: 9px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; }
+.feature-state.experimental { color: #cba77e; }
+.feature-slide .agreement-copy > p { max-width: 390px; }
+.feature-footnote { line-height: 1.8; }
+.feature-example { min-width: 0; padding: 32px; background: radial-gradient(ellipse at 80% 10%, #80674415, transparent 75%), #0a111b; --corner-size: 64px; }
+.example-kicker { display: block; color: #ddc9a7; font-size: 9px; letter-spacing: 2px; margin-bottom: 26px; }
+.item-examples { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }
+.item-example { padding-bottom: 17px; border-bottom: 1px solid #ddc9a721; }
+.item-example h3 { font-size: 27px; line-height: 1.25; margin-bottom: 7px; }
+.item-example p { font-size: 11px; color: #a3acb7; }
+.item-example .item-rarity { color: #75bfa8; }
+.item-example .item-rarity.rare { color: #7aa8d8; }
+.item-equipped { display: inline-block; color: #ddc9a7; margin-top: 9px; font-size: 12px; }
+.feature-example .demo-disclaimer { padding: 23px 0 0; }
+.dialog-example + .dialog-example { margin-top: 24px; padding-top: 24px; background: var(--ornamental-divider) top center / 100% 7px no-repeat; }
+.dialog-example > span { font-size: 9px; letter-spacing: 1.6px; text-transform: uppercase; color: #9aabbe; }
+.dialog-example blockquote { margin: 10px 0 0; font-family: var(--serif); font-size: 27px; line-height: 1.45; color: var(--pale); }
+.dialog-example em { color: #ddc9a7; }
+.feature-navigation { display: none; }
+.carousel-ready .feature-navigation { display: flex; align-items: center; justify-content: space-between; max-width: 650px; margin: 38px auto 0; }
+.feature-arrow { display: grid; place-items: center; width: 64px; height: 70px; padding: 10px; border: 0; background: none; }
+.feature-arrow::before { content: ''; display: block; width: 36px; height: 50px; background: url('./assets/carousel-arrow.svg') center / contain no-repeat; opacity: .78; transition: opacity .25s, filter .25s; }
+.feature-arrow.previous::before { transform: scaleX(-1); }
+.feature-arrow:hover::before, .feature-arrow:focus-visible::before { opacity: 1; filter: brightness(1.35); }
+.feature-dots { display: flex; align-items: center; gap: 8px; }
+.feature-dot { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 0; }
+.feature-dot::before { content: ''; width: 13px; height: 13px; box-sizing: border-box; border: 1px solid #a98d66; transform: rotate(45deg); transition: border-color .25s, background .25s; }
+.feature-dot[aria-pressed="true"]::before { border: 5px solid #ddc9a7; background: #0a111b; width: 15px; height: 15px; }
+.feature-dot:hover::before { border-color: #f0ddbd; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 1100px) { .feature-slide { gap: 30px; } .feature-example { padding: 27px; } }
+@media (max-width: 780px) {
+  .agreement.feature-carousel { padding-bottom: 65px; }
+  .feature-carousel > .eyebrow { font-size: 8px; letter-spacing: 1.5px; margin-bottom: 24px; }
+  .feature-slide { grid-template-columns: 1fr; gap: 24px; align-content: start; }
+  .carousel-ready .feature-slide { min-height: 850px; }
+  .feature-slide .agreement-copy h2 { font-size: 43px; }
+  .feature-slide .agreement-copy > p { max-width: none; }
+  .feature-example { padding: 29px 23px; }
+  .item-examples { gap: 23px 15px; }
+  .item-example h3 { font-size: 24px; }
+  .dialog-example blockquote { font-size: 25px; }
+  .carousel-ready .feature-navigation { margin-top: 12px; }
+}
+@media (max-width: 380px) {
+  .carousel-ready .feature-slide { min-height: 950px; }
+  .feature-slide .agreement-copy h2 { font-size: 39px; }
+  .item-examples { grid-template-columns: 1fr; gap: 14px; }
+  .item-example { padding-bottom: 12px; }
+  .example-kicker { letter-spacing: 1.2px; }
+}
+@media (prefers-reduced-motion: reduce) { .feature-arrow::before, .feature-dot::before { transition: none; } }

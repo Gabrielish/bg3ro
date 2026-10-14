@@ -43,7 +43,9 @@ const path = require('node:path');
   const fireflyCoverage = await page.locator('.embers').evaluate(el => el.getBoundingClientRect().width / window.innerWidth);
   assert(fireflyCoverage >= .8, 'Fireflies cover at least 80% of page width');
   assert.equal(await page.locator('.hero-actions a span').count(), 0, 'No diagonal arrow inside the hero button');
-  assert.equal(await page.locator('.ornate-frame').count(), 5);
+  assert.equal(await page.locator('.ornate-frame').count(), 6);
+  assert.equal(await page.locator('.voices, .companion-picker, [data-companion]').count(), 0, 'Companion section removed');
+  assert.equal(await page.locator('.eyebrow > span').count(), 0, 'Section headings are unnumbered');
   for (const selector of ['.journal-rule', '.last-word .ornament']) {
     assert(await page.locator(selector).evaluate(el => getComputedStyle(el).backgroundImage.includes('divider-double-gold.svg')));
   }
@@ -92,18 +94,6 @@ const path = require('node:path');
   assert.equal(await navItem.evaluate(el => getComputedStyle(el, '::after').opacity), '1');
   assert.equal(await navItem.evaluate(el => getComputedStyle(el).color), 'rgb(255, 255, 255)');
   assert(await navItem.evaluate(el => getComputedStyle(el, '::after').backgroundImage.includes('nav-underline.svg')));
-  for (const [id, name] of [['gale', 'GALE'], ['astarion', 'ASTARION'], ['laezel', 'LAE’ZEL'], ['wyll', 'WYLL'], ['karlach', 'KARLACH'], ['shadowheart', 'SHADOWHEART']]) {
-    await page.locator(`[data-companion="${id}"]`).click();
-    await page.waitForFunction(expected => document.getElementById('companion-name').textContent === expected, name);
-    assert((await page.locator('.companion-art').getAttribute('src')).endsWith(`hero-${id}.png`));
-    assert((await page.locator('.companion-backdrop').getAttribute('src')).endsWith(`bg-${id}.png`));
-    assert.equal(await page.locator(`[data-companion="${id}"]`).getAttribute('aria-pressed'), 'true');
-  }
-  await page.locator('[data-companion="gale"]').focus();
-  await page.keyboard.press('ArrowRight');
-  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'ASTARION');
-  await page.locator('[data-companion="shadowheart"]').click();
-  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'SHADOWHEART');
   await page.locator('[data-gender="male"]').click();
   assert.equal(await page.locator('[data-line="heal"]').textContent(), 'l-a vindecat');
   assert.equal(await page.locator('[data-line="passive"]').textContent(), 'vindecat');
@@ -112,11 +102,6 @@ const path = require('node:path');
   assert.equal(await page.locator('[data-line="heal"]').textContent(), 'a vindecat-o');
   assert.equal(await page.locator('[data-line="passive"]').textContent(), 'vindecată');
   assert.equal(await page.locator('[data-line="miss"]').textContent(), 'a ratat-o');
-  await page.locator('[data-topic="inventory"]').click();
-  assert.equal(await page.locator('#topic-title').textContent(), 'Ordine firească, sens păstrat.');
-  await page.locator('[data-topic="interface"]').click();
-  assert.equal(await page.locator('#topic-title').textContent(), 'Înțelegi. Alegi. Continui.');
-  await page.locator('[data-topic="dialog"]').click();
   await page.locator('details').first().locator('summary').click();
   assert(await page.locator('details').first().evaluate(el => el.open));
   await page.locator('details').first().locator('summary').click();
@@ -131,12 +116,6 @@ const path = require('node:path');
   await page.waitForTimeout(900);
   await page.screenshot({ path: path.join(output, 'desktop.png'), fullPage: true });
   await page.screenshot({ path: path.join(output, 'hero-desktop.png') });
-  await page.locator('[data-companion="gale"]').click();
-  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'GALE');
-  await page.locator('#detalii').screenshot({ path: path.join(output, 'companions-desktop.png') });
-  await page.locator('[data-companion="shadowheart"]').click();
-  await page.waitForFunction(() => document.getElementById('companion-name').textContent === 'SHADOWHEART');
-  assert(await page.locator('.companion-art').evaluate(img => img.complete && img.naturalWidth > 0), 'Official companion artwork must load during QA');
 
   for (const width of [390, 320, 768, 781, 820, 980, 1024]) {
     await page.setViewportSize({ width, height: 844 });
@@ -163,7 +142,7 @@ const path = require('node:path');
       await page.waitForTimeout(800);
       await page.screenshot({ path: path.join(output, 'mobile.png'), fullPage: true });
       await page.screenshot({ path: path.join(output, 'hero-mobile.png') });
-      await page.locator('#detalii').screenshot({ path: path.join(output, 'companions-mobile.png') });
+      await page.locator('#acord').screenshot({ path: path.join(output, 'features-mobile.png') });
     }
   }
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -177,6 +156,6 @@ const path = require('node:path');
   assert.equal(await noJS.locator('.reveal').first().evaluate(el => getComputedStyle(el).opacity), '1');
   assert(await noJS.locator('.button-gold').first().isVisible());
   assert.deepEqual(errors, []);
-  console.log('PASS: desktop; widths 320/390/768/1024; gender forms; topics; FAQ; menu keyboard; anchors; images; reduced motion; no-JS; no JS errors.');
+  console.log('PASS: desktop; widths 320/390/768/1024; gender forms; FAQ; menu keyboard; anchors; images; reduced motion; no-JS; no JS errors.');
   await browser.close();
 })().catch(error => { console.error(error); process.exitCode = 1; });

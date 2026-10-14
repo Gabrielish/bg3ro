@@ -88,19 +88,101 @@
     });
   });
 
-  const topics = {
-    dialog: ['FIECARE REPLICĂ ARE UN CONTEXT', 'Replici firești, sens păstrat.', 'Dialogurile sunt revizuite pentru ton, sens și acord. Obiectivul este ca personajele să rămână ele însele, și în română.'],
-    inventory: ['DETALII MICI. O DIFERENȚĂ REALĂ.', 'Ordine firească, sens păstrat.', 'Numele obiectelor, etichetele de raritate și starea „echipat” merită aceeași atenție ca dialogurile. Lucrez la formulări clare și consecvente, nu doar la cuvinte înlocuite.'],
-    interface: ['MAI PUȚINĂ FRICȚIUNE. MAI MULT JOC.', 'Înțelegi. Alegi. Continui.', 'Meniuri, descrieri de vrăji și indicii de interfață cu terminologie coerentă. O traducere utilă trebuie să te ajute să înțelegi și mecanicile, nu doar povestea.']
-  };
-  document.querySelectorAll('[data-topic]').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('[data-topic]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-      const [kicker, title, body] = topics[button.dataset.topic];
-      document.getElementById('topic-kicker').textContent = kicker;
-      document.getElementById('topic-title').textContent = title;
-      document.getElementById('topic-text').textContent = body;
+  const carousel = document.querySelector('.feature-carousel');
+  const stage = carousel.querySelector('.feature-stage');
+  const slides = [...carousel.querySelectorAll('.feature-slide')];
+  const dots = [...carousel.querySelectorAll('.feature-dot')];
+  const announcement = carousel.querySelector('.feature-announcement');
+  let currentSlide = 0;
+  let transitionId = 0;
+  let slideAnimations = [];
+  function showSlide(index, direction = 1) {
+    const next = (index + slides.length) % slides.length;
+    if (next === currentSlide) return;
+    const request = ++transitionId;
+    slideAnimations.forEach(animation => animation.cancel());
+    slideAnimations = [];
+    const outgoing = slides[currentSlide];
+    const incoming = slides[next];
+    // Reset interrupted transitions before starting the latest choice.
+    slides.forEach(slide => {
+      slide.hidden = slide !== outgoing && slide !== incoming;
+      slide.inert = slide !== incoming;
+      slide.setAttribute('aria-hidden', String(slide !== incoming));
     });
+    currentSlide = next;
+    dots.forEach((dot, i) => dot.setAttribute('aria-pressed', String(i === next)));
+    announcement.textContent = `Exemplul ${next + 1} din ${slides.length}: ${incoming.getAttribute('aria-label')}.`;
+    const finish = () => {
+      if (request !== transitionId) return;
+      outgoing.hidden = true;
+      slideAnimations.forEach(animation => animation.cancel());
+      slideAnimations = [];
+    };
+    if (reducedMotion.matches || !incoming.animate) { finish(); return; }
+    const options = { duration: 460, easing: 'cubic-bezier(.22,.75,.25,1)', fill: 'both' };
+    const exit = outgoing.animate([
+      { opacity: 1, transform: 'translateX(0)' },
+      { opacity: 0, transform: `translateX(${-direction * 35}px)` }
+    ], options);
+    const enter = incoming.animate([
+      { opacity: 0, transform: `translateX(${direction * 55}px)` },
+      { opacity: 1, transform: 'translateX(0)' }
+    ], options);
+    slideAnimations = [exit, enter];
+    Promise.all(slideAnimations.map(animation => animation.finished)).then(finish).catch(() => {});
+  }
+  slides.forEach((slide, i) => {
+    slide.hidden = i !== 0;
+    slide.inert = i !== 0;
+    slide.setAttribute('aria-hidden', String(i !== 0));
+  });
+  carousel.classList.add('carousel-ready');
+  // Reserve the tallest example at this width so the arrows never jump.
+  function sizeStage() {
+    stage.style.minHeight = '0px';
+    const states = slides.map(slide => ({ hidden: slide.hidden, visibility: slide.style.visibility }));
+    slides.forEach(slide => { slide.style.visibility = 'hidden'; slide.hidden = false; });
+    const height = stage.offsetHeight;
+    slides.forEach((slide, i) => { slide.hidden = states[i].hidden; slide.style.visibility = states[i].visibility; });
+    stage.style.minHeight = `${height}px`;
+  }
+  sizeStage();
+  document.fonts.ready.then(sizeStage);
+  let resizeFrame = 0;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(sizeStage);
+  }, { passive: true });
+  carousel.querySelector('.previous').addEventListener('click', () => showSlide(currentSlide - 1, -1));
+  carousel.querySelector('.next').addEventListener('click', () => showSlide(currentSlide + 1, 1));
+  dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i, i > currentSlide ? 1 : -1)));
+  carousel.addEventListener('keydown', event => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    if (event.key === 'Home') showSlide(0, -1);
+    else if (event.key === 'End') showSlide(slides.length - 1, 1);
+    else showSlide(currentSlide + (event.key === 'ArrowLeft' ? -1 : 1), event.key === 'ArrowLeft' ? -1 : 1);
+  });
+  let swipeStart = null;
+  stage.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch' || event.target.closest('button, a')) return;
+    swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+  }, { passive: true });
+  stage.addEventListener('pointerup', event => {
+    if (!swipeStart || swipeStart.id !== event.pointerId) return;
+    const dx = event.clientX - swipeStart.x;
+    const dy = event.clientY - swipeStart.y;
+    swipeStart = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) showSlide(currentSlide + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
+  }, { passive: true });
+  stage.addEventListener('pointercancel', () => { swipeStart = null; }, { passive: true });
+  reducedMotion.addEventListener('change', () => {
+    if (!reducedMotion.matches) return;
+    ++transitionId;
+    slideAnimations.forEach(animation => animation.cancel());
+    slideAnimations = [];
+    slides.forEach((slide, i) => { slide.hidden = i !== currentSlide; });
   });
 
   // Reveal only once; no polling, no render loop when the page is idle.
@@ -129,62 +211,4 @@
       embers.appendChild(spark);
     }
   }
-  const companion = document.querySelector('.companion-art');
-  const backdrop = document.querySelector('.companion-backdrop');
-  const voices = document.querySelector('.voices');
-  const companions = {
-    shadowheart: ['Shadowheart', 'Între credință și îndoială', 'Nuanțele unei replici contează la fel de mult ca sensul ei.', '#af909c'],
-    gale: ['Gale', 'Magie, ambiție și cuvinte alese', 'Replicile lui Gale trebuie să păstreze eleganța și precizia personajului.', '#689ac9'],
-    astarion: ['Astarion', 'Farmecul stă și în subtext', 'Ironia nu se traduce mecanic. Se înțelege în context.', '#c0a08b'],
-    laezel: ['Lae’zel', 'Directă. Hotărâtă. Fără ocolișuri.', 'O replică fermă trebuie să rămână fermă și în română.', '#a3ad80'],
-    wyll: ['Wyll', 'Curaj și onoare', 'Intenția din spatele cuvintelor contează la fel de mult ca forma lor.', '#a2b4c2'],
-    karlach: ['Karlach', 'Energie care trece dincolo de cuvinte', 'Replici care păstrează spontaneitatea și căldura personajului.', '#dc916d']
-  };
-  let selectionRequest = 0;
-  function loadArt(src) {
-    return new Promise(resolve => {
-      const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = () => resolve(null);
-      image.src = src;
-    });
-  }
-  async function selectCompanion(button) {
-    const id = button.dataset.companion;
-    const request = ++selectionRequest;
-    const [name, role, note, accent] = companions[id];
-    document.querySelectorAll('[data-companion]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-    voices.classList.add('switching');
-    const [newArt, newBackdrop] = await Promise.all([
-      loadArt(`https://baldursgate3.game/heros/hero-${id}.png`),
-      loadArt(`https://baldursgate3.game/heros/bg-${id}.png`)
-    ]);
-    if (request !== selectionRequest) return; // Rapid choices cannot show an older response.
-    if (newArt) { companion.src = newArt.src; companion.hidden = false; }
-    else { companion.hidden = true; }
-    if (newBackdrop) { backdrop.src = newBackdrop.src; backdrop.hidden = false; }
-    else { backdrop.hidden = true; }
-    companion.alt = `Ilustrație oficială a personajului ${name}`;
-    document.getElementById('companion-name').textContent = name.toLocaleUpperCase('ro');
-    document.getElementById('companion-role').textContent = role;
-    document.getElementById('companion-note').textContent = note;
-    voices.style.setProperty('--companion-accent', accent);
-    voices.classList.remove('switching');
-  }
-  document.querySelectorAll('[data-companion]').forEach(button => {
-    button.addEventListener('click', () => selectCompanion(button));
-  });
-  const picker = document.querySelector('.companion-picker');
-  picker.addEventListener('keydown', event => {
-    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(event.key)) return;
-    const buttons = [...picker.querySelectorAll('button')];
-    const index = buttons.indexOf(document.activeElement);
-    if (index < 0) return;
-    event.preventDefault();
-    let next = event.key === 'Home' ? 0 : event.key === 'End' ? buttons.length - 1 :
-      (index + (['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1) + buttons.length) % buttons.length;
-    buttons[next].focus(); buttons[next].click();
-  });
-  companion.addEventListener('error', () => { companion.hidden = true; });
-  backdrop.addEventListener('error', () => { backdrop.hidden = true; });
 })();
