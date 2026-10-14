@@ -1,0 +1,28 @@
+/* Official mouse silhouette and icon gradient, with a quiet downward hint. */
+.scroll-cue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  bottom: 13px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.scroll-cue svg {
+  display: block;
+  width: 18px;
+  height: 30px;
+  overflow: visible;
+  pointer-events: none;
+  animation: scroll-mouse-hint 2.3s ease-in-out infinite;
+}
+@keyframes scroll-mouse-hint {
+  0%, 100% { transform: translateY(-2px); }
+  60% { transform: translateY(3px); }
+}
+@media (max-width: 780px) { .scroll-cue { bottom: 4px; } }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue svg { animation: none; }
+}

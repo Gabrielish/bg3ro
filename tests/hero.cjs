@@ -11,6 +11,12 @@ const fs = require('node:fs');
     await page.setViewportSize({ width, height });
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
+    assert.equal(await page.locator('.scroll-cue svg').count(), 1);
+    assert.equal(await page.locator('#scroll-mouse-gradient stop').first().getAttribute('stop-color'), '#DDC9A7');
+    assert.equal(await page.locator('#scroll-mouse-gradient stop').last().getAttribute('stop-color'), '#B78F6D');
+    assert.equal(await page.locator('.scroll-cue svg').evaluate(el => getComputedStyle(el).animationName), 'scroll-mouse-hint');
+    const cue = await page.locator('.scroll-cue').boundingBox();
+    assert(cue.width >= 44 && cue.height >= 44, 'Scroll cue keeps a touch-friendly target');
     const rects = await page.evaluate(() => {
       const box = selector => {
         const r = document.querySelector(selector).getBoundingClientRect();
