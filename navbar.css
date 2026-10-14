@@ -1,0 +1,45 @@
+/* Reference: official BG3 navigation. Quadraat requires a web-font license;
+   use a licensed local installation if available, then the site's open font. */
+.site-header nav > a:not(.nav-download) {
+  font-family: 'QuadraatOffcPro Demibold', 'EB Garamond', Georgia, serif;
+  font-size: clamp(15px, 1.041vw, 20px);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: #fbcea0;
+  text-shadow: none;
+  transition: color .4s ease;
+}
+.site-header nav > a:not(.nav-download):hover,
+.site-header nav > a:not(.nav-download):focus-visible,
+.site-header nav > a:not(.nav-download).active {
+  color: #fff;
+  text-shadow: none;
+}
+.site-header nav > a:not(.nav-download)::after {
+  width: 100%;
+  height: 10px;
+  top: calc(100% - 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: url('./assets/nav-center-official.svg'), linear-gradient(90deg, #b78f6d, #ddc9a7), linear-gradient(90deg, #ddc9a7, #b78f6d);
+  background-position: center center, left center, right center;
+  background-size: 34px 10px, calc(50% - 17px) 1px, calc(50% - 17px) 1px;
+  background-repeat: no-repeat;
+  transition: opacity .4s ease;
+}
+@media (min-width: 781px) and (max-width: 980px) {
+  .site-header nav > a:not(.nav-download) { font-size: 13px; }
+}
+@media (max-width: 780px) {
+  .site-header nav > a:not(.nav-download) {
+    width: fit-content;
+    max-width: 100%;
+    font-size: 19px;
+    min-height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-header nav > a:not(.nav-download),
+  .site-header nav > a:not(.nav-download)::after { transition: none; }
+}

@@ -65,9 +65,14 @@ const path = require('node:path');
     if (selector.includes('hero-actions')) assert.equal(await button.evaluate(el => getComputedStyle(el).color), 'rgb(23, 21, 19)');
   }
   const navItem = page.locator('#navigation a[href="#proiect"]');
+  await page.mouse.move(0, 300);
+  await page.waitForTimeout(450);
+  assert.equal(await navItem.evaluate(el => getComputedStyle(el).color), 'rgb(251, 206, 160)');
   await navItem.hover();
-  await page.waitForTimeout(250);
+  await page.waitForTimeout(450);
   assert.equal(await navItem.evaluate(el => getComputedStyle(el, '::after').opacity), '1');
+  assert.equal(await navItem.evaluate(el => getComputedStyle(el).color), 'rgb(255, 255, 255)');
+  assert(await navItem.evaluate(el => getComputedStyle(el, '::after').backgroundImage.includes('nav-center-official.svg')));
   for (const [id, name] of [['gale', 'GALE'], ['astarion', 'ASTARION'], ['laezel', 'LAE’ZEL'], ['wyll', 'WYLL'], ['karlach', 'KARLACH'], ['shadowheart', 'SHADOWHEART']]) {
     await page.locator(`[data-companion="${id}"]`).click();
     await page.waitForFunction(expected => document.getElementById('companion-name').textContent === expected, name);
