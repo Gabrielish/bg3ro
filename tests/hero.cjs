@@ -11,6 +11,7 @@ const fs = require('node:fs');
     await page.setViewportSize({ width, height });
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('.hero-art')).userSelect === 'none');
     assert.equal(await page.locator('.hero-art').evaluate(el => el.draggable), false);
     assert.equal(await page.locator('.hero-art').evaluate(el => getComputedStyle(el).userSelect), 'none');
     assert.equal(await page.locator('.hero-art').evaluate(el => getComputedStyle(el).pointerEvents), 'none');

@@ -6,7 +6,7 @@
   const menu = document.querySelector('.menu-toggle');
   const progress = document.querySelector('.scroll-progress');
   const art = document.querySelector('.hero-art');
-  const navSections = ['proiect', 'acord', 'parcurs', 'instalare', 'feedback'].map(id => document.getElementById(id));
+  const navSections = ['proiect', 'acord', 'instalare', 'feedback'].map(id => document.getElementById(id));
   let scheduled = false;
 
   function updateActiveSection() {
@@ -18,7 +18,7 @@
       const inset = parseFloat(getComputedStyle(section).scrollMarginTop) || 0;
       if (section.getBoundingClientRect().top - inset <= activationLine) activeId = section.id;
     }
-    if (document.getElementById('sustinere').getBoundingClientRect().top <= activationLine) activeId = null;
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) activeId = 'feedback';
     navigation.querySelectorAll('a[href^="#"]').forEach(link => {
       const active = link.hash === `#${activeId}`;
       link.classList.toggle('active', active);
@@ -74,120 +74,62 @@
     }
   });
 
-  // An illustrative, browser-local demo. This is NOT the game's mod logic.
+  // Browser-only examples, deliberately independent of any game or mod API.
+  const tabs = [...document.querySelectorAll('.module-tabs [role="tab"]')];
+  const panels = [...document.querySelectorAll('.module-panel')];
+  const tabList = document.querySelector('.module-tabs');
+  function selectModule(index, focus = false) {
+    tabs.forEach((tab, i) => {
+      const active = i === index;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      panels[i].hidden = !active;
+    });
+    if (focus) tabs[index].focus();
+  }
+  if (tabs.length && panels.length === tabs.length) {
+    tabList.hidden = false;
+    document.querySelector('.mods-section').classList.add('modules-ready');
+    selectModule(0);
+    tabs.forEach((tab, index) => tab.addEventListener('click', () => selectModule(index)));
+    tabList.addEventListener('keydown', event => {
+      const current = tabs.indexOf(document.activeElement);
+      if (current < 0 || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const index = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
+        : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      selectModule(index, true);
+    });
+  }
+  const search = document.getElementById('example-search');
+  if (search) {
+    const items = [...document.querySelectorAll('[data-example-item]')];
+    const count = document.getElementById('example-count');
+    const fold = value => value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('ro');
+    function searchExample() {
+      const query = fold(search.value.trim());
+      let matches = 0;
+      items.forEach(item => {
+        item.hidden = !fold(item.dataset.exampleItem).includes(query);
+        if (!item.hidden) matches++;
+      });
+      count.textContent = matches === 1 ? '1 obiect în exemplu' : `${matches} obiecte în exemplu`;
+    }
+    search.disabled = false;
+    search.addEventListener('input', searchExample);
+    searchExample();
+  }
   const forms = {
-    female: { heal: 'a vindecat-o', passive: 'vindecată', miss: 'a ratat-o', explanation: 'vindecată · a vindecat-o · a ratat-o' },
-    male: { heal: 'l-a vindecat', passive: 'vindecat', miss: 'l-a ratat', explanation: 'vindecat · l-a vindecat · l-a ratat' }
+    female: { passive: 'vindecată', heal: 'a vindecat-o' },
+    male: { passive: 'vindecat', heal: 'l-a vindecat' }
   };
   document.querySelectorAll('[data-gender]').forEach(button => {
     button.addEventListener('click', () => {
       document.querySelectorAll('[data-gender]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
-      const selected = forms[button.dataset.gender];
-      Object.entries(selected).forEach(([key, value]) => {
-        const line = document.querySelector(`[data-line="${key}"]`);
-        line.textContent = value;
-        line.classList.remove('pulse-text');
-        requestAnimationFrame(() => line.classList.add('pulse-text'));
+      Object.entries(forms[button.dataset.gender]).forEach(([key, value]) => {
+        document.querySelector(`[data-form="${key}"]`).textContent = value;
       });
     });
-  });
-
-  const carousel = document.querySelector('.feature-carousel');
-  const stage = carousel.querySelector('.feature-stage');
-  const slides = [...carousel.querySelectorAll('.feature-slide')];
-  const dots = [...carousel.querySelectorAll('.feature-dot')];
-  const announcement = carousel.querySelector('.feature-announcement');
-  let currentSlide = 0;
-  let transitionId = 0;
-  let slideAnimations = [];
-  function showSlide(index, direction = 1) {
-    const next = (index + slides.length) % slides.length;
-    if (next === currentSlide) return;
-    const request = ++transitionId;
-    slideAnimations.forEach(animation => animation.cancel());
-    slideAnimations = [];
-    const outgoing = slides[currentSlide];
-    const incoming = slides[next];
-    // Reset interrupted transitions before starting the latest choice.
-    slides.forEach(slide => {
-      slide.hidden = slide !== outgoing && slide !== incoming;
-      slide.inert = slide !== incoming;
-      slide.setAttribute('aria-hidden', String(slide !== incoming));
-    });
-    currentSlide = next;
-    dots.forEach((dot, i) => dot.setAttribute('aria-pressed', String(i === next)));
-    announcement.textContent = `Exemplul ${next + 1} din ${slides.length}: ${incoming.getAttribute('aria-label')}.`;
-    const finish = () => {
-      if (request !== transitionId) return;
-      outgoing.hidden = true;
-      slideAnimations.forEach(animation => animation.cancel());
-      slideAnimations = [];
-    };
-    if (reducedMotion.matches || !incoming.animate) { finish(); return; }
-    const options = { duration: 460, easing: 'cubic-bezier(.22,.75,.25,1)', fill: 'both' };
-    const exit = outgoing.animate([
-      { opacity: 1, transform: 'translateX(0)' },
-      { opacity: 0, transform: `translateX(${-direction * 35}px)` }
-    ], options);
-    const enter = incoming.animate([
-      { opacity: 0, transform: `translateX(${direction * 55}px)` },
-      { opacity: 1, transform: 'translateX(0)' }
-    ], options);
-    slideAnimations = [exit, enter];
-    Promise.all(slideAnimations.map(animation => animation.finished)).then(finish).catch(() => {});
-  }
-  slides.forEach((slide, i) => {
-    slide.hidden = i !== 0;
-    slide.inert = i !== 0;
-    slide.setAttribute('aria-hidden', String(i !== 0));
-  });
-  carousel.classList.add('carousel-ready');
-  // Reserve the tallest example at this width so the arrows never jump.
-  function sizeStage() {
-    stage.style.minHeight = '0px';
-    const states = slides.map(slide => ({ hidden: slide.hidden, visibility: slide.style.visibility }));
-    slides.forEach(slide => { slide.style.visibility = 'hidden'; slide.hidden = false; });
-    const height = stage.offsetHeight;
-    slides.forEach((slide, i) => { slide.hidden = states[i].hidden; slide.style.visibility = states[i].visibility; });
-    stage.style.minHeight = `${height}px`;
-    queueScroll();
-  }
-  sizeStage();
-  document.fonts.ready.then(sizeStage);
-  let resizeFrame = 0;
-  window.addEventListener('resize', () => {
-    cancelAnimationFrame(resizeFrame);
-    resizeFrame = requestAnimationFrame(sizeStage);
-  }, { passive: true });
-  carousel.querySelector('.previous').addEventListener('click', () => showSlide(currentSlide - 1, -1));
-  carousel.querySelector('.next').addEventListener('click', () => showSlide(currentSlide + 1, 1));
-  dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i, i > currentSlide ? 1 : -1)));
-  carousel.addEventListener('keydown', event => {
-    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-    event.preventDefault();
-    if (event.key === 'Home') showSlide(0, -1);
-    else if (event.key === 'End') showSlide(slides.length - 1, 1);
-    else showSlide(currentSlide + (event.key === 'ArrowLeft' ? -1 : 1), event.key === 'ArrowLeft' ? -1 : 1);
-  });
-  let swipeStart = null;
-  stage.addEventListener('pointerdown', event => {
-    if (event.pointerType !== 'touch' || event.target.closest('button, a')) return;
-    swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-  }, { passive: true });
-  stage.addEventListener('pointerup', event => {
-    if (!swipeStart || swipeStart.id !== event.pointerId) return;
-    const dx = event.clientX - swipeStart.x;
-    const dy = event.clientY - swipeStart.y;
-    swipeStart = null;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) showSlide(currentSlide + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1);
-  }, { passive: true });
-  stage.addEventListener('pointercancel', () => { swipeStart = null; }, { passive: true });
-  reducedMotion.addEventListener('change', () => {
-    if (!reducedMotion.matches) return;
-    ++transitionId;
-    slideAnimations.forEach(animation => animation.cancel());
-    slideAnimations = [];
-    slides.forEach((slide, i) => { slide.hidden = i !== currentSlide; });
   });
 
   // Reveal only once; no polling, no render loop when the page is idle.

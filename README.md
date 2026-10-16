@@ -1,53 +1,42 @@
-# BG3RO — În cuvintele noastre
+# BG3RO — traducerea română neoficială
 
-One-page de prezentare pentru traducerea română neoficială a Baldur’s Gate 3, de Gabrielish.
+Site static pentru proiectul lui Gabrielish: https://gabrielish.github.io/bg3ro/
 
-Site: https://gabrielish.github.io/bg3ro/
+## Structura paginii
 
-Revizia următoare din 16 octombrie ridică pe mobil grupul titlu/CTA/mouse fără să
-schimbe spațierea textelor la scroll. Footerul este acum compact, cu doar trei
-resurse: Nexus, GitHub și `termeni.html`; nu mai reproduce navbarul. Feedbackul
-are secțiune și ancoră în meniul principal. Iconițele SVG bug/mână sunt extrase din
-pagina oficială `https://baldursgate3.game/support`, cu atribuire în pagina de
-termeni; nu sunt emoji și nu apar în butoane. Separatorul redundant din footer a
-fost eliminat, iar ornamentele dintre principiile de pe mobil au părinți poziționați
-corect. `tests/mobile-footer.cjs` verifică această revizie și pagina standalone.
-Pagina de termeni descrie intenția necomercială și lipsa afilierii, nu certifică
-o licență sau o conformitate juridică; include sursele oficiale Larian/Wizards.
+Hero-ul existent este păstrat. Conținutul de după el are patru secțiuni:
 
-Revizia din 16 octombrie 2026 simplifică încheierea: susținere opțională fără
-fundal ilustrat, două linkuri Patreon/Ko-fi, footer cu navigare și resurse, fără
-încă un mesaj promoțional. Secțiunea Parcurs păstrează separat stadiul Actului I,
-verificarea Actului II și lucrul la interfață/descrieri. `support.css` și
-`closing.css` controlează noua încheiere; `tests/closing.cjs` verifică desktopul,
-mobilul, focusul și linkurile. Etapele sunt furnizate de autor, nu estimate.
+1. Despre traducere și stadiul verificării, într-un singur loc.
+2. Moduri separate: căutare fără diacritice, acordul etichetelor, combat log experimental.
+3. Descărcare și instalare, cu trimitere la instrucțiunile versiunii de pe Nexus.
+4. Feedback și susținere opțională, urmate de un footer cu Nexus, GitHub și termeni.
 
-Logo tricolor: `assets/logo-d20-romania.png` (1024px, transparent), master în `assets/logo-d20-master.png`, brief și prompt în `assets/logo-brief.md`. Exporturile pentru favicon și navbar pot fi regenerate cu `node assets/export-logo.cjs` (Sharp disponibil în mediul de lucru). SEO și pașii de Search Console sunt documentați în `SEO.md`; nu este promisă indexarea sau o poziție în Google.
+Exemplele sunt demonstrații în browser, nu execuții ale jocului. Taburile funcționează și cu tastatura; fără JavaScript, toate exemplele rămân vizibile. Stadiile provin de la autor, nu sunt estimate.
 
-Descărcare: https://www.nexusmods.com/baldursgate3/mods/24379
+## Dezvoltare și verificare
 
-Susținere opțională: https://www.patreon.com/cw/Gabrielish și https://ko-fi.com/gabrielish — aceleași URL-uri din secțiunea support a paginii Polyhedron. Butonul din navbar duce la `#sustinere`, nu la descărcare. Hoverul acestuia trece de la crem la alb pur, verificat pe referința oficială; hoverul hero-ului este păstrat separat.
+HTML, CSS și JavaScript fără build. Servește rădăcina prin HTTP pe portul 4173 sau configurează BG3RO_TEST_URL. Căile locale sunt relative, compatibile cu GitHub Pages la /bg3ro/.
 
-## Dezvoltare
+site-content.css controlează cele patru secțiuni. Hero-ul folosește fișierele sale existente. closing.css controlează footerul și pagina separată de termeni.
 
-HTML, CSS și JavaScript fără framework, build sau dependențe obligatorii. Servește rădăcina cu un server HTTP static. Toate căile locale sunt relative pentru GitHub Pages la `/bg3ro/`.
-
-`node --check app.js` verifică sintaxa. `node tests/browser.cjs` rulează verificările Playwright când biblioteca și Chromium sunt disponibile (configurează `NODE_PATH` către bibliotecile instalate). Testele folosesc `http://127.0.0.1:4173` sau `BG3RO_TEST_URL`.
+Cu Playwright și Edge disponibile, rulează node --check app.js și fiecare fișier tests/*.cjs cu Node. Testele verifică structura, hero-ul față de revizia 95f1064, exemplele, navigarea, layoutul la 320–1440px, pagina de termeni și SEO. Capturile locale sunt în .qa (nepublicate).
 
 ## Publicare
 
-GitHub Pages: branch `main`, director `/`. Modificările aprobate de proprietar sunt comise și împinse direct pe `main`. Nu sunt publicate pachete ale modului în acest repository; Nexus este sursa descărcării.
+GitHub Pages: main, directorul rădăcină. Repository-ul conține doar site-ul, nu pachetele modurilor.
 
-## Conținut și ilustrații
+- Descărcare: https://www.nexusmods.com/baldursgate3/mods/24379
+- Patreon: https://www.patreon.com/cw/Gabrielish
+- Ko-fi: https://ko-fi.com/gabrielish
 
-- Imaginea de tabără este furnizată de proprietarul proiectului.
-- Shadowheart este o ilustrație oficială încărcată de pe `https://baldursgate3.game/heros/hero-shadowheart.png`, cu atribuire vizibilă către Larian. Dacă sursa nu este disponibilă, pagina funcționează fără ea.
-- Selectorul de companioni încarcă ilustrația și fundalul oficial pentru Shadowheart, Gale, Astarion, Lae’zel, Wyll sau Karlach doar la alegere. Portretele sunt lazy-loaded. Selecția este accesibilă și cu săgețile tastaturii; răspunsurile întârziate nu pot înlocui o alegere mai recentă. Textele despre tonul traducerii sunt editoriale, nu replici pretins extrase din joc.
-- `assets/camp-romania-clean.webp` este imaginea de început editată cu instrumentul integrat ImageGen după ilustrația furnizată: eliminarea titlurilor imprimate, păstrarea zarului tricolor și a scenei. Titlurile sunt acum HTML responsive. Originalul rămâne în `assets/camp-romania.webp`.
-- Fonturile EB Garamond, Cinzel și Gothic A1 sunt încărcate prin Google Fonts; există alternative locale serif/sans-serif. Gothic A1 este folosit și pe site-ul oficial. Fonturile comerciale Quadraat/Gilam de pe site-ul oficial nu sunt redistribuite.
-- Quadraat a fost încercat prin încărcare directă, dar serverul oficial nu permite încărcarea fontului de pe alt domeniu (CORS). Titlul și etichetele CTA folosesc EB Garamond cu greutate mai mare, nu pretind fontul exact. `controls.css` și ramele SVG locale separă suprafața butonului de etichetă, fără clip-path / backdrop-filter pe link. Hoverul și focusul dezvăluie forma crem cu text închis. Meniul cu nouă puncte apare doar la lățimi de telefon (max. 780px); desktopul/tableta păstrează navbarul complet.
-- Tema ornamentală `theme-bg3.css` folosește colțurile decorative publice `/faq/corner-small-*.svg` și textura `/jpg/texture-button.jpg` de pe hostul oficial, fără a copia site-ul sau pachetele sale. Aceste materiale aparțin Larian / titularilor respectivi. Ramele au și borduri locale, pentru cazul în care sursa externă nu este disponibilă.
-- Demo-ul de acord este un exemplu ilustrativ care rulează doar în browser, nu o execuție a modului și nu o măsurare a performanței sale.
-- Pagina separă obiectivele proiectului, versiunea publică Early Access și prototipul experimental de jurnal v10 / SE33. Nu pretinde traducere integrală finalizată.
+Traducerea este gratuită; contribuțiile sunt voluntare. Pagina termeni.html explică lipsa afilierii și intenția necomercială, fără a certifica o licență sau conformitatea juridică.
 
-Acesta este un proiect neoficial, fără afiliere cu Larian Studios sau Wizards of the Coast. Materialele jocului și mărcile aparțin titularilor lor.
+## Materiale și atribuiri
+
+Imaginea de tabără provine de la proprietarul proiectului; varianta camp-romania-clean.webp a fost editată cu ImageGen pentru eliminarea textului imprimat. Titlurile sunt HTML.
+
+Fonturile EB Garamond, Cinzel și Gothic A1 sunt încărcate prin Google Fonts, cu alternative locale. Materialele decorative și pictogramele bug/mână provin de pe site-ul oficial Baldur’s Gate 3; atribuirea și sursele sunt în pagina de termeni. Nu sunt redistribuite fonturile comerciale Quadraat/Gilam.
+
+Exporturile logo-ului pot fi regenerate cu node assets/export-logo.cjs (Sharp). Detaliile SEO sunt în SEO.md. Nu este promisă indexarea sau o poziție în Google.
+
+Proiect neoficial, fără afiliere cu Larian Studios sau Wizards of the Coast. Mărcile și materialele jocului aparțin titularilor respectivi.

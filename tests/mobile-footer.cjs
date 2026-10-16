@@ -18,7 +18,8 @@ const fs=require('node:fs');
       assert.equal(await footer.evaluate(el=>getComputedStyle(el,'::before').content),'none');
       assert.equal(await p.locator('.footer-divider,.footer-bottom').count(),0);
       assert.equal(await p.locator('.button img,.button svg,#navigation svg,#navigation img').count(),0);
-      for(const icon of await p.locator('.feedback-symbol,.support-glyph').all()){
+      assert.equal(await p.locator('.community-grid h3 img').count(),2);
+      for(const icon of await p.locator('.community-grid h3 img').all()){
         assert(await icon.evaluate(img=>img.complete&&img.naturalWidth>0));
         assert.equal(await icon.getAttribute('alt'),'');
       }

@@ -20,10 +20,10 @@ const path = require('node:path');
       assert.equal(await page.locator('.footer-links a').count(), 3);
       assert.equal(await page.locator('.footer-main').evaluate(el => getComputedStyle(el).display), 'flex');
       assert.equal(await page.locator('.footer img, #sustinere .button img, #sustinere svg').count(), 0);
-      const copy = await page.locator('.support-copy').boundingBox();
-      const actions = await page.locator('.support-actions').boundingBox();
-      if (width > 780) assert(actions.x >= copy.x + copy.width, 'Copy left; actions right');
-      else assert(actions.y >= copy.y + copy.height, 'Actions stack below copy on phones');
+      const feedback = await page.locator('.community-feedback').boundingBox();
+      const support = await page.locator('.community-support').boundingBox();
+      if (width > 780) assert(support.x >= feedback.x + feedback.width, 'Feedback and support share one row');
+      else assert(support.y >= feedback.y + feedback.height, 'Community articles stack on phones');
       for (const button of await page.locator('#sustinere a').all()) {
         assert((await button.boundingBox()).height >= 44);
         await button.focus();
@@ -32,7 +32,7 @@ const path = require('node:path');
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
       const invalid = await page.locator('a[href^="#"]').evaluateAll(links => links.filter(a => !document.getElementById(a.hash.slice(1))).map(a => a.hash));
       assert.deepEqual(invalid, []);
-      assert.equal(await page.locator('main').innerText().then(text => (text.match(/Actul I este verificat complet/g) || []).length), 1);
+      assert.equal(await page.locator('.project-status dt').filter({ hasText: /^Actul I$/ }).count(), 1);
       assert.deepEqual(errors, []);
       if (width === 1440 || width === 390) {
         await page.evaluate(() => document.activeElement.blur());
