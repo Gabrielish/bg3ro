@@ -4,6 +4,13 @@ One-page de prezentare pentru traducerea română neoficială a Baldur’s Gate 
 
 Site: https://gabrielish.github.io/bg3ro/
 
+Revizia din 16 octombrie 2026 simplifică încheierea: susținere opțională fără
+fundal ilustrat, două linkuri Patreon/Ko-fi, footer cu navigare și resurse, fără
+încă un mesaj promoțional. Secțiunea Parcurs păstrează separat stadiul Actului I,
+verificarea Actului II și lucrul la interfață/descrieri. `support.css` și
+`closing.css` controlează noua încheiere; `tests/closing.cjs` verifică desktopul,
+mobilul, focusul și linkurile. Etapele sunt furnizate de autor, nu estimate.
+
 Logo tricolor: `assets/logo-d20-romania.png` (1024px, transparent), master în `assets/logo-d20-master.png`, brief și prompt în `assets/logo-brief.md`. Exporturile pentru favicon și navbar pot fi regenerate cu `node assets/export-logo.cjs` (Sharp disponibil în mediul de lucru). SEO și pașii de Search Console sunt documentați în `SEO.md`; nu este promisă indexarea sau o poziție în Google.
 
 Descărcare: https://www.nexusmods.com/baldursgate3/mods/24379
