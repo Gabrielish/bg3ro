@@ -8,7 +8,7 @@ const path = require('node:path');
       const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
       await page.goto(process.env.BG3RO_TEST_URL || 'http://127.0.0.1:4173', { waitUntil: 'networkidle' });
       const nav = page.locator('.site-header .parchment-button');
-      const download = page.locator('.install-grid .parchment-button');
+      const download = page.locator('.download-copy .parchment-button');
       async function appearance(locator) {
         return locator.evaluate(el => {
           const s = getComputedStyle(el), base = getComputedStyle(el, '::before'), hover = getComputedStyle(el, '::after');
@@ -27,11 +27,14 @@ const path = require('node:path');
       assert.equal(hovered.hover, 'rgb(255, 255, 255)');
       assert.equal(hovered.hoverFilter, 'none');
       const spacing = await page.evaluate(() => {
-        const sections = [...document.querySelectorAll('.site-content > .content-section')];
-        return sections.slice(1).map((section, i) =>
-          parseFloat(getComputedStyle(sections[i]).paddingBottom) + parseFloat(getComputedStyle(section).paddingTop));
+        const pad = (selector, side) => parseFloat(getComputedStyle(document.querySelector(selector))[side]);
+        return [pad('.introduction', 'paddingBottom') + pad('#acord', 'paddingTop'),
+          pad('#acord', 'paddingBottom') + pad('#parcurs', 'paddingTop'),
+          pad('#parcurs', 'paddingBottom') + pad('.download-layout', 'paddingTop'),
+          pad('.download-layout', 'paddingBottom') + pad('.faq', 'paddingTop'),
+          pad('.faq', 'paddingBottom') + pad('#sustinere', 'paddingTop')];
       });
-      assert(spacing.every(gap => gap === (width <= 780 ? 88 : 144)), `Consistent section rhythm: ${spacing}`);
+      assert(spacing.every(gap => gap === (width <= 780 ? 64 : 96)), `Consistent section rhythm: ${spacing}`);
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
       if (width === 1440 || width === 390) {
         await page.locator('#instalare').screenshot({ path: path.join(__dirname, `../.qa/download-shared-${width}.png`) });
