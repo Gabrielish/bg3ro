@@ -8,6 +8,7 @@
 #instalare { scroll-margin-top: calc(-1 * var(--section-edge) - 1px); }
 .faq { padding-block: var(--section-edge); }
 .support-section { padding-block: var(--section-edge); scroll-margin-top: calc(-1 * var(--section-edge)); }
+.feedback-section { padding-block: var(--section-edge); scroll-margin-top: calc(-1 * var(--section-edge)); }
 .last-word { padding-top: var(--section-edge); padding-bottom: var(--section-gap); }
 @media (max-width: 780px) {
   :root { --section-gap: 64px; --section-edge: 32px; --intro-inset: 64px; }

@@ -2,10 +2,9 @@
    A single SVG canvas keeps each cap aligned with its horizontal rule. */
 :root { --ornamental-divider: url('./assets/divider-double-gold.svg'); }
 .principles { position: relative; }
-.principles article { border-top: 0; }
+.principles article { position: relative; border-top: 0; }
 .principles::before,
-.feature-footnote::before,
-.footer::before {
+.feature-footnote::before {
   content: '';
   position: absolute;
   top: 0;

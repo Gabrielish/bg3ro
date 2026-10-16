@@ -1,6 +1,7 @@
 /* Keep hero artwork and parallax inside their own stacking context. */
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .hero { isolation: isolate; z-index: 0; }
+.hero-content { display: contents; }
 .hero-art {
   -webkit-user-select: none;
   user-select: none;
@@ -44,9 +45,26 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     font-size: 7px;
     letter-spacing: 1px;
   }
-  .hero-bottom {
-    bottom: 64px;
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    position: absolute;
+    inset-inline: 0;
+    bottom: clamp(64px, 10svh, 100px);
+  }
+  .hero-content .hero-bottom {
+    position: static;
     padding-inline: 20px;
+  }
+  .hero-content > .scroll-cue {
+    position: relative;
+    inset: auto;
+    transform: none;
+    flex: none;
+    width: 44px;
+    height: 44px;
   }
   .hero-title {
     font-size: clamp(29px, 8.5vw, 46px);

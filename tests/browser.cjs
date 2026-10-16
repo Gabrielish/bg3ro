@@ -46,7 +46,7 @@ const path = require('node:path');
   assert.equal(await page.locator('.ornate-frame').count(), 5);
   assert.equal(await page.locator('.voices, .companion-picker, [data-companion]').count(), 0, 'Companion section removed');
   assert.equal(await page.locator('.eyebrow > span').count(), 0, 'Section headings are unnumbered');
-  for (const selector of ['.journal-rule', '.footer-divider']) {
+  for (const selector of ['.journal-rule']) {
     assert(await page.locator(selector).evaluate(el => getComputedStyle(el).backgroundImage.includes('divider-double-gold.svg')));
   }
   assert(await page.locator('.principles').evaluate(el => getComputedStyle(el,'::before').backgroundImage.includes('divider-double-gold.svg')));

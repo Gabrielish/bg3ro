@@ -6,7 +6,7 @@
   const menu = document.querySelector('.menu-toggle');
   const progress = document.querySelector('.scroll-progress');
   const art = document.querySelector('.hero-art');
-  const navSections = ['proiect', 'acord', 'parcurs', 'instalare'].map(id => document.getElementById(id));
+  const navSections = ['proiect', 'acord', 'parcurs', 'instalare', 'feedback'].map(id => document.getElementById(id));
   let scheduled = false;
 
   function updateActiveSection() {

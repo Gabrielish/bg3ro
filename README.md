@@ -4,6 +4,17 @@ One-page de prezentare pentru traducerea română neoficială a Baldur’s Gate 
 
 Site: https://gabrielish.github.io/bg3ro/
 
+Revizia următoare din 16 octombrie ridică pe mobil grupul titlu/CTA/mouse fără să
+schimbe spațierea textelor la scroll. Footerul este acum compact, cu doar trei
+resurse: Nexus, GitHub și `termeni.html`; nu mai reproduce navbarul. Feedbackul
+are secțiune și ancoră în meniul principal. Iconițele SVG bug/mână sunt extrase din
+pagina oficială `https://baldursgate3.game/support`, cu atribuire în pagina de
+termeni; nu sunt emoji și nu apar în butoane. Separatorul redundant din footer a
+fost eliminat, iar ornamentele dintre principiile de pe mobil au părinți poziționați
+corect. `tests/mobile-footer.cjs` verifică această revizie și pagina standalone.
+Pagina de termeni descrie intenția necomercială și lipsa afilierii, nu certifică
+o licență sau o conformitate juridică; include sursele oficiale Larian/Wizards.
+
 Revizia din 16 octombrie 2026 simplifică încheierea: susținere opțională fără
 fundal ilustrat, două linkuri Patreon/Ko-fi, footer cu navigare și resurse, fără
 încă un mesaj promoțional. Secțiunea Parcurs păstrează separat stadiul Actului I,
