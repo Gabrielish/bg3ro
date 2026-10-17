@@ -15,6 +15,9 @@ Testul `tests/hosted-access.sql` a trecut deja pe instanța reală. Creează doa
 
 ## Date și permisiuni
 
+- Migrarea `20261017205257_sidebar_feedback.sql` este deja aplicată: ratinguri și compatibilitate, un vot actualizabil per cont. Nu o rula din nou pe acest proiect. `tests/sidebar-access.sql` verifică izolarea, limitele, agregatele fără identități și interzicerea scrierilor anonime; testele sunt anulate prin ROLLBACK.
+- Evaluările și metadatele raportărilor de compatibilitate sunt publice, fără nume/e-mail/UUID. Acestea sunt distincte de rapoartele private de erori. Statisticile se citesc anonim prin RPC SECURITY INVOKER; utilizatorul autentificat citește și modifică doar propriile voturi.
+
 - Actualizările și progresul se citesc public; doar moderatorii le schimbă.
 - Mesajele noi sunt pending; doar autorul și moderatorii le văd înainte de aprobare.
 - Rapoartele nu se citesc anonim. Un utilizator vede numai rapoartele proprii; moderatorii le văd pe toate.

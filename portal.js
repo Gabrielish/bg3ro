@@ -99,6 +99,7 @@
     $('#reports-heading').textContent = moderator ? 'Rapoartele proiectului' : 'Rapoartele mele';
     $('#discussion-form button[type="submit"]').textContent = moderator ? 'Publică mesajul' : 'Trimite spre verificare';
     $('#discord-login').disabled = !client || !authEnabled;
+    window.dispatchEvent(new CustomEvent('bg3ro:auth', { detail: { client, userId: user?.id || null } }));
     if (dialog.open && !user) {
       $('#auth-unavailable').hidden = !!client && authEnabled;
       $('#discord-login-form').hidden = !client || !authEnabled;

@@ -15,8 +15,8 @@ const fs = require('node:fs');
       assert.equal(await page.locator('h1').textContent(),'Baldur’s Gate 3');
       assert.equal(await page.locator('[role=tab]').count(),5);
       assert.equal(await page.locator('[role=tabpanel]:visible').count(),1);
-      assert.equal(await page.locator('[role=progressbar]').count(),3);
-      assert.deepEqual(await page.locator('[role=progressbar]').evaluateAll(nodes=>nodes.map(el=>el.getAttribute('aria-valuenow'))),['80','20','20']);
+      assert.equal(await page.locator('#despre [role=progressbar]').count(),3);
+      assert.deepEqual(await page.locator('#despre [role=progressbar]').evaluateAll(nodes=>nodes.map(el=>el.getAttribute('aria-valuenow'))),['80','20','20']);
       assert.equal(await page.locator('a[href*="bg3ro-old"]').count(),0);
       for(const id of ['despre','actualizari','descarcari','discutii','erori']) {
         await page.locator(`#tab-${id}`).click();
@@ -31,7 +31,7 @@ const fs = require('node:fs');
       assert.equal(await page.locator('#tab-despre').getAttribute('aria-selected'),'true');
       await page.keyboard.press('End');assert.equal(await page.locator('#tab-erori').getAttribute('aria-selected'),'true');
       await page.keyboard.press('Home');assert.equal(await page.locator('#tab-despre').getAttribute('aria-selected'),'true');
-      await page.locator('.download-main').click();assert(await page.locator('#descarcari').isVisible());
+      await page.locator('.sidebar [data-go-tab="descarcari"]').click();assert(await page.locator('#descarcari').isVisible());
       await page.goBack();assert(await page.locator('#despre').isVisible());
       await page.locator('.topbar [data-auth-open]').click();assert(await page.locator('#auth-dialog').isVisible());
       assert(await page.locator('#auth-unavailable').isVisible());await page.keyboard.press('Escape');
@@ -48,7 +48,7 @@ const fs = require('node:fs');
     const page = await browser.newPage({javaScriptEnabled:false,viewport:{width:390,height:844}});
     await page.goto(base,{waitUntil:'networkidle'});
     assert.equal(await page.locator('.tab-panel:visible').count(),5);
-    assert.equal(await page.locator('a[href*="tab=files"]').count(),1);
+    assert.equal(await page.locator('a[href*="tab=files"]').count(),2);
     await page.close();
     console.log('PASS: five real tab panels, hash/history/keyboard, confirmed progress, download links, honest disconnected community, dialog/privacy, responsive 320–1440px and no-JS.');
   }finally{await browser.close();}

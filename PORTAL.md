@@ -32,9 +32,15 @@ Schema, configurarea Discord OAuth și activarea moderatorului sunt documentate 
 
 authEnabled este true pentru Discord OAuth. Nu este necesar SMTP. Clientul folosește PKCE cu sessionStorage, schimbă codul la revenire, curăță parametrii OAuth din URL și restabilește tabul anterior. Sesiunea rezistă reîncărcării în aceeași filă; nu se folosește localStorage. Rolul de moderator vine exclusiv din verificarea RPC/DB, nu din metadatele profilului Discord. Citirea progresului, actualizărilor și mesajelor aprobate folosește baza reală. Nu sunt inventate mesaje, actualizări sau conturi pentru a umple interfața. Preflight-ul OAuth real ajunge la aplicația corectă, dar se oprește înainte de consimțământ; proprietarul trebuie să confirme loginul real și apoi să primească rolul de moderator.
 
-## Verificări
+## Bara laterală comunitară
+
+portal-sidebar.css/js implementează descărcarea rapidă către fișierele Nexus, evaluări 1–5, voturi de compatibilitate, ultimele 10 raportări, statistici și copierea linkului. Nu există agent local, ZIP găzduit aici, echipă sau ratinguri precompletate. Descărcările totale se consultă pe Nexus; nu sunt înlocuite cu un contor de clicuri. „Actualizare pe site” folosește cea mai recentă actualizare publicată în baza de date, nu o dată inventată a pachetului.
+
+Migrarea 20261017205257_sidebar_feedback.sql este aplicată în proiectul proprietarului. bg3ro_ratings și bg3ro_compatibility au RLS, o singură înregistrare per cont, verificări de interval și limită de 10 secunde pentru modificări. Anonimul poate citi numai coloanele publice (nu user_id) și agregatele SECURITY INVOKER prin bg3ro_sidebar_stats. Endpoint-ul de statistici este apelat intenționat fără JWT, inclusiv pentru vizitatorii conectați; rolul authenticated citește numai propriile înregistrări. Niciun SECURITY DEFINER nou nu este adăugat. Testul SQL supabase/tests/sidebar-access.sql a trecut pe baza reală, cu ROLLBACK pentru toate datele QA. tests/sidebar.cjs folosește SDK/date sintetice pentru verificarea UI, nu dovedește un login Discord real.
 
 Navbarul plutește peste hero, cu texturile cloud-left/cloud-right de pe site-ul oficial sus. La marginea de jos, video-ul și imaginea de rezervă folosesc acum o mască alfa SVG locală cu estompare și variație neregulată; nu mai există dreptunghiul de fum inversat. Dimensiunile și object-fit rămân neschimbate, iar centrul videoclipului nu are overlay. portal-navbar.css reutilizează ornamentul de hover și măștile butonului pergament din versiunea veche, fără să importe tema veche global. Meniul mobil are buton cu nouă puncte, Escape și stare aria-expanded; singurul link de meniu este Nexus Mods; taburile se păstrează sub hero. Login deschide dialogul Discord OAuth; SMTP nu este necesar. Susține proiectul deschide un dialog cu Patreon și Ko-fi, cu X/Escape și restaurarea focusului. Linkurile publice către arhivă au fost eliminate la cererea proprietarului; repository-ul arhivei nu este șters sau modificat.
+
+## Verificări
 
 - node --check portal.js
 - node tests/portal.cjs — layout 320–1440px, navigare, fallback fără DB, accesibilitate de bază; folosește Playwright/Edge.
