@@ -1,0 +1,69 @@
+/* Official navigation: floating layout, cloud textures, peach serif links,
+   ornamental hover and parchment action. Open EB Garamond replaces Quadraat. */
+.topbar{position:fixed;inset:0 0 auto;z-index:40;border:0;background:none;isolation:isolate}
+.topbar:before,.topbar:after{content:'';position:absolute;top:0;height:210px;pointer-events:none;z-index:-1;background-repeat:no-repeat;background-size:contain}
+.topbar:before{right:0;width:100%;background-image:url('https://baldursgate3.game/menu/cloud-right.png');background-position:right top}
+.topbar:after{left:0;width:433px;max-width:100%;background-image:url('https://baldursgate3.game/menu/cloud-left.png');background-position:left top}
+.topbar .topbar-inner{width:calc(100% - 7.5vw);max-width:2200px;min-height:112px;gap:28px;align-items:center}
+.main-navigation{display:flex;align-items:center;justify-content:center;gap:22px;margin-left:auto}
+.main-navigation a,.nav-login{position:relative;font:600 clamp(15px,1.05vw,20px)/1.4 var(--serif);text-transform:uppercase;color:#fbcea0;white-space:nowrap;text-decoration:none;transition:color .4s}
+.main-navigation a{padding-block:12px}
+.main-navigation a:after,.nav-login:after{content:'';position:absolute;top:calc(100% - 5px);left:0;width:100%;height:10px;background:url('./assets/nav-underline.svg') center/100% 10px no-repeat;opacity:0;transition:opacity .4s}
+.main-navigation a:is(:hover,:focus-visible),.nav-login:is(:hover,:focus-visible){color:#fff;text-decoration:none}
+.main-navigation a:is(:hover,:focus-visible):after,.nav-login:is(:hover,:focus-visible):after{opacity:1}
+.navbar-actions{display:flex;align-items:center;gap:25px;flex-shrink:0}
+.nav-login{border:0;background:none;padding:12px 0}
+.nav-support{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;min-height:62px;padding:16px 25px;font:600 18px/1.2 var(--serif);text-transform:uppercase;color:#000!important;white-space:nowrap;text-decoration:none!important}
+.nav-support:before,.nav-support:after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;mask-image:url('./assets/diamond-hover-mask-decor-top.svg'),url('./assets/diamond-hover-mask-decor-bottom.svg'),url('./assets/diamond-hover-mask-corner-1.svg'),url('./assets/diamond-hover-mask-corner-2.svg'),url('./assets/diamond-hover-mask-corner-3.svg'),url('./assets/diamond-hover-mask-corner-4.svg');mask-position:center top,center bottom,left top,right top,left bottom,right bottom;mask-size:800px 800px;mask-repeat:no-repeat;mask-composite:intersect}
+.nav-support:before{background:radial-gradient(circle,#fff 0,#ddc9a7)}
+.nav-support:after{background:#fff;opacity:0;transition:opacity .4s}
+.nav-support:is(:hover,:focus-visible):after{opacity:1}
+.nav-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:0;padding:9px;color:#ddc9a7}
+.dot-grid{display:grid;grid-template-columns:repeat(3,4px);gap:5px}.dot-grid i{width:4px;height:4px;background:currentColor;border-radius:50%;transition:transform .3s}
+.nav-toggle[aria-expanded=true] .dot-grid{transform:rotate(45deg)}
+.project-banner.hero{height:clamp(600px,100svh,1000px)}
+.project-banner.hero .project-badges{top:145px}
+/* Smoke stays at the bottom edge; the central video remains unfiltered.
+   Background images also work without cross-origin CSS mask permission. */
+.hero-edge-smoke{position:absolute;inset:auto 0 0;height:170px;z-index:1;pointer-events:none;overflow:hidden}
+.hero-edge-smoke:before,.hero-edge-smoke:after{content:'';position:absolute;inset:0;transform:rotate(180deg);background:url('https://baldursgate3.game/menu/cloud-right.png') right top/100% 100% no-repeat}
+.hero-edge-smoke:after{left:auto;width:min(433px,100%);background-image:url('https://baldursgate3.game/menu/cloud-left.png');background-position:left top;background-size:contain}
+#continut,#sustinere,#intrebari-frecvente,.tab-panel,.tab-list{scroll-margin-top:120px}
+.skip-link{z-index:70}
+@media(max-width:1250px){
+  .topbar .topbar-inner{gap:20px;min-height:100px}
+  .main-navigation{gap:14px}.main-navigation a{font-size:14px}
+  .navbar-actions{gap:18px}.nav-support{font-size:16px;padding-inline:21px}
+}
+@media(max-width:1100px){
+  .nav-toggle{display:flex}
+  .main-navigation{display:none;position:absolute;top:95px;left:0;right:0;margin:0;padding:25px 6vw 35px;max-height:calc(100svh - 110px);overflow-y:auto;background:#0b0c0ff5;border-bottom:1px solid #ddc9a740;backdrop-filter:blur(12px);flex-direction:column;align-items:flex-start;gap:5px}
+  .topbar.menu-open .main-navigation{display:flex}
+  .main-navigation a{font-size:22px}
+  html:not(.nav-enhanced) .main-navigation{display:flex;position:static;background:#0b0c0f;max-height:none;flex-wrap:wrap;flex-direction:row;gap:15px}
+  html:not(.nav-enhanced) .topbar{position:relative;background:#0b0c0f}
+  html:not(.nav-enhanced) .topbar-inner{flex-wrap:wrap}
+}
+@media(max-width:760px){
+  .topbar .topbar-inner{width:calc(100% - 32px);min-height:88px;gap:12px}
+  .navbar-actions{gap:13px;margin-left:auto}
+  .nav-login{font-size:14px}.nav-support{min-height:52px;font-size:14px;padding-inline:18px}
+  .topbar:before,.topbar:after{height:160px}
+  .main-navigation{top:86px}
+  .project-banner.hero{height:clamp(500px,100svh,850px)}
+  .project-banner.hero .project-badges{top:115px}
+  .hero-edge-smoke{height:110px}
+  #continut,#sustinere,#intrebari-frecvente,.tab-panel,.tab-list{scroll-margin-top:100px}
+}
+@media(max-width:430px){
+  .topbar .topbar-inner{gap:8px;width:calc(100% - 24px)}
+  .topbar .wordmark{font-size:25px;gap:6px}.topbar .wordmark img{width:27px;height:27px}
+  .navbar-actions{gap:8px}.nav-support{font-size:12px;min-height:50px;padding-inline:14px;max-width:106px;white-space:normal;text-align:center}
+  .nav-login{font-size:13px}.nav-toggle{width:34px;padding:5px}
+}
+@media(prefers-reduced-motion:reduce){.main-navigation a,.main-navigation a:after,.nav-login,.nav-login:after,.nav-support:after{transition:none}}
+@media(max-width:360px){
+  .topbar .topbar-inner{width:calc(100% - 20px);gap:6px}
+  .topbar .wordmark{font-size:23px;gap:5px}.topbar .wordmark img{width:24px;height:24px}
+  .navbar-actions{gap:6px}.nav-support{font-size:11px;max-width:96px;padding-inline:12px}.nav-toggle{width:28px;padding:3px}
+}

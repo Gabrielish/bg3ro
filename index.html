@@ -40,8 +40,10 @@
   <link rel="stylesheet" href="./portal.css?v=20261017-video">
   <link rel="stylesheet" href="./portal-hero.css?v=20261017-cta">
   <link rel="stylesheet" href="./portal-footer.css?v=20261017-columns">
+  <link rel="stylesheet" href="./portal-navbar.css?v=20261017-smoke">
   <script src="./portal-config.js?v=20261017" defer></script>
-  <script src="./portal.js?v=20261017-footer" defer></script>
+  <script src="./portal.js?v=20261017-navigation" defer></script>
+  <script src="./portal-navbar.js?v=20261017" defer></script>
   <script src="./portal-video.js?v=20261017-no-controls" defer></script>
   <title>Baldur’s Gate 3 în română — traducere gratuită | BG3RO</title>
   <script type="application/ld+json">
@@ -63,13 +65,15 @@
   <a class="skip-link" href="#continut">Sari la conținut</a>
   <header class="topbar"><div class="container topbar-inner">
     <a class="wordmark" href="./" aria-label="BG3RO — pagina proiectului"><img src="./assets/brand-mark-romania.svg" width="37" height="37" alt=""><span>BG3<span class="brand-ro">RO</span></span></a>
-    <nav class="topbar-links" aria-label="Resurse"><a href="https://gabrielish.github.io/bg3ro-old/">Site-ul anterior</a><a href="https://www.nexusmods.com/baldursgate3/mods/24379" target="_blank" rel="noopener noreferrer">Nexus Mods ↗</a><button class="btn secondary" type="button" data-auth-open>Conectează-te</button><button class="btn secondary" type="button" id="sign-out" hidden>Deconectare</button></nav>
+    <nav class="main-navigation" id="main-navigation" aria-label="Navigație principală"><a href="#despre" data-go-tab="despre">Despre</a><a href="#actualizari" data-go-tab="actualizari">Actualizări</a><a href="#descarcari" data-go-tab="descarcari">Descărcări</a><a href="#discutii" data-go-tab="discutii">Discuții</a><a href="#erori" data-go-tab="erori">Raportare erori</a><a href="https://www.nexusmods.com/baldursgate3/mods/24379" target="_blank" rel="noopener noreferrer">Nexus Mods ↗</a></nav>
+    <div class="navbar-actions"><button class="nav-login" type="button" data-auth-open data-auth-label="Login">Login</button><button class="nav-login" type="button" id="sign-out" hidden>Deconectare</button><a class="nav-support" href="#sustinere"><span>Susține proiectul</span></a><button class="nav-toggle" type="button" aria-label="Deschide meniul" aria-expanded="false" aria-controls="main-navigation"><span class="dot-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button></div>
   </div></header>
   <main>
     <section class="project-banner hero" aria-labelledby="project-title">
       <img class="banner-art" src="https://baldursgate3.game/about/video-still.jpg" data-fallback="./assets/camp-romania-clean.webp" width="1920" height="1080" alt="" fetchpriority="high">
       <video class="banner-video" muted loop playsinline preload="none" data-src="https://baldursgate3.game/_nuxt/About_infinity_video.CO5FZyjg.mp4" aria-hidden="true" tabindex="-1"></video>
       <div class="embers" aria-hidden="true"></div>
+      <div class="hero-edge-smoke" aria-hidden="true"></div>
       <div class="container banner-inner">
         <div class="banner-copy"><div class="project-badges"><span class="badge">Versiune publică · Early Access</span><span class="language"><span class="flag" aria-hidden="true"></span>Română</span></div>
           <div class="hero-titles"><h1 id="project-title">Baldur’s Gate 3</h1><p class="subtitle">În limba română</p>
@@ -133,7 +137,7 @@
         <aside class="sidebar" aria-label="Informații despre proiect">
           <section class="card"><h2>Joacă în limba română</h2><a class="btn download-main" href="#descarcari" data-go-tab="descarcari">Descarcă traducerea</a><p class="small">Fișiere găzduite pe Nexus Mods.<br>Proiect gratuit, în Early Access.</p><a class="external-link" href="#erori" data-go-tab="erori">Ai întâmpinat o problemă? →</a></section>
           <section class="card"><h2>Informații despre proiect</h2><dl><div><dt>Limbă</dt><dd>Română</dd></div><div><dt>Conținut</dt><dd>Textele jocului</dd></div><div><dt>Stadiu</dt><dd>Early Access</dd></div><div><dt>Distribuție</dt><dd>Nexus Mods</dd></div><div><dt>Preț</dt><dd>Gratuit</dd></div></dl></section>
-          <section class="card"><h2>Autorul traducerii</h2><div class="author-line"><div class="author-avatar" aria-hidden="true">G</div><div><strong>Gabrielish</strong><span>Traducere și verificare în joc</span></div></div><p class="small">Dacă vrei să susții proiectul, poți contribui voluntar. Traducerea rămâne gratuită.</p><div class="support-actions"><a class="btn secondary" href="https://www.patreon.com/cw/Gabrielish" target="_blank" rel="noopener noreferrer">Patreon ↗</a><a class="btn secondary" href="https://ko-fi.com/gabrielish" target="_blank" rel="noopener noreferrer">Ko-fi ↗</a></div></section>
+          <section class="card" id="sustinere"><h2>Autorul traducerii</h2><div class="author-line"><div class="author-avatar" aria-hidden="true">G</div><div><strong>Gabrielish</strong><span>Traducere și verificare în joc</span></div></div><p class="small">Dacă vrei să susții proiectul, poți contribui voluntar. Traducerea rămâne gratuită.</p><div class="support-actions"><a class="btn secondary" href="https://www.patreon.com/cw/Gabrielish" target="_blank" rel="noopener noreferrer">Patreon ↗</a><a class="btn secondary" href="https://ko-fi.com/gabrielish" target="_blank" rel="noopener noreferrer">Ko-fi ↗</a></div></section>
         </aside>
       </div>
     </div>
@@ -165,7 +169,6 @@
           <a href="#intrebari-frecvente" data-go-tab="despre" data-go-target="intrebari-frecvente">Întrebări frecvente</a>
           <a href="#confidentialitate">Confidențialitate</a>
           <a href="https://www.nexusmods.com/baldursgate3/mods/24379?tab=posts" target="_blank" rel="noopener noreferrer">Contact ↗</a>
-          <a href="https://gabrielish.github.io/bg3ro-old/">Site-ul anterior ↗</a>
         </nav>
       </div>
       <div class="footer-bottom"><span>© 2026 BG3RO · Gabrielish</span><span>Traducere gratuită pentru comunitatea românească.</span></div>

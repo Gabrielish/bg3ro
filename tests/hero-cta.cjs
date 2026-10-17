@@ -16,7 +16,7 @@ const assert=require('node:assert/strict');
       const hero=await page.locator('.project-banner').boundingBox(),button=await cta.boundingBox(),platforms=await page.locator('.hero-platforms').boundingBox();
       assert(button.y>hero.y && platforms.y>=button.y+button.height && platforms.y+platforms.height<hero.y+hero.height);
       assert(button.x>=0 && button.x+button.width<=width);
-      assert(await page.locator('.hero-cta__corner').evaluateAll(els=>els.every(el=>el.complete&&el.naturalWidth>0)));
+      await page.waitForFunction(()=>[...document.querySelectorAll('.hero-cta__corner')].every(el=>el.complete&&el.naturalWidth>0));
       await cta.hover();
       assert.equal(await page.locator('.hero-cta__hover').evaluate(el=>getComputedStyle(el).opacity),'1');
       assert.equal(await page.locator('.hero-cta__label').evaluate(el=>getComputedStyle(el).color),'rgb(0, 0, 0)');

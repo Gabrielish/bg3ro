@@ -1,0 +1,22 @@
+(() => {
+  const header = document.querySelector('.topbar');
+  const toggle = header.querySelector('.nav-toggle');
+  const nav = header.querySelector('.main-navigation');
+  document.documentElement.classList.add('nav-enhanced');
+  function close(focus = false) {
+    header.classList.remove('menu-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Deschide meniul');
+    if (focus) toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    const open = !header.classList.contains('menu-open');
+    header.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Închide meniul' : 'Deschide meniul');
+  });
+  header.addEventListener('click', e => { if (e.target.closest('a, [data-auth-open]')) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && header.classList.contains('menu-open')) close(true); });
+  document.addEventListener('click', e => { if (!header.contains(e.target)) close(); });
+  matchMedia('(min-width:1101px)').addEventListener('change', () => close());
+})();

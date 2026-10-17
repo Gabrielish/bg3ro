@@ -16,12 +16,13 @@ const assert=require('node:assert/strict');
   try{
     for(const width of [320,390,820,1440]){
       const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'});
+      await page.route('**/portal-config.js*',r=>r.fulfill({contentType:'text/javascript',body:'window.BG3RO_CONFIG={supabaseUrl:"",supabasePublishableKey:"",authEnabled:false};'}));
       await page.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/',{waitUntil:'networkidle'});
       await page.waitForSelector('html.portal-ready');await page.evaluate(()=>document.fonts.ready);
       const logo=page.locator('header .wordmark');
       const brand=await logo.evaluate(el=>{const s=getComputedStyle(el);return{font:s.fontFamily,size:s.fontSize,color:s.color,weight:s.fontWeight,spacing:s.letterSpacing}});
       assert.equal(brand.font,'"EB Garamond", Georgia, serif');assert.equal(brand.weight,'600');assert.equal(brand.spacing,'-0.3px');
-      assert.equal(brand.size,width<=760?'29px':'34px');assert.equal(brand.color,'rgb(244, 236, 217)');
+      assert.equal(brand.size,width<=360?'23px':width<=430?'25px':width<=760?'29px':'34px');assert.equal(brand.color,'rgb(244, 236, 217)');
       assert.equal(await logo.locator('.brand-ro').evaluate(el=>getComputedStyle(el).color),'rgb(215, 188, 138)');
       assert(await logo.locator('img').evaluate(el=>el.complete&&el.naturalWidth>0));
       assert((await logo.locator('img').getAttribute('src')).includes('brand-mark-romania.svg'));

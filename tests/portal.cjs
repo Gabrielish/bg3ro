@@ -17,7 +17,7 @@ const fs = require('node:fs');
       assert.equal(await page.locator('[role=tabpanel]:visible').count(),1);
       assert.equal(await page.locator('[role=progressbar]').count(),3);
       assert.deepEqual(await page.locator('[role=progressbar]').evaluateAll(nodes=>nodes.map(el=>el.getAttribute('aria-valuenow'))),['80','20','20']);
-      assert(await page.locator('a[href="https://gabrielish.github.io/bg3ro-old/"]').count()>=1);
+      assert.equal(await page.locator('a[href*="bg3ro-old"]').count(),0);
       for(const id of ['despre','actualizari','descarcari','discutii','erori']) {
         await page.locator(`#tab-${id}`).click();
         assert.equal(await page.locator(`#tab-${id}`).getAttribute('aria-selected'),'true');

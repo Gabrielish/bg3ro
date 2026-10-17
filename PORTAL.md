@@ -34,6 +34,8 @@ authEnabled este false până la configurarea SMTP și a șablonului OTP. Citire
 
 ## Verificări
 
+Navbarul plutește peste hero, cu texturile cloud-left/cloud-right de pe site-ul oficial și aceleași texturi inversate la marginea de jos. Centrul videoclipului nu are overlay. portal-navbar.css reutilizează ornamentul de hover și măștile butonului pergament din versiunea veche, fără să importe tema veche global. Meniul mobil are buton cu nouă puncte, Escape și stare aria-expanded; linkurile duc la taburile existente. Login deschide dialogul existent, dar nu activează autentificarea înainte de SMTP. Susține proiectul duce la cardul Patreon/Ko-fi. Linkurile publice către arhivă au fost eliminate la cererea proprietarului; repository-ul arhivei nu este șters sau modificat.
+
 - node --check portal.js
 - node tests/portal.cjs — layout 320–1440px, navigare, fallback fără DB, accesibilitate de bază; folosește Playwright/Edge.
 - node tests/portal-community.cjs — integrarea UI cu SDK sintetic; NU dovedește conectarea la Supabase sau livrarea e-mailului.

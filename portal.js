@@ -294,10 +294,10 @@
     }
     if (!client) {
       $$('.backend-notice').forEach(notice => { notice.hidden = false; });
-      $$('[data-auth-open]').forEach(button => { button.textContent = 'Comunitate în pregătire'; });
+      $$('[data-auth-open]').forEach(button => { button.textContent = button.dataset.authLabel || 'Comunitate în pregătire'; });
     }
     if (client && !authEnabled) {
-      $$('[data-auth-open]').forEach(button => { button.textContent = 'Comunitate în pregătire'; });
+      $$('[data-auth-open]').forEach(button => { button.textContent = button.dataset.authLabel || 'Comunitate în pregătire'; });
       $$('.backend-notice').forEach(notice => {
         notice.hidden = false;
         notice.textContent = 'Baza de date este conectată. Autentificarea și trimiterea mesajelor vor fi activate după configurarea serviciului de e-mail.';
