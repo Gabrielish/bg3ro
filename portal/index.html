@@ -37,9 +37,9 @@
   <link rel="preload" href="../assets/fonts/eb-garamond-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://baldursgate3.game">
 
-  <link rel="stylesheet" href="../portal.css?v=20261017-gold">
+  <link rel="stylesheet" href="../portal.css?v=20261017-progress">
   <script src="../portal-config.js?v=20261017" defer></script>
-  <script src="../portal.js?v=20261017" defer></script>
+  <script src="../portal.js?v=20261017-progress" defer></script>
   <title>Baldur’s Gate 3 în română — traducere gratuită | BG3RO</title>
   <script type="application/ld+json">
   {
@@ -82,11 +82,10 @@
       <div class="page-grid">
         <div class="panel-stack">
           <section id="despre" class="tab-panel panel-stack" aria-labelledby="tab-despre">
-            <div class="card progress-card"><div class="card-header"><h2>Progresul traducerii</h2><span class="small">Proiect în dezvoltare</span></div>
-              <div class="progress-row"><div class="progress-label"><span>Traducere</span><strong id="translation-percent">80%</strong></div><div class="progress-track" role="progressbar" aria-label="Progresul traducerii" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80"><div class="progress-fill"></div></div></div>
-              <div class="state-row"><span>Corectură</span><strong id="review-state">Actul I verificat, inclusiv variantele de gen</strong></div>
-              <div class="state-row testing"><span>Testare în joc</span><strong id="testing-state">Verificarea Actului II urmează</strong></div>
-              <p class="progress-note">Progres general comunicat de autor. Corectura și testarea nu au încă un procent separat.</p>
+            <div class="card progress-card"><div class="card-header"><h2>Progresul traducerii</h2></div>
+              <div class="progress-row"><div class="progress-label"><span>Traducere</span><strong id="translation-percent">80%</strong></div><div class="progress-track" id="translation-progress" role="progressbar" aria-label="Progresul traducerii" aria-valuemin="0" aria-valuemax="100" aria-valuenow="80"><div class="progress-fill"></div></div></div>
+              <div class="progress-row"><div class="progress-label"><span>Corectură</span><strong id="review-percent">20%</strong></div><div class="progress-track" id="review-progress" role="progressbar" aria-label="Progresul corecturii" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><div class="progress-fill review-fill"></div></div></div>
+              <div class="progress-row"><div class="progress-label"><span>Testare</span><strong id="testing-percent">20%</strong></div><div class="progress-track" id="testing-progress" role="progressbar" aria-label="Progresul testării" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><div class="progress-fill testing-fill"></div></div></div>
             </div>
             <article class="card about-copy"><h2>Despre proiect</h2><p>Sunt Gabrielish și lucrez singur la traducerea neoficială în limba română pentru Baldur’s Gate 3. Este un proiect personal, pornit din pasiune pentru joc.</p><p>Obiectivul meu este o traducere integrală, firească și consecventă — de la dialoguri și cărți la interfață, obiecte și vrăji. Urmăresc să păstrez sensul, umorul și personalitatea personajelor, cu acorduri corecte la feminin și masculin.</p><p>Verific textele în joc, în contextul în care apar. Actul I este verificat, inclusiv variantele de gen; urmează verificarea Actului II. În paralel, lucrez la interfață și la descrierile obiectelor și vrăjilor.</p><p class="note">Sunt traduse textele jocului, nu vocile. Înregistrările audio originale rămân neschimbate.</p></article>
             <article class="card"><h2>Moduri pentru particularitățile limbii române</h2>
@@ -102,7 +101,7 @@
             <div class="card"><h2>La ce lucrez acum</h2><p>Următoarea etapă de verificare este Actul II. Continui în paralel revizia interfeței, a obiectelor și a vrăjilor.</p><p class="small">Acesta este stadiul proiectului, nu anunțul unei versiuni noi. Pentru fișiere deja publicate, consultă pagina Nexus Mods.</p></div>
             <section class="card admin-tools" id="admin-tools" hidden><h2>Administrarea proiectului</h2><p class="small">Vizibil doar moderatorilor. Actualizările publicate apar în acest tab.</p>
               <details><summary>Publică o actualizare</summary><form id="update-form"><div class="field"><label for="update-title">Titlu</label><input id="update-title" name="title" required maxlength="160"></div><div class="field"><label for="update-body">Conținut</label><textarea id="update-body" name="body" required maxlength="12000"></textarea></div><button class="btn" type="submit">Publică actualizarea</button><p class="form-status" role="status"></p></form></details>
-              <details><summary>Modifică progresul</summary><form id="progress-form"><div class="field"><label for="progress-value">Traducere (%)</label><input id="progress-value" name="translation_percent" type="number" min="0" max="100" value="80" required></div><div class="field"><label for="progress-review">Stadiul corecturii</label><input id="progress-review" name="review_state" maxlength="180" required></div><div class="field"><label for="progress-testing">Stadiul testării</label><input id="progress-testing" name="testing_state" maxlength="180" required></div><button class="btn" type="submit">Salvează progresul</button><p class="form-status" role="status"></p></form></details>
+              <details><summary>Modifică progresul</summary><form id="progress-form"><div class="field"><label for="progress-value">Traducere (%)</label><input id="progress-value" name="translation_percent" type="number" min="0" max="100" value="80" required></div><div class="form-grid"><div class="field"><label for="progress-review-value">Corectură (%)</label><input id="progress-review-value" name="review_percent" type="number" min="0" max="100" value="20" required></div><div class="field"><label for="progress-testing-value">Testare (%)</label><input id="progress-testing-value" name="testing_percent" type="number" min="0" max="100" value="20" required></div></div><div class="field"><label for="progress-review">Stadiul corecturii</label><input id="progress-review" name="review_state" maxlength="180" required></div><div class="field"><label for="progress-testing">Stadiul testării</label><input id="progress-testing" name="testing_state" maxlength="180" required></div><button class="btn" type="submit">Salvează progresul</button><p class="form-status" role="status"></p></form></details>
             </section>
           </section>
           <section id="descarcari" class="tab-panel panel-stack" aria-labelledby="tab-descarcari">

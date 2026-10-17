@@ -3,7 +3,7 @@
 Direcție cerută: portal inspirat de organizarea paginii Lokalizace.net, nu copierea conținutului, codului sau statisticilor sale.
 
 - Cinci taburi: Despre, Actualizări, Descărcări, Discuții, Raportare erori.
-- Progres confirmat: 80%. Corectura și testarea au stadii textuale, nu procente inventate.
+- Procente comunicate de proprietar: traducere 80%, corectură 20%, testare 20%. Toate trei au bare separate și se pot modifica din administrare.
 - Conținutul proiectului funcționează static pe GitHub Pages; comunitatea folosește Supabase.
 - Copia anterioară este publicată separat: https://gabrielish.github.io/bg3ro-old/ . Istoricul anterior este păstrat acolo.
 - Noua interfață nu se publică peste site-ul actual înainte de instalarea și verificarea comunității pe proiectul proprietarului.

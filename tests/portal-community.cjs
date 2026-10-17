@@ -2,7 +2,7 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 function syntheticSDK(){
-  const state=window.__communityTest={user:null,comments:[],reports:[],updates:[],failInsert:false,status:{translation_percent:80,review_state:'Actul I verificat',testing_state:'Actul II urmează'}};
+  const state=window.__communityTest={user:null,comments:[],reports:[],updates:[],failInsert:false,status:{translation_percent:80,review_percent:20,testing_percent:20,review_state:'Actul I verificat',testing_state:'Actul II urmează'}};
   const moderator=()=>state.user?.id==='owner';
   let authCallback=()=>{};
   const client={
@@ -59,8 +59,8 @@ function syntheticSDK(){
       if(owner){
         await p.locator('.report-item select').selectOption('resolved');await p.locator('.report-item textarea').fill('Corectat.');await p.locator('.report-item button[type=submit]').click();await p.waitForFunction(()=>window.__communityTest.reports[0].status==='resolved');
         await p.locator('#tab-actualizari').click();assert(await p.locator('#admin-tools').isVisible());await p.locator('#admin-tools details summary').nth(1).click();
-        await p.locator('#progress-value').fill('82');await p.locator('#progress-review').fill('Stadiu de test');await p.locator('#progress-testing').fill('Testare de test');await p.locator('#progress-form button').click();await p.waitForFunction(()=>document.querySelector('#progress-form .form-status').textContent.includes('actualizat'));
-        await p.locator('#tab-despre').click();assert.equal(await p.locator('#translation-percent').textContent(),'82%');
+        await p.locator('#progress-value').fill('82');await p.locator('#progress-review-value').fill('25');await p.locator('#progress-testing-value').fill('30');await p.locator('#progress-review').fill('Stadiu de test');await p.locator('#progress-testing').fill('Testare de test');await p.locator('#progress-form button').click();await p.waitForFunction(()=>document.querySelector('#progress-form .form-status').textContent.includes('actualizat'));
+        await p.locator('#tab-despre').click();assert.equal(await p.locator('#translation-percent').textContent(),'82%');assert.equal(await p.locator('#review-percent').textContent(),'25%');assert.equal(await p.locator('#testing-percent').textContent(),'30%');
         await p.locator('#tab-actualizari').click();await p.locator('#admin-tools details summary').first().click();await p.locator('#update-title').fill('Actualizare de test');await p.locator('#update-body').fill('O actualizare sintetică pentru testarea interfeței.');await p.locator('#update-form button').click();await p.waitForFunction(()=>document.querySelector('#updates-list').textContent.includes('Actualizare de test'));
       }else assert.equal(await p.locator('#admin-tools:visible').count(),0);
       await p.locator('#sign-out').click();await p.waitForSelector('#sign-out',{state:'hidden'});assert.equal(await p.locator('[data-user-form]:visible').count(),0);assert.equal(await p.locator('#my-reports:visible').count(),0);

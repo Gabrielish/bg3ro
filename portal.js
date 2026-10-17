@@ -133,13 +133,18 @@
   }
   async function loadProgress() {
     if (!client) return;
-    const { data, error } = await client.from('bg3ro_project_status').select('translation_percent,review_state,testing_state').eq('id', 1).maybeSingle();
+    const { data, error } = await client.from('bg3ro_project_status').select('translation_percent,review_percent,testing_percent,review_state,testing_state').eq('id', 1).maybeSingle();
     if (error || !data) return;
-    const percent = Math.max(0, Math.min(100, Number(data.translation_percent)));
-    $('#translation-percent').textContent = `${percent}%`;
-    $('.progress-fill').style.width = `${percent}%`; $('.progress-track').setAttribute('aria-valuenow', String(percent));
-    $('#review-state').textContent = data.review_state; $('#testing-state').textContent = data.testing_state;
-    $('#progress-value').value = percent; $('#progress-review').value = data.review_state; $('#progress-testing').value = data.testing_state;
+    for (const [kind, field, input] of [['translation','translation_percent','progress-value'],['review','review_percent','progress-review-value'],['testing','testing_percent','progress-testing-value']]) {
+      const value = Number(data[field]);
+      if (!Number.isFinite(value)) continue;
+      const percent = Math.max(0, Math.min(100, value));
+      $(`#${kind}-percent`).textContent = `${percent}%`;
+      $(`#${kind}-progress .progress-fill`).style.width = `${percent}%`;
+      $(`#${kind}-progress`).setAttribute('aria-valuenow', String(percent));
+      $(`#${input}`).value = percent;
+    }
+    $('#progress-review').value = data.review_state; $('#progress-testing').value = data.testing_state;
   }
   async function loadUpdates() {
     const target = $('#updates-list');
@@ -267,7 +272,8 @@
   $('#progress-form').addEventListener('submit', event => {
     event.preventDefault(); if (!client || !moderator) return;
     submit(event.currentTarget, async () => {
-      const form = event.currentTarget, values = Object.fromEntries(new FormData(form)); values.translation_percent = Number(values.translation_percent);
+      const form = event.currentTarget, values = Object.fromEntries(new FormData(form));
+      for (const field of ['translation_percent','review_percent','testing_percent']) values[field] = Number(values[field]);
       const { error } = await client.from('bg3ro_project_status').update(values).eq('id', 1);
       if (error) throw error; formStatus(form, 'Progres actualizat.'); await loadProgress();
     });
