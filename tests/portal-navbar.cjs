@@ -9,7 +9,7 @@ try{for(const width of [320,390,820,1100,1280,1440,1920]){
  const header=page.locator('.topbar');assert.equal(await header.evaluate(el=>getComputedStyle(el).position),'fixed');
  const actions=await page.locator('.navbar-actions').boundingBox();assert(actions.x+actions.width<=width,`Actions inside viewport ${width}`);
  assert((await header.evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).includes('cloud-right.png'));
- assert((await page.locator('.hero-edge-smoke').evaluate(el=>getComputedStyle(el,'::before').backgroundImage)).includes('cloud-right.png'));
+ assert((await page.locator('.banner-video').evaluate(el=>getComputedStyle(el).maskImage)).includes('hero-video-feather.svg'));
  assert.equal(await header.locator('[data-auth-open]').textContent(),'Login');
  if(width<=1100){await page.locator('.nav-toggle').click();assert(await page.locator('.main-navigation').isVisible());await page.keyboard.press('Escape');assert.equal(await page.locator('.nav-toggle').getAttribute('aria-expanded'),'false');await page.locator('.nav-toggle').click();}
  assert.equal(await header.locator('[data-go-tab]').count(),0);
