@@ -10,12 +10,35 @@
 .project-banner.hero .banner-copy{height:100%}
 .project-banner.hero .project-badges{position:absolute;top:32px;left:0;right:0;justify-content:center;margin:0;gap:16px;font-size:12px;text-shadow:0 2px 7px #0009}
 .project-banner.hero .language{color:#f4ecd9}
-.project-banner.hero .hero-titles{position:absolute;bottom:20%;left:0;right:0;text-align:center;color:#f4ecd9;text-shadow:0 2px 8px #000b}
+.project-banner.hero .hero-titles{position:absolute;bottom:9%;left:0;right:0;text-align:center;color:#f4ecd9;text-shadow:0 2px 8px #000b}
 .project-banner.hero h1{font-family:var(--serif);font-size:clamp(48px,8.2vw,148px);font-weight:600;line-height:1.05;letter-spacing:-1px;text-transform:uppercase;margin:0;white-space:nowrap}
 .project-banner.hero .subtitle{font-family:var(--serif);font-size:clamp(21px,2.1vw,32px);font-weight:500;letter-spacing:5px;line-height:1.4;margin:18px 0 0;color:inherit}
-.project-banner.hero .banner-video-controls{position:absolute;z-index:3;right:24px;bottom:18px;min-height:0;margin:0}
-.project-banner.hero .banner-video-controls .btn{min-height:44px;background:#0b0c0f66;color:#f4ecd9;border-color:#f4ecd94d;text-shadow:0 1px 4px #0009}
-.project-banner.hero .banner-video-controls .btn:hover{background:#0b0c0faa}
+.hero-actions{display:flex;justify-content:center;margin-top:34px}
+/* Inspected on the official Get it now control: black 35%, blur 10px,
+   corner-intersection masks and a radial parchment hover fading in over .4s. */
+.hero-cta{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;width:410px;max-width:100%;height:86px;color:#fff;white-space:nowrap;text-decoration:none!important}
+.hero-cta__surface{position:absolute;inset:5px 6px;background:rgba(0,0,0,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);mask-image:url('./assets/official-cta-diamond-mask-corner-1.svg'),url('./assets/official-cta-diamond-mask-corner-2.svg'),url('./assets/official-cta-diamond-mask-corner-3.svg'),url('./assets/official-cta-diamond-mask-corner-4.svg');mask-position:left top,right top,left bottom,right bottom;mask-repeat:no-repeat;mask-size:800px 800px;mask-composite:intersect}
+.hero-cta__frame,.hero-cta__decors{position:absolute;inset:5px 6px;pointer-events:none}
+.hero-cta__decors{z-index:2;transition:opacity .4s}
+.hero-cta__border{position:absolute;top:0;bottom:0;width:calc(50% - 16px);border-top:1px solid #e1cbb7;border-bottom:1px solid #be9775}
+.hero-cta__border.left{left:0}.hero-cta__border.right{right:0}
+.hero-cta__border:after{content:'';position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(#e1cbb7,#be9775)}
+.hero-cta__border.left:after{left:0}.hero-cta__border.right:after{right:0}
+.hero-cta__corner{position:absolute;width:10px;height:10px}
+.hero-cta__corner.top-left{top:0;left:0}.hero-cta__corner.top-right{top:0;right:0}.hero-cta__corner.bottom-left{bottom:0;left:0}.hero-cta__corner.bottom-right{bottom:0;right:0}
+.hero-cta__diamond{position:absolute;top:50%;transform:translateY(-50%)}
+.hero-cta__diamond.left{left:-6px}.hero-cta__diamond.right{right:-6px}
+.hero-cta__decor{position:absolute;left:50%;transform:translateX(-50%)}
+.hero-cta__decor.top{top:-5px;fill:#e1cbb7}.hero-cta__decor.bottom{bottom:-4px;fill:#be9775}
+.hero-cta__hover{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .4s;background-image:radial-gradient(circle,#fff 0,#ddc9a7 100%),url('https://baldursgate3.game/btn/diamond-hover-texture-left.png'),url('https://baldursgate3.game/btn/diamond-hover-texture-right.png');background-position:center,left center,right center;background-size:cover;mask-image:url('./assets/diamond-hover-mask-decor-top.svg'),url('./assets/diamond-hover-mask-decor-bottom.svg'),url('./assets/diamond-hover-mask-corner-1.svg'),url('./assets/diamond-hover-mask-corner-2.svg'),url('./assets/diamond-hover-mask-corner-3.svg'),url('./assets/diamond-hover-mask-corner-4.svg');mask-position:center top,center bottom,left top,right top,left bottom,right bottom;mask-repeat:no-repeat;mask-size:800px 800px;mask-composite:intersect}
+.hero-cta__label{position:relative;z-index:4;padding:0 30px;font:600 26px/1.2 var(--serif);text-transform:uppercase;color:#fff;text-shadow:none;transition:color .4s}
+.hero-cta:is(:hover,:focus-visible) .hero-cta__hover{opacity:1}
+.hero-cta:is(:hover,:focus-visible) .hero-cta__decors{opacity:0}
+.hero-cta:is(:hover,:focus-visible) .hero-cta__label{color:#000}
+.hero-platforms{list-style:none;display:flex;justify-content:center;align-items:center;gap:32px;margin:24px 0 0;padding:0;color:#ddc9a7}
+.hero-platforms li{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600;line-height:1.3}
+.hero-platforms .coming-soon{gap:6px;flex-direction:column;line-height:1.1}
+.hero-platforms small{font:500 10px/1.2 var(--sans);letter-spacing:.5px;color:#d4c5af}
 .project-banner.hero .embers{position:absolute}
 .project-banner.hero .ember{position:absolute;pointer-events:none}
 .project-banner.hero.animation-paused .ember{animation-play-state:paused}
@@ -24,7 +47,12 @@
   .project-banner.hero .project-badges{top:24px;gap:10px;font-size:10px}
   .project-banner.hero h1{font-size:clamp(31px,8.4vw,64px);letter-spacing:-.5px}
   .project-banner.hero .subtitle{font-size:20px;letter-spacing:3px;margin-top:15px}
-  .project-banner.hero .hero-titles{bottom:23%}
-  .project-banner.hero .banner-video-controls{right:18px;bottom:14px}
+  .project-banner.hero .hero-titles{bottom:10%}
+  .hero-actions{margin-top:24px}
+  .hero-cta{width:350px;height:74px}
+  .hero-cta__label{font-size:clamp(19px,5.9vw,23px);padding-inline:18px}
+  .hero-platforms{gap:22px;margin-top:20px}
+  .hero-platforms li{font-size:13px;gap:6px}
+  .hero-platforms svg{width:17px;height:17px}
 }
-@media(prefers-reduced-motion:reduce){.project-banner.hero .embers,.project-banner.hero .banner-video-controls{display:none}}
+@media(prefers-reduced-motion:reduce){.project-banner.hero .embers{display:none}.hero-cta__hover,.hero-cta__decors,.hero-cta__label{transition:none}}

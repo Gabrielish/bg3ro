@@ -3,8 +3,7 @@
   const banner = document.querySelector('.project-banner');
   const video = banner?.querySelector('.banner-video');
   const image = banner?.querySelector('.banner-art');
-  const toggle = document.getElementById('banner-video-toggle');
-  if (!video || !toggle) return;
+  if (!video) return;
   const embers = banner.querySelector('.embers');
   if (embers) {
     const count = matchMedia('(max-width: 760px)').matches ? 22 : 36;
@@ -23,38 +22,30 @@
   }
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const connection = navigator.connection;
-  let userPaused = false, visible = true, failed = false;
-  function syncButton() {
-    const label = userPaused ? 'Pornește animația' : 'Oprește animația';
-    toggle.textContent = label;
-    toggle.setAttribute('aria-label', `${label} de fundal`);
-  }
+  let visible = true, failed = false;
   function stopOnFailure() {
-    failed = true; video.pause(); toggle.hidden = !embers;
+    failed = true; video.pause();
     banner.classList.remove('video-loaded');
   }
   async function syncPlayback() {
-    banner.classList.toggle('animation-paused', userPaused || !visible || document.hidden || motion.matches || !!connection?.saveData);
+    banner.classList.toggle('animation-paused', !visible || document.hidden || motion.matches || !!connection?.saveData);
     if (motion.matches || connection?.saveData) {
-      video.pause(); toggle.hidden = true; banner.classList.remove('video-loaded'); return;
+      video.pause(); banner.classList.remove('video-loaded'); return;
     }
-    if (failed) { video.pause(); toggle.hidden = !embers; return; }
-    if (embers) toggle.hidden = false;
-    if (userPaused || !visible || document.hidden) { video.pause(); return; }
+    if (failed) { video.pause(); return; }
+    if (!visible || document.hidden) { video.pause(); return; }
     if (!video.src) { video.muted = true; video.src = video.dataset.src; }
     try { await video.play(); }
     catch (error) {
       // Visibility changes can interrupt a pending play without a media failure.
       if (error.name === 'AbortError') return;
-      if (error.name === 'NotAllowedError') {
-        userPaused = true; toggle.hidden = false; syncButton(); return;
-      }
+      if (error.name === 'NotAllowedError') return;
       stopOnFailure();
     }
   }
   video.addEventListener('playing', () => {
     if (motion.matches || connection?.saveData) { video.pause(); return; }
-    banner.classList.add('video-loaded'); toggle.hidden = false; syncButton();
+    banner.classList.add('video-loaded');
   });
   video.addEventListener('error', stopOnFailure);
   function imageFallback() {
@@ -62,7 +53,6 @@
   }
   image?.addEventListener('error', imageFallback);
   if (image?.complete && !image.naturalWidth) imageFallback();
-  toggle.addEventListener('click', () => { userPaused = !userPaused; syncButton(); syncPlayback(); });
   motion.addEventListener('change', syncPlayback);
   connection?.addEventListener?.('change', syncPlayback);
   document.addEventListener('visibilitychange', syncPlayback);

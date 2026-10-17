@@ -28,8 +28,11 @@ const assert=require('node:assert/strict');
     assert.equal(await page.locator('video').evaluate(el=>getComputedStyle(el).filter),'none');
     assert.equal(await page.locator('.ember').count(),36);
     assert.equal(await page.locator('.ember').first().evaluate(el=>getComputedStyle(el).animationName),'firefly-drift');
-    await page.locator('#banner-video-toggle').click();assert.equal(await page.locator('.ember').first().evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
+    assert.equal(await page.locator('#banner-video-toggle').count(),0);
+    await page.locator('.footer').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('.project-banner').classList.contains('animation-paused'));
+    assert.equal(await page.locator('.ember').first().evaluate(el=>getComputedStyle(el).animationPlayState),'paused');
+    await page.evaluate(()=>scrollTo(0,0));
     await page.screenshot({path:'.qa/centered-hero-video-1440.png'});await page.close();
-    console.log('PASS: centered old-style title/subtitle, top badges, no hero CTA/cover/metadata, unfiltered video without overlay, text shadow, restored fireflies, pause/reduced motion, 320–1920px.');
+    console.log('PASS: centered title/subtitle, top badges, no cover/metadata, unfiltered video, text shadow, restored fireflies, offscreen/reduced motion handling, 320–1920px.');
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});
