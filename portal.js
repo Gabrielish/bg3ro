@@ -30,6 +30,7 @@
   setTab(location.hash.slice(1));
   tabs.forEach((tab, i) => tab.addEventListener('click', event => { event.preventDefault(); goTab(ids[i]); }));
   $$('[data-go-tab]').forEach(link => link.addEventListener('click', event => {
+    if (link.hasAttribute('data-primary-download') && link.href.startsWith('https://')) return;
     event.preventDefault(); goTab(link.dataset.goTab, true);
     const target = link.dataset.goTarget ? document.getElementById(link.dataset.goTarget) : $('.tab-list');
     target?.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -99,7 +100,7 @@
     $('#reports-heading').textContent = moderator ? 'Rapoartele proiectului' : 'Rapoartele mele';
     $('#discussion-form button[type="submit"]').textContent = 'Publică mesajul';
     $('#discord-login').disabled = !client || !authEnabled;
-    window.dispatchEvent(new CustomEvent('bg3ro:auth', { detail: { client, userId: user?.id || null } }));
+    window.dispatchEvent(new CustomEvent('bg3ro:auth', { detail: { client, userId: user?.id || null, moderator } }));
     if (dialog.open && !user) {
       $('#auth-unavailable').hidden = !!client && authEnabled;
       $('#discord-login-form').hidden = !client || !authEnabled;
@@ -160,7 +161,7 @@
     const { data, error } = await client.from('bg3ro_project_updates').select('id,title,body,published_at').order('published_at', { ascending: false }).limit(30);
     if (error) { target.replaceChildren(element('p', 'small', 'Actualizările nu au putut fi încărcate. Consultă istoricul pe Nexus Mods.')); return; }
     target.replaceChildren();
-    if (!data.length) target.append(element('p', 'small', 'Nu sunt încă actualizări publicate în acest portal. Versiunile existente se găsesc pe Nexus Mods.'));
+    if (!data.length) target.append(element('p', 'small release-empty-news', 'Nu sunt încă anunțuri separate publicate în acest portal. Versiunile publicate apar automat mai sus.'));
     data.forEach(update => {
       const article = element('article', 'update-article');
       article.append(element('time', 'update-date', dateText(update.published_at)), element('h3', '', update.title), element('p', '', update.body));
@@ -171,6 +172,7 @@
       }));
       target.append(article);
     });
+    window.dispatchEvent(new Event('bg3ro:updates-loaded'));
   }
   function actionButton(label, action) {
     const button = element('button', 'btn secondary small-btn', label); button.type = 'button';

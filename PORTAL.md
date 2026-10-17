@@ -1,5 +1,7 @@
 # Portal BG3RO — lucru în curs
 
+Fluxul nou de versiuni GitHub, anunțuri legate, drepturi ale proprietarului și încărcare este documentat în [supabase/RELEASES.md](supabase/RELEASES.md). Acesta înlocuiește fluxul anterior exclusiv Nexus pentru descărcarea principală, după prima versiune publicată.
+
 Direcție cerută: portal inspirat de organizarea paginii Lokalizace.net, nu copierea conținutului, codului sau statisticilor sale.
 
 - Cinci taburi: Despre, Actualizări, Descărcări, Discuții, Raportare erori.

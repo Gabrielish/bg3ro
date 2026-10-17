@@ -25,7 +25,7 @@ const {chromium}=require('playwright');const assert=require('node:assert/strict'
  await page.locator('[data-works="true"]').click();await page.waitForFunction(()=>document.querySelector('#compatibility-percent').textContent==='100%');
  await page.locator('.recent-compatibility summary').click();assert.equal(await page.locator('#recent-compatibility-list img').count(),0);assert((await page.locator('#recent-compatibility-list').textContent()).includes('<img src=x>'));
  await page.evaluate(()=>window.__sidebarTest.fail=true);await page.locator('[data-rating="2"]').click();await page.waitForSelector('#rating-status.error');assert.equal(await page.locator('#rating-average').textContent(),'4.0');
- assert((await page.locator('.download-main').getAttribute('href')).includes('tab=files'));assert.equal(await page.locator('#statistics-updated').textContent(),'Nicio actualizare');
+ assert((await page.locator('.quick-download a[href*="nexusmods"]').getAttribute('href')).includes('tab=files'));assert.equal(await page.locator('#github-quick-download:visible').count(),0);assert.equal(await page.locator('#statistics-updated').textContent(),'Nicio actualizare');
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(errors,[]);
  await page.locator('.sidebar').screenshot({path:`.qa/sidebar-${width}.png`});await page.close();
 }console.log('PASS: sidebar responsive, quick download, empty state, login gating, star/vote save/error, anonymous recent reports and text-only rendering.');}finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});

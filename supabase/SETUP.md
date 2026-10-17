@@ -1,5 +1,7 @@
 # Conectarea comunității BG3RO
 
+Configurarea versiunilor, moderatorul confirmat și secretul de încărcare GitHub sunt documentate în [RELEASES.md](RELEASES.md). UUID-ul proprietarului a primit deja rolul de moderator; nu îl atribui automat altui cont pe baza numelui afișat.
+
 Nu publica portalul ca funcțional înainte de verificările de mai jos.
 
 1. Migrările `migrations/20261017_bg3ro_portal.sql` și `migrations/20261017b_bg3ro_public_access.sql` sunt deja instalate în proiectul proprietarului. Nu le rula din nou. Pentru o instanță nouă, rulează-le o singură dată în această ordine. Nu modifică tabelele altor aplicații; toate numele au prefixul bg3ro.

@@ -73,5 +73,6 @@
     if (await save('bg3ro_compatibility', payload, '#compatibility-status')) { myVote = payload;drawOwn();await loadStats(); }
   }));
   $('#share-project').addEventListener('click', async () => { try { await navigator.clipboard.writeText('https://gabrielish.github.io/bg3ro/');status('#share-status', 'Link copiat.'); } catch (_) { status('#share-status', 'https://gabrielish.github.io/bg3ro/'); } });
+  window.addEventListener('bg3ro:releases-updated', loadStats);
   loadStats();
 })();
