@@ -22,6 +22,8 @@ Proprietarul creează un fine-grained GitHub token limitat la `Gabrielish/bg3ro`
 
 ## Teste
 
+- `node tests/upload-cors.cjs`: regresie pe serviciul real, din browser fără interceptarea cererilor. Confirmă că SDK-ul trece de preflight și primește JSON 401 pentru un JWT de diagnostic invalid; nu folosește sesiunea proprietarului și nu încarcă fișiere. Corecția CORS permite explicit `x-client-info`, antetele de retry/tracing ale SDK-ului și `x-file-name`, numai pentru originile aprobate.
+
 - `node tests/releases.cjs`: UI desktop/mobil, date sintetice, publicare/editare în ambele taburi și erori de upload.
 - `node tests/upload-handler.cjs`: autorizare, origine, limite, semnături, nume, înlocuire SHA și descărcare fixată la commit; fără apeluri GitHub reale.
 - `supabase/tests/releases-access.sql`: verificat pe instanța reală, cu ROLLBACK pentru toate datele QA; publicare/editare autorizată și URL-uri nesigure refuzate.

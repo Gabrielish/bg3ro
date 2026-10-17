@@ -3,10 +3,13 @@ export function createUploadHandler({ env, fetch: request }) {
   const origins = new Set(['https://gabrielish.github.io', 'http://127.0.0.1:4173', 'http://localhost:4173']);
   const folder = "Baldur's Gate 3 Romanian Translate";
   const maxBytes = 20 * 1024 * 1024;
+  // Supabase JS 2.118.0 sends x-client-info; keep retry/optional tracing headers
+  // aligned with the SDK as well. The filename header is specific to this uploader.
+  const allowedHeaders = 'authorization, apikey, content-type, x-client-info, x-file-name, x-retry-count, traceparent, tracestate, baggage';
   return async function handler(req) {
     const origin = req.headers.get('origin') || '';
     const headers = { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'Vary': 'Origin' };
-    if (origins.has(origin)) Object.assign(headers, { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-file-name', 'Access-Control-Allow-Methods': 'POST, OPTIONS' });
+    if (origins.has(origin)) Object.assign(headers, { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Headers': allowedHeaders, 'Access-Control-Allow-Methods': 'POST, OPTIONS' });
     const reply = (status, message, extra = {}) => new Response(JSON.stringify({ message, ...extra }), { status, headers });
     if (origin && !origins.has(origin)) return reply(403, 'Origine nepermisă.');
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers });
