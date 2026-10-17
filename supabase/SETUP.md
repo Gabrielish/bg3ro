@@ -7,7 +7,7 @@ Nu publica portalul ca funcțional înainte de verificările de mai jos.
 3. În Supabase, Site URL și Redirect URLs includ exact `https://gabrielish.github.io/bg3ro/`. Providerul Discord este confirmat activ prin endpoint-ul public settings; înregistrările sunt permise. Nu este necesar SMTP sau domeniu propriu pentru acest flux. Clientul folosește PKCE, cu verifier și sesiune în sessionStorage, schimbă codul la revenire și elimină parametrii de autentificare din URL. Schimbarea tabului curent se păstrează pe durata redirecționării. Nu se solicită apartenență sau acces la serverul Discord.
 4. Adaugă Project URL și Publishable Key / anon în `portal-config.js`. Nu introduce parola bazei de date, service_role sau secret keys. Cheia publică este destinată browserului; accesul este restrâns de RLS și granturi.
 5. Proprietarul trebuie să se conecteze o dată cu propriul cont Discord. În Authentication > Users verifică identitatea și copiază UUID-ul Supabase, apoi folosește comanda de la finalul migrării pentru a-l face moderator. Application ID-ul Discord nu este ID-ul utilizatorului. Nu atribui automat drepturi pe baza user_metadata, numelui sau e-mailului. Niciun vizitator nu se poate promova singur.
-6. Verifică testele SQL de acces cu două conturi de test și un moderator, apoi testează trimiterea/aprobarea unui mesaj, răspunsul privat la un raport, actualizările și progresul. Nu sunt suficiente simulările din browser.
+6. Verifică testele SQL de acces cu două conturi de test și un moderator, apoi testează publicarea imediată a unui mesaj, răspunsul privat la un raport, actualizările și progresul. Nu sunt suficiente simulările din browser.
 
 Testul `tests/hosted-access.sql` a trecut deja pe instanța reală. Creează doar în tranzacție utilizatorii de diagnostic, verifică anonimul/autorul/alt utilizator/moderatorul și încheie prin ROLLBACK. Nu sunt păstrate conturi sau rapoarte fictive. Autentificarea prin e-mail nu este testată de acel SQL.
 
@@ -19,7 +19,7 @@ Testul `tests/hosted-access.sql` a trecut deja pe instanța reală. Creează doa
 - Evaluările și metadatele raportărilor de compatibilitate sunt publice, fără nume/e-mail/UUID. Acestea sunt distincte de rapoartele private de erori. Statisticile se citesc anonim prin RPC SECURITY INVOKER; utilizatorul autentificat citește și modifică doar propriile voturi.
 
 - Actualizările și progresul se citesc public; doar moderatorii le schimbă.
-- Mesajele noi sunt pending; doar autorul și moderatorii le văd înainte de aprobare.
+- Mesajele și răspunsurile noi sunt publicate imediat, fără aprobare. Autorii le pot șterge; moderatorii le pot ascunde ulterior. Migrarea `20261017210537_instant_discussions.sql` este aplicată în proiectul proprietarului; nu o rula din nou.
 - Rapoartele nu se citesc anonim. Un utilizator vede numai rapoartele proprii; moderatorii le văd pe toate.
 - Utilizatorii nu pot modifica autorul, data, stadiul sau răspunsul moderatorului. Coloanele acceptate la insert/update sunt limitate explicit.
 - Trimiterile sunt limitate în baza de date: minimum 30 secunde între mesaje/rapoarte, maximum 20 pe zi, pe cont și tip. Sunt necesare și protecțiile Auth împotriva abuzului cu multe conturi.

@@ -48,4 +48,4 @@ Navbarul plutește peste hero, cu texturile cloud-left/cloud-right de pe site-ul
 - node tests/portal-db.cjs — migrare și RLS în PostgreSQL local PGlite; necesită npm install --prefix .qa/db-test @electric-sql/pglite . Nu este backendul site-ului și nu stochează datele utilizatorilor reali.
 - Celelalte teste tests/*.cjs se referă la site-ul arhivat, cu excepția verificărilor SEO aplicabile în continuare.
 
-Înainte de lansare: test real cu utilizator anonim, doi utilizatori și moderator; consimțământ și revenire Discord reușite; mesaj pending/aprobare; raport privat și răspuns; publicarea unei actualizări și modificarea progresului. Testele locale nu înlocuiesc această verificare.
+Înainte de lansare: test real cu utilizator anonim, doi utilizatori și moderator; consimțământ și revenire Discord reușite; mesaj publicat imediat, fără aprobare; raport privat și răspuns; publicarea unei actualizări și modificarea progresului. Testele locale nu înlocuiesc această verificare.

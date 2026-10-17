@@ -97,7 +97,7 @@
     $('#my-reports').hidden = !user;
     $('#admin-tools').hidden = !moderator;
     $('#reports-heading').textContent = moderator ? 'Rapoartele proiectului' : 'Rapoartele mele';
-    $('#discussion-form button[type="submit"]').textContent = moderator ? 'Publică mesajul' : 'Trimite spre verificare';
+    $('#discussion-form button[type="submit"]').textContent = 'Publică mesajul';
     $('#discord-login').disabled = !client || !authEnabled;
     window.dispatchEvent(new CustomEvent('bg3ro:auth', { detail: { client, userId: user?.id || null } }));
     if (dialog.open && !user) {
@@ -227,7 +227,7 @@
       const form = event.currentTarget, values = Object.fromEntries(new FormData(form));
       const { error } = await client.from('bg3ro_discussion_posts').insert({ author_id: user.id, author_name: values.author_name.trim(), title: values.title.trim(), body: values.body.trim(), parent_id: values.parent_id || null });
       if (error) throw error;
-      form.elements.body.value = ''; cancelReply(); formStatus(form, moderator ? 'Mesajul a fost publicat.' : 'Mesaj primit. Va apărea public după verificare.'); page = 0; await loadComments();
+      form.elements.body.value = ''; cancelReply(); formStatus(form, 'Mesajul a fost publicat.'); page = 0; await loadComments();
     });
   });
   $('#report-form').addEventListener('submit', event => {

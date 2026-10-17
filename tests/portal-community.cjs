@@ -23,7 +23,7 @@ function syntheticSDK(){
           }
           if(this.operation==='insert'){
             if(state.failInsert)return{data:null,error:{message:'Network error'}};
-            const row={id:`row-${Date.now()}-${Math.random()}`,created_at:new Date().toISOString(),published_at:new Date().toISOString(),status:key==='comments'?(moderator()?'approved':'pending'):'new',moderator_reply:'',...this.payload};
+            const row={id:`row-${Date.now()}-${Math.random()}`,created_at:new Date().toISOString(),published_at:new Date().toISOString(),status:key==='comments'?'approved':'new',moderator_reply:'',...this.payload};
             state[key].unshift(row);return{data:null,error:null};
           }
           const matches=row=>this.filters.every(([k,v])=>row[k]===v);
@@ -54,7 +54,9 @@ function syntheticSDK(){
       await p.locator('#discussion-form button[type=submit]').click();await p.waitForFunction(()=>document.querySelector('#discussion-form .form-status').textContent.includes('Mesaj'));
       assert.equal(await p.locator('#discussion-list img').count(),0);assert.equal(await p.evaluate(()=>window.injected),undefined);
       assert.equal(await p.evaluate(()=>window.__communityTest.comments.length),1);
-      assert.equal(await p.evaluate(()=>window.__communityTest.comments[0].status),owner?'approved':'pending');
+      assert.equal(await p.evaluate(()=>window.__communityTest.comments[0].status),'approved');
+      assert.equal(await p.locator('#discussion-form .form-status').textContent(),'Mesajul a fost publicat.');
+      assert.equal(await p.locator('#discussion-form button[type=submit]').textContent(),'Publică mesajul');
       await p.locator('#tab-erori').click();await p.locator('#report-title').fill('O eroare în traducere');await p.locator('#report-version').fill('Versiune de test');await p.locator('#report-body').fill('Un context de test care descrie suficient de clar eroarea.');
       await p.evaluate(()=>window.__communityTest.failInsert=true);await p.locator('#report-form button[type=submit]').click();await p.waitForSelector('#report-form .form-status.error');assert.equal(await p.evaluate(()=>window.__communityTest.reports.length),0);
       assert.equal(await p.locator('#report-title').inputValue(),'O eroare în traducere');
