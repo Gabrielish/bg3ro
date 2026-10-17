@@ -16,6 +16,8 @@ portal-config.js conține exclusiv URL-ul și cheia PUBLICĂ Supabase. Nu folosi
 
 ## Identitate vizuală
 
+Footerul are patru coloane: identitatea BG3RO, Traducere, Comunitate și Informații. Folosește ilustrația locală ca fundal discret, o singură linie înaintea benzii de încheiere și păstrează atribuirea și informațiile despre date. Nu inventează conturi sociale; linkurile merg către taburile reale, FAQ, Nexus, GitHub, Patreon, Ko-fi și arhivă.
+
 Hero-ul principal folosește titlul serif mare, centrat, cu „În limba română” dedesubt și etichetele de stadiu/limbă sus. Nu are caseta cu zar, metadate, slogan sau CTA de descărcare. portal-hero.css elimină overlay-ul și transparența video-ului; lizibilitatea se bazează pe umbra textelor. Licuricii reutilizează fireflies.css și se opresc împreună cu video-ul din controlul de pauză, când hero-ul nu este vizibil sau este cerută reducerea mișcării.
 
 Antetul încarcă video-ul oficial din pagina About a Baldur’s Gate 3, direct de la Larian, fără copie MP4 în repository. Atribuirea este vizibilă în footer. Sursa cu hash se poate schimba; imaginea statică oficială este prima rezervă, iar ilustrația locală a taberei este rezerva pentru imagine. Video-ul este fără sunet, în buclă, cu pauză manuală; nu se descarcă dacă este cerută reducerea mișcării sau economisirea datelor. Redarea se oprește în afara ecranului și când pagina este ascunsă.

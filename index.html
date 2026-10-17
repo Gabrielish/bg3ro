@@ -39,8 +39,9 @@
 
   <link rel="stylesheet" href="./portal.css?v=20261017-video">
   <link rel="stylesheet" href="./portal-hero.css?v=20261017-centered">
+  <link rel="stylesheet" href="./portal-footer.css?v=20261017-columns">
   <script src="./portal-config.js?v=20261017" defer></script>
-  <script src="./portal.js?v=20261017-progress" defer></script>
+  <script src="./portal.js?v=20261017-footer" defer></script>
   <script src="./portal-video.js?v=20261017-centered" defer></script>
   <title>Baldur’s Gate 3 în română — traducere gratuită | BG3RO</title>
   <script type="application/ld+json">
@@ -96,7 +97,7 @@
               <div class="module-row"><h3>Jurnalul de luptă <span class="mini-badge experimental">Experimental</span></h3><p>Forme precum „vindecat” / „vindecată” și „l-a ratat” / „a ratat-o”, adaptate după personaj. Comportamentul este încă în testare.</p></div>
               <p class="module-footnote">Extensii separate de traducerea de bază. Disponibilitatea fișierelor și cerințele se verifică în <a href="#descarcari" data-go-tab="descarcari">Descărcări</a>.</p>
             </article>
-            <article class="card faq"><h2>Întrebări frecvente</h2><details><summary>Este tradus tot jocul?</summary><p>Nu încă. Versiunea publică este în Early Access. Progresul și conținutul fiecărui pachet sunt lucruri distincte; citește descrierea versiunii înainte să o instalezi.</p></details><details><summary>Am nevoie de Script Extender?</summary><p>Nu presupune că toate pachetele au aceleași cerințe. Extensiile de căutare și jurnal folosesc Script Extender în testele pe Windows. Consultă instrucțiunile fișierului ales.</p></details><details><summary>Unde pot semnala o greșeală?</summary><p>În tabul <a href="#erori" data-go-tab="erori">Raportare erori</a>. Include textul, contextul și versiunea instalată. Pentru un acord greșit, menționează și genul personajului sau obiectul.</p></details></article>
+            <article class="card faq" id="intrebari-frecvente"><h2>Întrebări frecvente</h2><details><summary>Este tradus tot jocul?</summary><p>Nu încă. Versiunea publică este în Early Access. Progresul și conținutul fiecărui pachet sunt lucruri distincte; citește descrierea versiunii înainte să o instalezi.</p></details><details><summary>Am nevoie de Script Extender?</summary><p>Nu presupune că toate pachetele au aceleași cerințe. Extensiile de căutare și jurnal folosesc Script Extender în testele pe Windows. Consultă instrucțiunile fișierului ales.</p></details><details><summary>Unde pot semnala o greșeală?</summary><p>În tabul <a href="#erori" data-go-tab="erori">Raportare erori</a>. Include textul, contextul și versiunea instalată. Pentru un acord greșit, menționează și genul personajului sau obiectul.</p></details></article>
           </section>
           <section id="actualizari" class="tab-panel panel-stack" aria-labelledby="tab-actualizari">
             <div class="card"><div class="card-header"><h2>Actualizări</h2><a class="small" href="https://www.nexusmods.com/baldursgate3/mods/24379?tab=logs" target="_blank" rel="noopener noreferrer">Istoric pe Nexus ↗</a></div><div id="updates-list"><p class="muted">Se încarcă actualizările…</p></div></div>
@@ -135,7 +136,41 @@
       </div>
     </div>
   </main>
-  <footer class="footer"><div class="container"><div class="footer-top"><span class="footer-brand">BG3<span class="brand-ro">RO</span></span><nav class="footer-links" aria-label="Resurse"><a href="https://www.nexusmods.com/baldursgate3/mods/24379">Nexus Mods</a><a href="https://github.com/Gabrielish/bg3ro">GitHub</a><a href="https://gabrielish.github.io/bg3ro-old/">Site-ul anterior</a><a href="#confidentialitate">Confidențialitate</a></nav></div><p>Proiect neoficial, fără afiliere cu Larian Studios sau Wizards of the Coast. Baldur’s Gate 3 și materialele asociate aparțin titularilor lor. Ilustrația de tabără este furnizată de proiect. Video de fundal și imagine statică: <a href="https://baldursgate3.game/about" target="_blank" rel="noopener noreferrer">Larian Studios / Baldur’s Gate 3</a>.</p><details id="confidentialitate"><summary>Despre cont, mesaje și datele personale</summary><p>Contul folosește adresa de e-mail pentru autentificare prin Supabase. E-mailul nu apare în discuții. Numele afișat și mesajele aprobate sunt publice. Rapoartele de erori sunt private, accesibile autorului lor și moderatorilor. Nu publica date personale în mesaje. Pentru ștergerea unui mesaj folosește opțiunea „Șterge”; pentru ștergerea contului și a rapoartelor, contactează Gabrielish prin pagina Nexus. Nu sunt utilizate contoare publicitare sau statistici de vizitare în această versiune.</p></details></div></footer>
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-intro">
+          <a class="wordmark footer-wordmark" href="./" aria-label="BG3RO — începutul paginii"><img src="./assets/brand-mark-romania.svg" width="37" height="37" alt=""><span>BG3<span class="brand-ro">RO</span></span></a>
+          <p>Traducerea neoficială în limba română pentru Baldur’s Gate 3.<br>Un proiect de Gabrielish.</p>
+          <div class="footer-socials" aria-label="Paginile proiectului">
+            <a href="https://github.com/Gabrielish/bg3ro" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.13.68-3.79-1.33-3.79-1.33-.51-1.3-1.25-1.65-1.25-1.65-1.02-.7.08-.69.08-.69 1.13.08 1.72 1.16 1.72 1.16 1.01 1.72 2.64 1.22 3.29.93.1-.73.4-1.22.72-1.5-2.5-.28-5.13-1.25-5.13-5.56 0-1.23.44-2.23 1.16-3.02-.12-.28-.5-1.43.11-2.98 0 0 .95-.3 3.1 1.15a10.8 10.8 0 0 1 5.63 0c2.15-1.46 3.1-1.15 3.1-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.02 0 4.32-2.63 5.27-5.14 5.55.4.35.76 1.03.76 2.08v3.11c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z"/></svg><span>GitHub</span></a>
+            <a href="https://www.nexusmods.com/baldursgate3/mods/24379" target="_blank" rel="noopener noreferrer">Nexus Mods ↗</a>
+          </div>
+        </div>
+        <nav class="footer-column" aria-labelledby="footer-translation"><h2 id="footer-translation">Traducere</h2>
+          <a href="#despre" data-go-tab="despre">Despre proiect</a>
+          <a href="#actualizari" data-go-tab="actualizari">Actualizări</a>
+          <a href="#descarcari" data-go-tab="descarcari">Descărcări</a>
+          <a href="https://www.nexusmods.com/baldursgate3/mods/24379?tab=description" target="_blank" rel="noopener noreferrer">Instrucțiuni pe Nexus ↗</a>
+        </nav>
+        <nav class="footer-column" aria-labelledby="footer-community"><h2 id="footer-community">Comunitate</h2>
+          <a href="#discutii" data-go-tab="discutii">Discuții</a>
+          <a href="#erori" data-go-tab="erori">Raportare erori</a>
+          <a href="https://www.patreon.com/cw/Gabrielish" target="_blank" rel="noopener noreferrer">Patreon ↗</a>
+          <a href="https://ko-fi.com/gabrielish" target="_blank" rel="noopener noreferrer">Ko-fi ↗</a>
+        </nav>
+        <nav class="footer-column" aria-labelledby="footer-information"><h2 id="footer-information">Informații</h2>
+          <a href="#intrebari-frecvente" data-go-tab="despre" data-go-target="intrebari-frecvente">Întrebări frecvente</a>
+          <a href="#confidentialitate">Confidențialitate</a>
+          <a href="https://www.nexusmods.com/baldursgate3/mods/24379?tab=posts" target="_blank" rel="noopener noreferrer">Contact ↗</a>
+          <a href="https://gabrielish.github.io/bg3ro-old/">Site-ul anterior ↗</a>
+        </nav>
+      </div>
+      <div class="footer-bottom"><span>© 2026 BG3RO · Gabrielish</span><span>Traducere gratuită pentru comunitatea românească.</span></div>
+      <div class="footer-attribution"><p>Proiect neoficial, fără afiliere cu Larian Studios sau Wizards of the Coast. Baldur’s Gate 3 și materialele asociate aparțin titularilor lor. Ilustrația de tabără este furnizată de proiect. Video de fundal și imagine statică: <a href="https://baldursgate3.game/about" target="_blank" rel="noopener noreferrer">Larian Studios / Baldur’s Gate 3</a>.</p></div>
+      <details id="confidentialitate"><summary>Despre cont, mesaje și datele personale</summary><p>Contul folosește adresa de e-mail pentru autentificare prin Supabase. E-mailul nu apare în discuții. Numele afișat și mesajele aprobate sunt publice. Rapoartele de erori sunt private, accesibile autorului lor și moderatorilor. Nu publica date personale în mesaje. Pentru ștergerea unui mesaj folosește opțiunea „Șterge”; pentru ștergerea contului și a rapoartelor, contactează Gabrielish prin pagina Nexus. Nu sunt utilizate contoare publicitare sau statistici de vizitare în această versiune.</p></details>
+    </div>
+  </footer>
   <dialog id="auth-dialog" aria-labelledby="auth-heading"><div class="dialog-title"><h2 id="auth-heading">Intră în comunitate</h2><button type="button" class="dialog-close" aria-label="Închide autentificarea">×</button></div><p class="dialog-copy">Primești un cod prin e-mail. Nu ai nevoie de parolă.</p><p id="auth-unavailable" class="notice" hidden>Autentificarea va fi disponibilă după conectarea bazei de date.</p><form id="email-form"><div class="field"><label for="auth-email">Adresa de e-mail</label><input id="auth-email" type="email" name="email" autocomplete="email" required maxlength="254"></div><label class="checkbox-line"><input type="checkbox" required><span>Am citit informațiile despre cont și datele personale din footer.</span></label><button class="btn" type="submit">Trimite codul</button><p class="form-status" role="status"></p></form><form id="otp-form" hidden><div class="field"><label for="auth-code">Codul primit prin e-mail</label><input id="auth-code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,10}" minlength="6" maxlength="10" required></div><button class="btn" type="submit">Confirmă codul</button><p class="form-status" role="status"></p></form></dialog>
   <div class="toast" id="toast" role="status" hidden></div>
 </body>

@@ -31,7 +31,8 @@
   tabs.forEach((tab, i) => tab.addEventListener('click', event => { event.preventDefault(); goTab(ids[i]); }));
   $$('[data-go-tab]').forEach(link => link.addEventListener('click', event => {
     event.preventDefault(); goTab(link.dataset.goTab, true);
-    $('.tab-list').scrollIntoView({ block: 'start', behavior: 'instant' });
+    const target = link.dataset.goTarget ? document.getElementById(link.dataset.goTarget) : $('.tab-list');
+    target?.scrollIntoView({ block: 'start', behavior: 'instant' });
   }));
   tablist.addEventListener('keydown', event => {
     const index = tabs.indexOf(document.activeElement);
