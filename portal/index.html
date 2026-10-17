@@ -37,9 +37,10 @@
   <link rel="preload" href="../assets/fonts/eb-garamond-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preconnect" href="https://baldursgate3.game">
 
-  <link rel="stylesheet" href="../portal.css?v=20261017-progress">
+  <link rel="stylesheet" href="../portal.css?v=20261017-video">
   <script src="../portal-config.js?v=20261017" defer></script>
   <script src="../portal.js?v=20261017-progress" defer></script>
+  <script src="../portal-video.js?v=20261017-video" defer></script>
   <title>Baldur’s Gate 3 în română — traducere gratuită | BG3RO</title>
   <script type="application/ld+json">
   {
@@ -64,12 +65,14 @@
   </div></header>
   <main>
     <section class="project-banner" aria-labelledby="project-title">
-      <img class="banner-art" src="../assets/camp-romania-clean.webp" width="1677" height="938" alt="" fetchpriority="high">
+      <img class="banner-art" src="https://baldursgate3.game/about/video-still.jpg" data-fallback="../assets/camp-romania-clean.webp" width="1920" height="1080" alt="" fetchpriority="high">
+      <video class="banner-video" muted loop playsinline preload="none" data-src="https://baldursgate3.game/_nuxt/About_infinity_video.CO5FZyjg.mp4" aria-hidden="true" tabindex="-1"></video>
       <div class="container banner-inner">
         <div class="project-cover" aria-hidden="true"><img src="../assets/logo-d20-romania-256.webp" width="118" height="118" alt=""><span>ÎN LIMBA ROMÂNĂ</span></div>
         <div class="banner-copy"><div class="project-badges"><span class="badge">Versiune publică · Early Access</span><span class="language"><span class="flag" aria-hidden="true"></span>Română</span></div>
           <h1 id="project-title">Baldur’s Gate 3</h1><p class="subtitle">Traducere în limba română</p>
           <div class="project-meta"><span>Un proiect de <a href="https://github.com/Gabrielish">Gabrielish</a></span><span>Traducere neoficială</span><span>Gratuită</span></div>
+          <div class="banner-video-controls"><button class="btn secondary small-btn" id="banner-video-toggle" type="button" aria-label="Oprește animația de fundal" hidden>Oprește animația</button></div>
         </div>
       </div>
     </section>
@@ -133,7 +136,7 @@
       </div>
     </div>
   </main>
-  <footer class="footer"><div class="container"><div class="footer-top"><span class="footer-brand">BG3<span class="brand-ro">RO</span></span><nav class="footer-links" aria-label="Resurse"><a href="https://www.nexusmods.com/baldursgate3/mods/24379">Nexus Mods</a><a href="https://github.com/Gabrielish/bg3ro">GitHub</a><a href="https://gabrielish.github.io/bg3ro-old/">Site-ul anterior</a><a href="#confidentialitate">Confidențialitate</a></nav></div><p>Proiect neoficial, fără afiliere cu Larian Studios sau Wizards of the Coast. Baldur’s Gate 3 și materialele asociate aparțin titularilor lor. Ilustrația de tabără este furnizată de proiect.</p><details id="confidentialitate"><summary>Despre cont, mesaje și datele personale</summary><p>Contul folosește adresa de e-mail pentru autentificare prin Supabase. E-mailul nu apare în discuții. Numele afișat și mesajele aprobate sunt publice. Rapoartele de erori sunt private, accesibile autorului lor și moderatorilor. Nu publica date personale în mesaje. Pentru ștergerea unui mesaj folosește opțiunea „Șterge”; pentru ștergerea contului și a rapoartelor, contactează Gabrielish prin pagina Nexus. Nu sunt utilizate contoare publicitare sau statistici de vizitare în această versiune.</p></details></div></footer>
+  <footer class="footer"><div class="container"><div class="footer-top"><span class="footer-brand">BG3<span class="brand-ro">RO</span></span><nav class="footer-links" aria-label="Resurse"><a href="https://www.nexusmods.com/baldursgate3/mods/24379">Nexus Mods</a><a href="https://github.com/Gabrielish/bg3ro">GitHub</a><a href="https://gabrielish.github.io/bg3ro-old/">Site-ul anterior</a><a href="#confidentialitate">Confidențialitate</a></nav></div><p>Proiect neoficial, fără afiliere cu Larian Studios sau Wizards of the Coast. Baldur’s Gate 3 și materialele asociate aparțin titularilor lor. Ilustrația de tabără este furnizată de proiect. Video de fundal și imagine statică: <a href="https://baldursgate3.game/about" target="_blank" rel="noopener noreferrer">Larian Studios / Baldur’s Gate 3</a>.</p><details id="confidentialitate"><summary>Despre cont, mesaje și datele personale</summary><p>Contul folosește adresa de e-mail pentru autentificare prin Supabase. E-mailul nu apare în discuții. Numele afișat și mesajele aprobate sunt publice. Rapoartele de erori sunt private, accesibile autorului lor și moderatorilor. Nu publica date personale în mesaje. Pentru ștergerea unui mesaj folosește opțiunea „Șterge”; pentru ștergerea contului și a rapoartelor, contactează Gabrielish prin pagina Nexus. Nu sunt utilizate contoare publicitare sau statistici de vizitare în această versiune.</p></details></div></footer>
   <dialog id="auth-dialog" aria-labelledby="auth-heading"><div class="dialog-title"><h2 id="auth-heading">Intră în comunitate</h2><button type="button" class="dialog-close" aria-label="Închide autentificarea">×</button></div><p class="dialog-copy">Primești un cod prin e-mail. Nu ai nevoie de parolă.</p><p id="auth-unavailable" class="notice" hidden>Autentificarea va fi disponibilă după conectarea bazei de date.</p><form id="email-form"><div class="field"><label for="auth-email">Adresa de e-mail</label><input id="auth-email" type="email" name="email" autocomplete="email" required maxlength="254"></div><label class="checkbox-line"><input type="checkbox" required><span>Am citit informațiile despre cont și datele personale din footer.</span></label><button class="btn" type="submit">Trimite codul</button><p class="form-status" role="status"></p></form><form id="otp-form" hidden><div class="field"><label for="auth-code">Codul primit prin e-mail</label><input id="auth-code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,10}" minlength="6" maxlength="10" required></div><button class="btn" type="submit">Confirmă codul</button><p class="form-status" role="status"></p></form></dialog>
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
