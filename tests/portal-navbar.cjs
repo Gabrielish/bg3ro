@@ -18,7 +18,7 @@ try{for(const width of [320,390,820,1100,1280,1440,1920]){
  if(width<=1100)await page.keyboard.press('Escape');
  for(const id of ['despre','actualizari','descarcari','discutii','erori']){await page.locator(`#tab-${id}`).click();assert(await page.locator(`#${id}`).isVisible());}
  await header.locator('[data-auth-open]').click();assert(await page.locator('#auth-dialog').isVisible());assert(await page.locator('#auth-unavailable').isVisible());await page.keyboard.press('Escape');
- await page.locator('.nav-support').click();await page.waitForTimeout(200);const support=await page.locator('#sustinere').boundingBox();assert(support.y>=88&&support.y<1000);
+ await page.locator('.nav-support').click();assert(await page.locator('#support-dialog').isVisible());await page.locator('.support-close').click();assert(!await page.locator('#support-dialog').isVisible());
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`No overflow ${width}`);
  await page.evaluate(()=>scrollTo(0,0));await page.mouse.move(0,500);await page.screenshot({path:`.qa/navbar-${width}.png`});assert.deepEqual(errors,[]);await page.close();
 }console.log('PASS: official smoke textures, floating navbar, mobile menu/Escape, Login dialog, support navigation, no old-site links, 320–1920px.');}finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});

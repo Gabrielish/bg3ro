@@ -40,10 +40,10 @@
   <link rel="stylesheet" href="./portal.css?v=20261017-video">
   <link rel="stylesheet" href="./portal-hero.css?v=20261017-restored-button">
   <link rel="stylesheet" href="./portal-footer.css?v=20261017-columns">
-  <link rel="stylesheet" href="./portal-navbar.css?v=20261017-video-feather">
+  <link rel="stylesheet" href="./portal-navbar.css?v=20261017-support-modal">
   <script src="./portal-config.js?v=20261017" defer></script>
   <script src="./portal.js?v=20261017-navigation" defer></script>
-  <script src="./portal-navbar.js?v=20261017" defer></script>
+  <script src="./portal-navbar.js?v=20261017-support-modal" defer></script>
   <script src="./portal-video.js?v=20261017-no-controls" defer></script>
   <title>Baldur’s Gate 3 în română — traducere gratuită | BG3RO</title>
   <script type="application/ld+json">
@@ -178,6 +178,7 @@
     </div>
   </footer>
   <dialog id="auth-dialog" aria-labelledby="auth-heading"><div class="dialog-title"><h2 id="auth-heading">Intră în comunitate</h2><button type="button" class="dialog-close" aria-label="Închide autentificarea">×</button></div><p class="dialog-copy">Primești un cod prin e-mail. Nu ai nevoie de parolă.</p><p id="auth-unavailable" class="notice" hidden>Autentificarea va fi disponibilă după conectarea bazei de date.</p><form id="email-form"><div class="field"><label for="auth-email">Adresa de e-mail</label><input id="auth-email" type="email" name="email" autocomplete="email" required maxlength="254"></div><label class="checkbox-line"><input type="checkbox" required><span>Am citit informațiile despre cont și datele personale din footer.</span></label><button class="btn" type="submit">Trimite codul</button><p class="form-status" role="status"></p></form><form id="otp-form" hidden><div class="field"><label for="auth-code">Codul primit prin e-mail</label><input id="auth-code" name="code" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6,10}" minlength="6" maxlength="10" required></div><button class="btn" type="submit">Confirmă codul</button><p class="form-status" role="status"></p></form></dialog>
+  <dialog id="support-dialog" class="support-modal" aria-labelledby="support-heading" aria-describedby="support-description"><button type="button" class="support-close" aria-label="Închide fereastra de susținere" autofocus>×</button><p class="support-eyebrow">BG3RO · Contribuție voluntară</p><h2 id="support-heading">Susține proiectul</h2><p id="support-description">Dacă vrei să mă ajuți să continui traducerea, poți contribui prin Patreon sau Ko-fi.</p><div class="support-modal-links"><a href="https://www.patreon.com/cw/Gabrielish" target="_blank" rel="noopener noreferrer"><span><strong>Patreon</strong><small>Pagina proiectului</small></span><span aria-hidden="true">↗</span></a><a href="https://ko-fi.com/gabrielish" target="_blank" rel="noopener noreferrer"><span><strong>Ko-fi</strong><small>O cafea pentru traducere</small></span><span aria-hidden="true">↗</span></a></div><p class="support-free">Traducerea rămâne gratuită, indiferent dacă alegi să contribui.</p></dialog>
   <div class="toast" id="toast" role="status" hidden></div>
 </body>
 </html>

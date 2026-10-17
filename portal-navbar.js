@@ -2,6 +2,24 @@
   const header = document.querySelector('.topbar');
   const toggle = header.querySelector('.nav-toggle');
   const nav = header.querySelector('.main-navigation');
+  const supportTrigger = header.querySelector('.nav-support');
+  const supportDialog = document.getElementById('support-dialog');
+  supportTrigger.setAttribute('aria-haspopup', 'dialog');
+  supportTrigger.setAttribute('aria-controls', 'support-dialog');
+  supportTrigger.addEventListener('click', event => {
+    event.preventDefault();
+    supportDialog.showModal();
+    document.documentElement.classList.add('support-open');
+  });
+  supportDialog.querySelector('.support-close').addEventListener('click', () => supportDialog.close());
+  supportDialog.addEventListener('click', event => {
+    const rect = supportDialog.getBoundingClientRect();
+    if (event.target === supportDialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) supportDialog.close();
+  });
+  supportDialog.addEventListener('close', () => {
+    document.documentElement.classList.remove('support-open');
+    supportTrigger.focus({ preventScroll: true });
+  });
   document.documentElement.classList.add('nav-enhanced');
   function close(focus = false) {
     header.classList.remove('menu-open');
