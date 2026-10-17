@@ -30,7 +30,9 @@ const assert=require('node:assert/strict');
     const failure=await browser.newPage();
     await failure.route('**/About_infinity_video*.mp4',r=>r.abort());await failure.route('**/about/video-still.jpg',r=>r.abort());
     await failure.goto(url,{waitUntil:'networkidle'});await failure.waitForFunction(()=>{const img=document.querySelector('.banner-art');return img.complete&&img.naturalWidth>0&&img.src.includes('camp-romania-clean.webp')});
-    assert.equal(await failure.locator('.project-banner').evaluate(el=>el.classList.contains('video-loaded')),false);assert.equal(await failure.locator('#banner-video-toggle').isVisible(),false);await failure.close();
+    assert.equal(await failure.locator('.project-banner').evaluate(el=>el.classList.contains('video-loaded')),false);
+    assert(await failure.locator('#banner-video-toggle').isVisible(),'Fireflies still have a pause control when video fails');
+    await failure.locator('#banner-video-toggle').click();assert(await failure.locator('.project-banner').evaluate(el=>el.classList.contains('animation-paused')));await failure.close();
     console.log('PASS: official video really plays on desktop/mobile, mute/loop/inline, pause/resume, offscreen pause, reduced motion/data-saver skip download, local fallback on external failure.');
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});

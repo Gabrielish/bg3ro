@@ -1,0 +1,30 @@
+@import url('./fireflies.css?v=20261017');
+/* The picture/video is intentionally unfiltered: readability comes from text shadow only. */
+.project-banner.hero{height:clamp(540px,calc(100svh - 76px),900px);min-height:0;background:#0b0c0f;border-bottom:0}
+.project-banner.hero:after{content:none;display:none}
+.project-banner.hero .banner-art{opacity:1;filter:none;object-position:center}
+.project-banner.hero .banner-video{object-position:center;filter:none}
+.project-banner.hero.video-loaded .banner-video{opacity:1}
+.project-banner.hero.video-loaded .banner-art{opacity:0}
+.project-banner.hero .banner-inner{position:relative;z-index:2;height:100%;display:block;padding:0}
+.project-banner.hero .banner-copy{height:100%}
+.project-banner.hero .project-badges{position:absolute;top:32px;left:0;right:0;justify-content:center;margin:0;gap:16px;font-size:12px;text-shadow:0 2px 7px #0009}
+.project-banner.hero .language{color:#f4ecd9}
+.project-banner.hero .hero-titles{position:absolute;bottom:20%;left:0;right:0;text-align:center;color:#f4ecd9;text-shadow:0 2px 8px #000b}
+.project-banner.hero h1{font-family:var(--serif);font-size:clamp(48px,8.2vw,148px);font-weight:600;line-height:1.05;letter-spacing:-1px;text-transform:uppercase;margin:0;white-space:nowrap}
+.project-banner.hero .subtitle{font-family:var(--serif);font-size:clamp(21px,2.1vw,32px);font-weight:500;letter-spacing:5px;line-height:1.4;margin:18px 0 0;color:inherit}
+.project-banner.hero .banner-video-controls{position:absolute;z-index:3;right:24px;bottom:18px;min-height:0;margin:0}
+.project-banner.hero .banner-video-controls .btn{min-height:44px;background:#0b0c0f66;color:#f4ecd9;border-color:#f4ecd94d;text-shadow:0 1px 4px #0009}
+.project-banner.hero .banner-video-controls .btn:hover{background:#0b0c0faa}
+.project-banner.hero .embers{position:absolute}
+.project-banner.hero .ember{position:absolute;pointer-events:none}
+.project-banner.hero.animation-paused .ember{animation-play-state:paused}
+@media(max-width:760px){
+  .project-banner.hero{height:clamp(430px,calc(100svh - 66px),760px)}
+  .project-banner.hero .project-badges{top:24px;gap:10px;font-size:10px}
+  .project-banner.hero h1{font-size:clamp(31px,8.4vw,64px);letter-spacing:-.5px}
+  .project-banner.hero .subtitle{font-size:20px;letter-spacing:3px;margin-top:15px}
+  .project-banner.hero .hero-titles{bottom:23%}
+  .project-banner.hero .banner-video-controls{right:18px;bottom:14px}
+}
+@media(prefers-reduced-motion:reduce){.project-banner.hero .embers,.project-banner.hero .banner-video-controls{display:none}}

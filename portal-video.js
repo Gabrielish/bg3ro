@@ -5,6 +5,22 @@
   const image = banner?.querySelector('.banner-art');
   const toggle = document.getElementById('banner-video-toggle');
   if (!video || !toggle) return;
+  const embers = banner.querySelector('.embers');
+  if (embers) {
+    const count = matchMedia('(max-width: 760px)').matches ? 22 : 36;
+    for (let i = 0; i < count; i++) {
+      const spark = document.createElement('i');
+      spark.className = 'ember';
+      spark.style.setProperty('--left', `${(i * 37.7 + 8) % 100}%`);
+      spark.style.setProperty('--top', `${(i * 23.3 + 10) % 100}%`);
+      spark.style.setProperty('--size', `${2 + i % 3}px`);
+      spark.style.setProperty('--duration', `${10 + i % 9}s`);
+      spark.style.setProperty('--delay', `${-i * 1.7}s`);
+      spark.style.setProperty('--drift', `${i % 2 ? -35 : 35}px`);
+      spark.style.setProperty('--lift', `${-35 - i % 60}px`);
+      embers.append(spark);
+    }
+  }
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const connection = navigator.connection;
   let userPaused = false, visible = true, failed = false;
@@ -14,13 +30,16 @@
     toggle.setAttribute('aria-label', `${label} de fundal`);
   }
   function stopOnFailure() {
-    failed = true; video.pause(); toggle.hidden = true;
+    failed = true; video.pause(); toggle.hidden = !embers;
     banner.classList.remove('video-loaded');
   }
   async function syncPlayback() {
-    if (motion.matches || connection?.saveData || failed) {
+    banner.classList.toggle('animation-paused', userPaused || !visible || document.hidden || motion.matches || !!connection?.saveData);
+    if (motion.matches || connection?.saveData) {
       video.pause(); toggle.hidden = true; banner.classList.remove('video-loaded'); return;
     }
+    if (failed) { video.pause(); toggle.hidden = !embers; return; }
+    if (embers) toggle.hidden = false;
     if (userPaused || !visible || document.hidden) { video.pause(); return; }
     if (!video.src) { video.muted = true; video.src = video.dataset.src; }
     try { await video.play(); }
