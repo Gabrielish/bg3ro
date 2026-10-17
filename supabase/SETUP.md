@@ -3,15 +3,15 @@
 Nu publica portalul ca funcțional înainte de verificările de mai jos.
 
 1. Migrările `migrations/20261017_bg3ro_portal.sql` și `migrations/20261017b_bg3ro_public_access.sql` sunt deja instalate în proiectul proprietarului. Nu le rula din nou. Pentru o instanță nouă, rulează-le o singură dată în această ordine. Nu modifică tabelele altor aplicații; toate numele au prefixul bg3ro.
-2. În Authentication, activează providerul Email și confirmarea e-mailului. Șablonul Magic Link trebuie să includă codul `{{ .Token }}`, nu doar linkul. Interfața folosește OTP, nu callback din URL.
-3. Configurează serviciul de e-mail pentru utilizatorii reali (SMTP propriu și limitele/captcha disponibile în proiect). Livrarea e-mailurilor trebuie testată înainte de lansare; serviciul implicit poate restricționa destinatarii.
+2. Autentificarea actuală folosește Discord, nu OTP prin e-mail. Aplicația Discord este `1190788174314754161`; Client Secret se introduce exclusiv în Supabase Authentication > Providers > Discord. Public Key și bot token nu sunt necesare. Callback-ul autorizat în Discord este `https://gatkiwcyjgbgjwfgvplm.supabase.co/auth/v1/callback`.
+3. În Supabase, Site URL și Redirect URLs includ exact `https://gabrielish.github.io/bg3ro/`. Providerul Discord este confirmat activ prin endpoint-ul public settings; înregistrările sunt permise. Nu este necesar SMTP sau domeniu propriu pentru acest flux. Clientul folosește PKCE, cu verifier și sesiune în sessionStorage, schimbă codul la revenire și elimină parametrii de autentificare din URL. Schimbarea tabului curent se păstrează pe durata redirecționării. Nu se solicită apartenență sau acces la serverul Discord.
 4. Adaugă Project URL și Publishable Key / anon în `portal-config.js`. Nu introduce parola bazei de date, service_role sau secret keys. Cheia publică este destinată browserului; accesul este restrâns de RLS și granturi.
-5. Conectează-te o dată din site cu e-mailul proprietarului. În Authentication > Users copiază UUID-ul și rulează comanda de la finalul migrării pentru a-l face moderator. Niciun vizitator nu se poate promova singur.
+5. Proprietarul trebuie să se conecteze o dată cu propriul cont Discord. În Authentication > Users verifică identitatea și copiază UUID-ul Supabase, apoi folosește comanda de la finalul migrării pentru a-l face moderator. Application ID-ul Discord nu este ID-ul utilizatorului. Nu atribui automat drepturi pe baza user_metadata, numelui sau e-mailului. Niciun vizitator nu se poate promova singur.
 6. Verifică testele SQL de acces cu două conturi de test și un moderator, apoi testează trimiterea/aprobarea unui mesaj, răspunsul privat la un raport, actualizările și progresul. Nu sunt suficiente simulările din browser.
 
 Testul `tests/hosted-access.sql` a trecut deja pe instanța reală. Creează doar în tranzacție utilizatorii de diagnostic, verifică anonimul/autorul/alt utilizator/moderatorul și încheie prin ROLLBACK. Nu sunt păstrate conturi sau rapoarte fictive. Autentificarea prin e-mail nu este testată de acel SQL.
 
-După verificarea livrării e-mailului și a contului proprietarului, setează `authEnabled: true` în portal-config.js și rulează testul real din interfață. Portalul este deja pagina principală /bg3ro/, la cererea proprietarului; autentificarea și trimiterile sunt încă dezactivate. Adresa /portal/ redirecționează către pagina principală.
+`authEnabled: true` este activat pentru Discord. Testele cu SDK sintetic verifică revenirea PKCE, anularea/expirarea, trimiterea mesajelor/rapoartelor și moderarea. Testul real de preflight verifică redirecționarea Supabase către aplicația corectă, dar se oprește înainte de consimțământul Discord: conectarea completă a proprietarului și atribuirea moderatorului rămân de verificat de acesta. Portalul este pagina principală /bg3ro/; /portal/ redirecționează către ea. Nu prezenta preflight-ul ca autentificare completă reușită.
 
 ## Date și permisiuni
 
@@ -22,7 +22,7 @@ După verificarea livrării e-mailului și a contului proprietarului, setează `
 - Trimiterile sunt limitate în baza de date: minimum 30 secunde între mesaje/rapoarte, maximum 20 pe zi, pe cont și tip. Sunt necesare și protecțiile Auth împotriva abuzului cu multe conturi.
 - Numele public este ales de utilizator și nu este un nume de identitate verificat. E-mailurile sunt păstrate în Supabase Auth, nu în tabelele publice.
 - Conținutul este redat ca text, nu HTML. Nu există upload de fișiere sau salvări în această primă versiune.
-- Sesiunea este în memorie, fără persistență în localStorage; la reîncărcarea paginii este necesară reconectarea.
+- Sesiunea și verifier-ul PKCE folosesc sessionStorage, nu localStorage. Reîncărcarea în aceeași filă păstrează sesiunea; alte file au stocare separată, iar închiderea filei o încheie de regulă (restaurarea browserului poate restaura sessionStorage). Deconectarea folosește Supabase signOut.
 - Ștergerea unui cont din Supabase Auth șterge prin cascade mesajele și rapoartele sale. Ștergerea unei discuții elimină și răspunsurile asociate.
 
 ## Publicare

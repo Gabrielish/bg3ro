@@ -6,8 +6,9 @@ function syntheticSDK(){
   const moderator=()=>state.user?.id==='owner';
   let authCallback=()=>{};
   const client={
-    auth:{getSession:async()=>({data:{session:null},error:null}),onAuthStateChange:cb=>{authCallback=cb;return{data:{subscription:{unsubscribe(){}}}}},
-      signInWithOtp:async()=>({error:null}),verifyOtp:async({email})=>{state.user={id:email.startsWith('owner')?'owner':'alice'};const session={user:state.user};setTimeout(()=>authCallback('SIGNED_IN',session),0);return{data:{session},error:null}},
+    auth:{getSession:async()=>({data:{session:state.user?{user:state.user}:null},error:null}),onAuthStateChange:cb=>{authCallback=cb;return{data:{subscription:{unsubscribe(){}}}}},
+      signInWithOAuth:async(options)=>{state.oauth=options;if(state.failOAuth)return{error:{message:'Network error'}};state.user={id:window.__qaOwner?'owner':'alice',user_metadata:{full_name:'Jucător Discord',moderator:true}};const session={user:state.user};setTimeout(()=>authCallback('SIGNED_IN',session),0);return{data:{},error:null}},
+      exchangeCodeForSession:async code=>{state.exchangeCode=code;if(code==='expired')return{data:{session:null},error:{message:'expired'}};state.user={id:'alice',user_metadata:{full_name:'Jucător Discord',moderator:true}};return{data:{session:{user:state.user}},error:null}},
       signOut:async()=>{state.user=null;authCallback('SIGNED_OUT',null);return{error:null}}},
     rpc:async()=>({data:moderator(),error:null}),
     from(table){
@@ -39,13 +40,16 @@ function syntheticSDK(){
   const browser=await chromium.launch({channel:'msedge',headless:true});
   try{
     for(const owner of [false,true]){
-      const p=await browser.newPage({viewport:{width:owner?1440:390,height:950}});
+      const p=await browser.newPage({viewport:{width:owner?1440:390,height:950},reducedMotion:'reduce'});
+      await p.route('https://baldursgate3.game/**',r=>r.abort());
+      await p.addInitScript(isOwner=>{window.__qaOwner=isOwner;},owner);
       const errors=[];p.on('pageerror',e=>errors.push(e.message));
       await p.route('**/portal-config.js*',r=>r.fulfill({contentType:'text/javascript',body:"window.BG3RO_CONFIG={supabaseUrl:'https://test-project.supabase.co',supabasePublishableKey:'test-public-key'};"}));
       await p.route('https://esm.sh/**',r=>r.fulfill({contentType:'text/javascript',headers:{'Access-Control-Allow-Origin':'*'},body:`export const createClient=()=>(${syntheticSDK.toString()})();`}));
       await p.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/',{waitUntil:'networkidle'});await p.waitForSelector('html.portal-ready');
-      await p.locator('.topbar [data-auth-open]').click();await p.locator('#auth-email').fill(owner?'owner@example.test':'alice@example.test');await p.locator('#email-form input[type=checkbox]').check();await p.locator('#email-form button').click();
-      await p.locator('#auth-code').fill('123456');await p.locator('#otp-form button').click();await p.waitForSelector('#auth-dialog',{state:'hidden'});
+      await p.locator('.topbar [data-auth-open]').click();await p.locator('#auth-consent').check();await p.locator('#discord-login').click();await p.waitForSelector('#auth-dialog',{state:'hidden'});
+      assert.equal(await p.evaluate(()=>window.__communityTest.oauth.provider),'discord');
+      assert.equal(await p.locator('#discussion-name').inputValue(),'Jucător Discord');
       await p.locator('#tab-discutii').click();await p.locator('#discussion-name').fill('Jucător de test');await p.locator('#discussion-title').fill('O întrebare');await p.locator('#discussion-body').fill('<img src=x onerror="window.injected=true"> Text de test.');
       await p.locator('#discussion-form button[type=submit]').click();await p.waitForFunction(()=>document.querySelector('#discussion-form .form-status').textContent.includes('Mesaj'));
       assert.equal(await p.locator('#discussion-list img').count(),0);assert.equal(await p.evaluate(()=>window.injected),undefined);
@@ -66,6 +70,23 @@ function syntheticSDK(){
       await p.locator('#sign-out').click();await p.waitForSelector('#sign-out',{state:'hidden'});assert.equal(await p.locator('[data-user-form]:visible').count(),0);assert.equal(await p.locator('#my-reports:visible').count(),0);
       assert.deepEqual(errors,[]);await p.close();
     }
-    console.log('PASS: synthetic OTP login/logout, posting and failure recovery, plaintext/XSS protection, private-report UI, moderator response and publishing/progress controls. Hosted Supabase and SMTP still require integration testing.');
+    for(const outcome of ['success','expired','cancelled']){
+      const p=await browser.newPage({viewport:{width:390,height:950}});
+      await p.route('https://baldursgate3.game/**',r=>r.abort());
+      await p.route('**/portal-config.js*',r=>r.fulfill({contentType:'text/javascript',body:"window.BG3RO_CONFIG={supabaseUrl:'https://test-project.supabase.co',supabasePublishableKey:'test-public-key',authEnabled:true,authRedirectUrl:'https://gabrielish.github.io/bg3ro/'};"}));
+      await p.route('https://esm.sh/**',r=>r.fulfill({contentType:'text/javascript',headers:{'Access-Control-Allow-Origin':'*'},body:`export const createClient=(_url,_key,options)=>{window.__authOptions=options;return (${syntheticSDK.toString()})();};`}));
+      await p.addInitScript(()=>sessionStorage.setItem('bg3ro-return-tab','erori'));
+      const url=new URL(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/');
+      url.search=outcome==='cancelled'?'?error=access_denied&error_description=untrusted-message':`?code=${outcome==='success'?'test-code':'expired'}`;
+      await p.goto(url.href,{waitUntil:'networkidle'});await p.waitForSelector('html.portal-ready');
+      assert.equal(new URL(p.url()).search,'');assert.equal(new URL(p.url()).hash,'#erori');
+      assert.equal(await p.evaluate(()=>window.__authOptions.auth.flowType),'pkce');
+      assert(await p.evaluate(()=>window.__authOptions.auth.storage===sessionStorage));
+      assert.equal(await p.locator('#admin-tools:visible').count(),0,'User metadata cannot grant moderator access');
+      if(outcome==='success'){assert(await p.locator('#report-form').isVisible());assert.equal(await p.evaluate(()=>window.__communityTest.exchangeCode),'test-code');}
+      else {assert(await p.locator('#auth-dialog').isVisible());assert(await p.locator('#discord-login-form .form-status.error').isVisible());assert.equal(await p.locator('#report-form:visible').count(),0);assert(!(await p.locator('#auth-dialog').textContent()).includes('untrusted-message'));}
+      await p.close();
+    }
+    console.log('PASS: synthetic Discord OAuth, PKCE callback success/expiry/cancel, query cleanup and tab restore, no metadata-based privileges, login/logout, posts, reports, XSS and moderation controls. Real Discord consent still requires owner verification.');
   }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});

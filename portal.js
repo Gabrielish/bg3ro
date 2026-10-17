@@ -46,12 +46,19 @@
   addEventListener('hashchange', () => { if (ids.includes(location.hash.slice(1))) setTab(location.hash.slice(1)); });
   $('a[href="#confidentialitate"]').addEventListener('click', () => { $('#confidentialitate').open = true; });
 
-  let client = null, user = null, moderator = false, page = 0, reportsLimit = 20, authEmail = '';
+  let client = null, user = null, moderator = false, page = 0, reportsLimit = 20;
   let toastTimer;
   const config = window.BG3RO_CONFIG || {};
   const authEnabled = config.authEnabled !== false;
   const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(config.supabaseUrl || '') && !!config.supabasePublishableKey;
   const dialog = $('#auth-dialog');
+  const callbackURL = new URL(location.href);
+  const authCode = callbackURL.searchParams.get('code');
+  const authError = callbackURL.searchParams.has('error') || callbackURL.searchParams.has('error_description');
+  if (authCode || authError) {
+    ['code','error','error_code','error_description'].forEach(key => callbackURL.searchParams.delete(key));
+    history.replaceState(null, '', callbackURL.pathname + callbackURL.search + callbackURL.hash);
+  }
   const statusLabels = { pending: 'În verificare', approved: 'Publicat', rejected: 'Nepublicat', new: 'Nou', investigating: 'În lucru', resolved: 'Rezolvat', closed: 'Închis' };
   function element(tag, className, text) {
     const node = document.createElement(tag);
@@ -69,7 +76,7 @@
   function readableError(error) {
     const message = error?.message || '';
     if (/rate|limit|too many|30 de secunde|zilnic/i.test(message)) return 'Prea multe încercări. Așteaptă puțin înainte să trimiți din nou.';
-    if (/expired|invalid.*token|otp/i.test(message)) return 'Codul nu este valid sau a expirat. Cere un cod nou.';
+    if (/expired|invalid.*token|otp/i.test(message)) return 'Conectarea a expirat. Încearcă din nou cu Discord.';
     if (/fetch|network/i.test(message)) return 'Conexiunea nu a reușit. Verifică internetul și încearcă din nou.';
     return 'Operația nu a reușit. Încearcă din nou; dacă persistă, contactează proiectul pe Nexus Mods.';
   }
@@ -91,29 +98,26 @@
     $('#admin-tools').hidden = !moderator;
     $('#reports-heading').textContent = moderator ? 'Rapoartele proiectului' : 'Rapoartele mele';
     $('#discussion-form button[type="submit"]').textContent = moderator ? 'Publică mesajul' : 'Trimite spre verificare';
+    $('#discord-login').disabled = !client || !authEnabled;
+    if (dialog.open && !user) {
+      $('#auth-unavailable').hidden = !!client && authEnabled;
+      $('#discord-login-form').hidden = !client || !authEnabled;
+    }
   }
   $$('[data-auth-open]').forEach(button => button.addEventListener('click', () => {
-    $('#auth-unavailable').hidden = !!client && authEnabled; $('#email-form').hidden = !client || !authEnabled;
-    if (client && !authEnabled) $('#auth-unavailable').textContent = 'La comunitate mai configurăm livrarea codurilor prin e-mail. Conturile vor fi activate după verificarea autentificării.';
-    $('#otp-form').hidden = true; dialog.showModal();
+    $('#auth-unavailable').hidden = !!client && authEnabled;
+    $('#discord-login-form').hidden = !client || !authEnabled;
+    dialog.showModal();
   }));
-  $('.dialog-close').addEventListener('click', () => dialog.close());
-  $('#email-form').addEventListener('submit', event => {
+  dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+  $('#discord-login-form').addEventListener('submit', event => {
     event.preventDefault(); if (!client || !authEnabled) return;
-    submit(event.currentTarget, async () => {
-      authEmail = $('#auth-email').value.trim();
-      const { error } = await client.auth.signInWithOtp({ email: authEmail });
+    const form = event.currentTarget;
+    submit(form, async () => {
+      sessionStorage.setItem('bg3ro-return-tab', ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'discutii');
+      const { error } = await client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: config.authRedirectUrl || new URL('./', location.href).href } });
       if (error) throw error;
-      $('#email-form').hidden = true; $('#otp-form').hidden = false;
-      formStatus($('#otp-form'), 'Introdu codul din e-mail. Poate dura câteva minute.'); $('#auth-code').focus();
-    });
-  });
-  $('#otp-form').addEventListener('submit', event => {
-    event.preventDefault(); if (!client || !authEnabled) return;
-    submit(event.currentTarget, async () => {
-      const { data, error } = await client.auth.verifyOtp({ email: authEmail, token: $('#auth-code').value.trim(), type: 'email' });
-      if (error) throw error;
-      await sessionChanged(data.session); dialog.close(); $('#otp-form').reset(); toast('Ești conectat. Poți participa la comunitate.');
+      formStatus(form, 'Se deschide Discord…');
     });
   });
   $('#sign-out').addEventListener('click', async () => {
@@ -129,7 +133,9 @@
     if (user) {
       const { data, error } = await client.rpc('bg3ro_is_moderator');
       if (!error) moderator = data === true;
+      if (!$('#discussion-name').value) $('#discussion-name').value = String(user.user_metadata?.full_name || user.user_metadata?.name || '').slice(0, 40);
     }
+    if (user && dialog.open) dialog.close();
     syncAuth(); await Promise.all([loadComments(), loadReports(), loadProgress()]);
   }
   async function loadProgress() {
@@ -283,13 +289,27 @@
     if (configured) {
       try {
         const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2.118.0');
-        client = createClient(config.supabaseUrl, config.supabasePublishableKey, { auth: { persistSession: false, detectSessionInUrl: false } });
+        client = createClient(config.supabaseUrl, config.supabasePublishableKey, { auth: { flowType: 'pkce', storage: sessionStorage, storageKey: 'bg3ro-auth', persistSession: true, detectSessionInUrl: false, autoRefreshToken: true } });
         const schema = await client.from('bg3ro_project_status').select('id').eq('id', 1).maybeSingle();
         if (schema.error || !schema.data) throw new Error('Community schema is not ready');
+        let callbackFailed = authError;
+        if (authCode && authEnabled) {
+          const result = await client.auth.exchangeCodeForSession(authCode);
+          callbackFailed = !!result.error;
+        }
         const { data, error } = await client.auth.getSession();
         if (error) throw error;
         client.auth.onAuthStateChange((_event, session) => { setTimeout(() => sessionChanged(session).then(loadUpdates).catch(() => toast('Comunitatea nu a putut fi actualizată.')), 0); });
         await sessionChanged(data.session);
+        if (authCode || authError) {
+          const returnTab = sessionStorage.getItem('bg3ro-return-tab');
+          sessionStorage.removeItem('bg3ro-return-tab');
+          if (ids.includes(returnTab)) { history.replaceState(null, '', location.pathname + location.search + '#' + returnTab); setTab(returnTab); $('.tab-list').scrollIntoView({ block: 'start' }); }
+          if (callbackFailed || !data.session) {
+            $('#auth-unavailable').hidden = true; $('#discord-login-form').hidden = false;
+            formStatus($('#discord-login-form'), 'Conectarea Discord a fost anulată sau a expirat. Încearcă din nou din acest browser.', true); dialog.showModal();
+          } else toast('Ești conectat prin Discord. Poți participa la comunitate.');
+        }
       } catch (_error) { client = null; }
     }
     if (!client) {
@@ -300,7 +320,7 @@
       $$('[data-auth-open]').forEach(button => { button.textContent = button.dataset.authLabel || 'Comunitate în pregătire'; });
       $$('.backend-notice').forEach(notice => {
         notice.hidden = false;
-        notice.textContent = 'Baza de date este conectată. Autentificarea și trimiterea mesajelor vor fi activate după configurarea serviciului de e-mail.';
+        notice.textContent = 'Autentificarea este temporar dezactivată. Mesajele și rapoartele vor putea fi trimise după reactivare.';
       });
     }
     syncAuth(); await Promise.all([loadUpdates(), loadComments(), loadProgress()]);
