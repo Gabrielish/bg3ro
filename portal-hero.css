@@ -14,31 +14,23 @@
 .project-banner.hero h1{font-family:var(--serif);font-size:clamp(48px,8.2vw,148px);font-weight:600;line-height:1.05;letter-spacing:-1px;text-transform:uppercase;margin:0;white-space:nowrap}
 .project-banner.hero .subtitle{font-family:var(--serif);font-size:clamp(21px,2.1vw,32px);font-weight:500;letter-spacing:5px;line-height:1.4;margin:18px 0 0;color:inherit}
 .hero-actions{display:flex;justify-content:center;margin-top:34px}
-/* Inspected on the official Get it now control: black 35%, blur 10px,
-   corner-intersection masks and a radial parchment hover fading in over .4s. */
-.hero-cta{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;width:410px;max-width:100%;height:86px;color:#fff;white-space:nowrap;text-decoration:none!important}
-.hero-cta__surface{position:absolute;inset:5px 6px;background:rgba(0,0,0,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);mask-image:url('./assets/official-cta-diamond-mask-corner-1.svg'),url('./assets/official-cta-diamond-mask-corner-2.svg'),url('./assets/official-cta-diamond-mask-corner-3.svg'),url('./assets/official-cta-diamond-mask-corner-4.svg');mask-position:left top,right top,left bottom,right bottom;mask-repeat:no-repeat;mask-size:800px 800px;mask-composite:intersect}
-.hero-cta__frame,.hero-cta__decors{position:absolute;inset:5px 6px;pointer-events:none}
-.hero-cta__decors{z-index:2;transition:opacity .4s}
-.hero-cta__border{position:absolute;top:0;bottom:0;width:calc(50% - 16px);border-top:1px solid #e1cbb7;border-bottom:1px solid #be9775}
-.hero-cta__border.left{left:0}.hero-cta__border.right{right:0}
-.hero-cta__border:after{content:'';position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(#e1cbb7,#be9775)}
-.hero-cta__border.left:after{left:0}.hero-cta__border.right:after{right:0}
-.hero-cta__corner{position:absolute;width:10px;height:10px}
-.hero-cta__corner.top-left{top:0;left:0}.hero-cta__corner.top-right{top:0;right:0}.hero-cta__corner.bottom-left{bottom:0;left:0}.hero-cta__corner.bottom-right{bottom:0;right:0}
-.hero-cta__diamond{position:absolute;top:50%;transform:translateY(-50%)}
-.hero-cta__diamond.left{left:-6px}.hero-cta__diamond.right{right:-6px}
-.hero-cta__decor{position:absolute;left:50%;transform:translateX(-50%)}
-.hero-cta__decor.top{top:-5px;fill:#e1cbb7}.hero-cta__decor.bottom{bottom:-4px;fill:#be9775}
-.hero-cta__hover{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .4s;background-image:radial-gradient(circle,#fff 0,#ddc9a7 100%),url('https://baldursgate3.game/btn/diamond-hover-texture-left.png'),url('https://baldursgate3.game/btn/diamond-hover-texture-right.png');background-position:center,left center,right center;background-size:cover;mask-image:url('./assets/diamond-hover-mask-decor-top.svg'),url('./assets/diamond-hover-mask-decor-bottom.svg'),url('./assets/diamond-hover-mask-corner-1.svg'),url('./assets/diamond-hover-mask-corner-2.svg'),url('./assets/diamond-hover-mask-corner-3.svg'),url('./assets/diamond-hover-mask-corner-4.svg');mask-position:center top,center bottom,left top,right top,left bottom,right bottom;mask-repeat:no-repeat;mask-size:800px 800px;mask-composite:intersect}
-.hero-cta__label{position:relative;z-index:4;padding:0 30px;font:600 26px/1.2 var(--serif);text-transform:uppercase;color:#fff;text-shadow:none;transition:color .4s}
+/* Restore the old site's one-piece SVG contour, with an independent glass
+   surface so the blur does not distort the frame or label. */
+.hero-cta{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;width:410px;max-width:100%;height:86px;color:#f5ead8;white-space:nowrap;text-decoration:none!important}
+.hero-cta__surface{position:absolute;inset:0;background:rgba(0,0,0,.35);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);mask:url('./assets/hero-button-shape.svg') center/100% 100% no-repeat}
+.hero-cta__frame,.hero-cta__hover{position:absolute;inset:0;pointer-events:none;transition:opacity .4s}
+.hero-cta__frame{z-index:2;background:url('./assets/hero-button-outline.svg') center/100% 100% no-repeat}
+.hero-cta__hover{z-index:3;opacity:0;background:url('./assets/button-filled.svg') center/100% 100% no-repeat}
+.hero-cta__label{position:relative;z-index:4;padding:0 30px;font:600 26px/1.2 var(--serif);text-transform:uppercase;color:#f5ead8;text-shadow:none;transition:color .4s}
 .hero-cta:is(:hover,:focus-visible) .hero-cta__hover{opacity:1}
-.hero-cta:is(:hover,:focus-visible) .hero-cta__decors{opacity:0}
-.hero-cta:is(:hover,:focus-visible) .hero-cta__label{color:#000}
-.hero-platforms{list-style:none;display:flex;justify-content:center;align-items:center;gap:32px;margin:24px 0 0;padding:0;color:#ddc9a7}
-.hero-platforms li{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:600;line-height:1.3}
-.hero-platforms .coming-soon{gap:6px;flex-direction:column;line-height:1.1}
-.hero-platforms small{font:500 10px/1.2 var(--sans);letter-spacing:.5px;color:#d4c5af}
+.hero-cta:is(:hover,:focus-visible) .hero-cta__frame{opacity:0}
+.hero-cta:is(:hover,:focus-visible) .hero-cta__label{color:#171513}
+.project-banner.hero .hero-availability{margin:28px 0 0;font:600 17px/1.4 var(--serif);letter-spacing:4px;text-transform:uppercase;color:#ddc9a7}
+.hero-platforms{list-style:none;display:flex;justify-content:center;align-items:center;gap:40px;margin:22px 0 0;padding:0;color:#ddc9a7}
+.hero-platforms li{display:flex;align-items:center;gap:12px;line-height:1}
+.hero-platforms img{display:block;object-fit:contain;flex-shrink:0}
+.hero-platforms .in-development{flex-direction:row;gap:12px}
+.hero-platforms .in-development span{font:500 13px/1.2 var(--sans);color:#ddc9a7;white-space:nowrap}
 .project-banner.hero .embers{position:absolute}
 .project-banner.hero .ember{position:absolute;pointer-events:none}
 .project-banner.hero.animation-paused .ember{animation-play-state:paused}
@@ -51,8 +43,13 @@
   .hero-actions{margin-top:24px}
   .hero-cta{width:350px;height:74px}
   .hero-cta__label{font-size:clamp(19px,5.9vw,23px);padding-inline:18px}
-  .hero-platforms{gap:22px;margin-top:20px}
-  .hero-platforms li{font-size:13px;gap:6px}
-  .hero-platforms svg{width:17px;height:17px}
+  .project-banner.hero .hero-availability{font-size:14px;letter-spacing:3px;margin-top:22px}
+  .hero-platforms{gap:24px;margin-top:18px}
+  .hero-platforms li{gap:8px}
+  .hero-platforms li:first-child img{width:30px;height:26px}
+  .hero-platforms li:nth-child(2) img{width:25px;height:29px}
+  .hero-platforms .in-development img{width:80px;height:31px}
+  .hero-platforms .in-development{gap:8px}
+  .hero-platforms .in-development span{font-size:11px}
 }
-@media(prefers-reduced-motion:reduce){.project-banner.hero .embers{display:none}.hero-cta__hover,.hero-cta__decors,.hero-cta__label{transition:none}}
+@media(prefers-reduced-motion:reduce){.project-banner.hero .embers{display:none}.hero-cta__hover,.hero-cta__frame,.hero-cta__label{transition:none}}
