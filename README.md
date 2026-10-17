@@ -1,5 +1,7 @@
 # BG3RO — În cuvintele noastre
 
+Site-ul principal s-a mutat la https://gabrielish.github.io/ . Codul activ este în [Gabrielish/gabrielish.github.io](https://github.com/Gabrielish/gabrielish.github.io), checkout local `C:/Users/raluc/Documents/Codex/gabrielish.github.io`. Acest repository păstrează arhivele încărcate și redirecționarea de la `/bg3ro/`; notele vechi de mai jos sunt istorice.
+
 Portalul nou este pagina principală la https://gabrielish.github.io/bg3ro/ . Detaliile și verificările sunt în [PORTAL.md](PORTAL.md). Adresa /portal/ redirecționează către pagina principală. Autentificarea rămâne în configurare. Copia istorică este la https://gabrielish.github.io/bg3ro-old/ . Restul notelor de mai jos descriu versiunea arhivată.
 
 One-page de prezentare pentru traducerea română neoficială a Baldur’s Gate 3, de Gabrielish.
