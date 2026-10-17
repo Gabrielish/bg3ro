@@ -25,8 +25,10 @@
 .project-banner.hero .project-badges{top:145px}
 /* Smoke stays at the bottom edge; the central video remains unfiltered.
    Background images also work without cross-origin CSS mask permission. */
-.hero-edge-smoke{position:absolute;inset:auto 0 0;height:170px;z-index:1;pointer-events:none;overflow:hidden}
-.hero-edge-smoke:before,.hero-edge-smoke:after{content:'';position:absolute;inset:0;transform:rotate(180deg);background:url('https://baldursgate3.game/menu/cloud-right.png') right top/100% 100% no-repeat}
+.hero-edge-smoke{position:absolute;inset:auto 0 -1px;height:250px;z-index:1;pointer-events:none;overflow:hidden;background:linear-gradient(to bottom,rgba(11,12,15,0),rgba(11,12,15,.16) 25%,rgba(11,12,15,.72) 58%,var(--bg) 90%)}
+/* Keep the irregular smoky edge, then dissolve its black pixels into the
+   exact page color. The final opaque strip hides video pixels at the seam. */
+.hero-edge-smoke:before,.hero-edge-smoke:after{content:'';position:absolute;inset:0;transform:rotate(180deg);background:url('https://baldursgate3.game/menu/cloud-right.png') right top/100% 100% no-repeat;mask-image:linear-gradient(to bottom,transparent 8%,#000 65%);mask-size:100% 100%;mask-repeat:no-repeat}
 .hero-edge-smoke:after{left:auto;width:min(433px,100%);background-image:url('https://baldursgate3.game/menu/cloud-left.png');background-position:left top;background-size:contain}
 #continut,#sustinere,#intrebari-frecvente,.tab-panel,.tab-list{scroll-margin-top:120px}
 .skip-link{z-index:70}
@@ -52,7 +54,7 @@
   .main-navigation{top:86px}
   .project-banner.hero{height:clamp(500px,100svh,850px)}
   .project-banner.hero .project-badges{top:115px}
-  .hero-edge-smoke{height:110px}
+  .hero-edge-smoke{height:170px}
   #continut,#sustinere,#intrebari-frecvente,.tab-panel,.tab-list{scroll-margin-top:100px}
 }
 @media(max-width:430px){
