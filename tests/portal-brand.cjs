@@ -16,7 +16,7 @@ const assert=require('node:assert/strict');
   try{
     for(const width of [320,390,820,1440]){
       const page=await browser.newPage({viewport:{width,height:1000},reducedMotion:'reduce'});
-      await page.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/portal/',{waitUntil:'networkidle'});
+      await page.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/',{waitUntil:'networkidle'});
       await page.waitForSelector('html.portal-ready');await page.evaluate(()=>document.fonts.ready);
       const brand=await page.locator('.wordmark').evaluate(el=>{const s=getComputedStyle(el);return{font:s.fontFamily,size:s.fontSize,color:s.color,weight:s.fontWeight,spacing:s.letterSpacing}});
       assert.equal(brand.font,'"EB Garamond", Georgia, serif');assert.equal(brand.weight,'600');assert.equal(brand.spacing,'-0.3px');
@@ -34,7 +34,7 @@ const assert=require('node:assert/strict');
       }
       const manifestURL=new URL(await page.locator('link[rel=manifest]').getAttribute('href'),page.url()).href;
       const manifest=await (await page.request.get(manifestURL)).json();
-      assert.equal(manifest.scope,'/bg3ro/portal/');assert(manifest.icons.every(icon=>icon.src.includes('portal-icon')));
+      assert.equal(manifest.scope,'/bg3ro/');assert(manifest.icons.every(icon=>icon.src.includes('portal-icon')));
       await page.close();
     }
     console.log('PASS: charcoal/gold palette, old EB Garamond wordmark metrics/colors, supplied tricolor SVG, favicon exports, manifest, hover and responsive logo.');

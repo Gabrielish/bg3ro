@@ -6,11 +6,11 @@ Direcție cerută: portal inspirat de organizarea paginii Lokalizace.net, nu cop
 - Procente comunicate de proprietar: traducere 80%, corectură 20%, testare 20%. Toate trei au bare separate și se pot modifica din administrare.
 - Conținutul proiectului funcționează static pe GitHub Pages; comunitatea folosește Supabase.
 - Copia anterioară este publicată separat: https://gabrielish.github.io/bg3ro-old/ . Istoricul anterior este păstrat acolo.
-- Noua interfață nu se publică peste site-ul actual înainte de instalarea și verificarea comunității pe proiectul proprietarului.
+- La cererea proprietarului, interfața nouă este pagina principală /bg3ro/. Comunitatea rămâne dezactivată până la configurarea e-mailurilor.
 
 ## Fișiere active
 
-Previzualizare: portal/index.html, portal.css, portal.js, portal-config.js. Pagina principală index.html rămâne site-ul anterior până la activarea și verificarea autentificării. Căile din previzualizare sunt relative la un nivel mai sus; la promovarea în rădăcină trebuie adaptate.
+Pagina principală: index.html, portal.css, portal.js, portal-video.js și portal-config.js. portal/index.html redirecționează către rădăcină, păstrând tabul din fragment și parametrii URL. Căile locale ale paginii principale sunt relative la /bg3ro/.
 
 portal-config.js conține exclusiv URL-ul și cheia PUBLICĂ Supabase. Nu folosi service_role sau parole aici.
 
@@ -20,7 +20,7 @@ Antetul încarcă video-ul oficial din pagina About a Baldur’s Gate 3, direct 
 
 Paletă închisă cu crem/auriu, inspirată de site-ul oficial Baldur’s Gate 3, fără accentele mov ale primei variante. Wordmarkul BG3RO păstrează fontul EB Garamond, greutatea 600, spațierea și culorile din site-ul anterior. Emblema din stânga provine din path-ul SVG furnizat de proprietar; geometria este păstrată, translația externă eliminată, iar umplerea este în trei benzi tricolore. Nu este un logo generat cu AI.
 
-assets/export-portal-brand.cjs exportă dimensiunile PNG din assets/brand-mark-romania.svg. Faviconul și manifestul portalului sunt separate de cele ale paginii principale și arhivei. tests/portal-brand.cjs verifică acest lucru și identitatea logo-ului.
+assets/export-portal-brand.cjs exportă dimensiunile PNG din assets/brand-mark-romania.svg. Pagina principală folosește noile faviconuri și portal.webmanifest, cu scope /bg3ro/. Arhiva are în continuare fișierele sale. tests/portal-brand.cjs verifică acest lucru și identitatea logo-ului.
 
 Schema, configurarea OTP/SMTP și activarea moderatorului sunt documentate în supabase/SETUP.md. Ambele migrări sunt instalate în proiectul proprietarului. Testul supabase/tests/hosted-access.sql a trecut pe instanța reală; datele de diagnostic au fost anulate prin ROLLBACK.
 

@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 (async () => {
   const browser = await chromium.launch({channel:'msedge',headless:true});
-  const base = process.env.BG3RO_TEST_URL || 'http://127.0.0.1:4173/portal/';
+  const base = process.env.BG3RO_TEST_URL || 'http://127.0.0.1:4173/';
   fs.mkdirSync('.qa',{recursive:true});
   try {
     for(const width of [320,390,600,760,820,1024,1440]) {

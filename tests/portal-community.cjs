@@ -43,7 +43,7 @@ function syntheticSDK(){
       const errors=[];p.on('pageerror',e=>errors.push(e.message));
       await p.route('**/portal-config.js*',r=>r.fulfill({contentType:'text/javascript',body:"window.BG3RO_CONFIG={supabaseUrl:'https://test-project.supabase.co',supabasePublishableKey:'test-public-key'};"}));
       await p.route('https://esm.sh/**',r=>r.fulfill({contentType:'text/javascript',headers:{'Access-Control-Allow-Origin':'*'},body:`export const createClient=()=>(${syntheticSDK.toString()})();`}));
-      await p.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/portal/',{waitUntil:'networkidle'});await p.waitForSelector('html.portal-ready');
+      await p.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/',{waitUntil:'networkidle'});await p.waitForSelector('html.portal-ready');
       await p.locator('.topbar [data-auth-open]').click();await p.locator('#auth-email').fill(owner?'owner@example.test':'alice@example.test');await p.locator('#email-form input[type=checkbox]').check();await p.locator('#email-form button').click();
       await p.locator('#auth-code').fill('123456');await p.locator('#otp-form button').click();await p.waitForSelector('#auth-dialog',{state:'hidden'});
       await p.locator('#tab-discutii').click();await p.locator('#discussion-name').fill('Jucător de test');await p.locator('#discussion-title').fill('O întrebare');await p.locator('#discussion-body').fill('<img src=x onerror="window.injected=true"> Text de test.');

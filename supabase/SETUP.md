@@ -11,7 +11,7 @@ Nu publica portalul ca funcțional înainte de verificările de mai jos.
 
 Testul `tests/hosted-access.sql` a trecut deja pe instanța reală. Creează doar în tranzacție utilizatorii de diagnostic, verifică anonimul/autorul/alt utilizator/moderatorul și încheie prin ROLLBACK. Nu sunt păstrate conturi sau rapoarte fictive. Autentificarea prin e-mail nu este testată de acel SQL.
 
-După verificarea livrării e-mailului și a contului proprietarului, setează `authEnabled: true` în portal-config.js, rulează testul real din interfață, apoi promovează portal/index.html în pagina principală adaptând căile relative. Până atunci, previzualizarea este la /bg3ro/portal/ și nu acceptă trimiteri publice.
+După verificarea livrării e-mailului și a contului proprietarului, setează `authEnabled: true` în portal-config.js și rulează testul real din interfață. Portalul este deja pagina principală /bg3ro/, la cererea proprietarului; autentificarea și trimiterile sunt încă dezactivate. Adresa /portal/ redirecționează către pagina principală.
 
 ## Date și permisiuni
 

@@ -2,7 +2,7 @@ const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
 (async()=>{
   const browser=await chromium.launch({channel:'msedge',headless:true});
-  const url=process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/portal/';
+  const url=process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/';
   try{
     for(const width of [1440,390]){
       const page=await browser.newPage({viewport:{width,height:950},reducedMotion:'no-preference'});
