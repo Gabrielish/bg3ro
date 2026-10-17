@@ -1,5 +1,7 @@
 # BG3RO — În cuvintele noastre
 
+Portalul nou este în pregătire la `/bg3ro/portal/`; detaliile și verificările sunt în [PORTAL.md](PORTAL.md). Pagina principală de mai jos rămâne publicată până la finalizarea autentificării. Copia istorică este la https://gabrielish.github.io/bg3ro-old/ .
+
 One-page de prezentare pentru traducerea română neoficială a Baldur’s Gate 3, de Gabrielish.
 
 Site: https://gabrielish.github.io/bg3ro/

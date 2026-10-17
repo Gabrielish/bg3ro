@@ -1,0 +1,71 @@
+// Browser integration with a synthetic SDK. Real RLS is tested separately in portal-db.cjs.
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+function syntheticSDK(){
+  const state=window.__communityTest={user:null,comments:[],reports:[],updates:[],failInsert:false,status:{translation_percent:80,review_state:'Actul I verificat',testing_state:'Actul II urmează'}};
+  const moderator=()=>state.user?.id==='owner';
+  let authCallback=()=>{};
+  const client={
+    auth:{getSession:async()=>({data:{session:null},error:null}),onAuthStateChange:cb=>{authCallback=cb;return{data:{subscription:{unsubscribe(){}}}}},
+      signInWithOtp:async()=>({error:null}),verifyOtp:async({email})=>{state.user={id:email.startsWith('owner')?'owner':'alice'};const session={user:state.user};setTimeout(()=>authCallback('SIGNED_IN',session),0);return{data:{session},error:null}},
+      signOut:async()=>{state.user=null;authCallback('SIGNED_OUT',null);return{error:null}}},
+    rpc:async()=>({data:moderator(),error:null}),
+    from(table){
+      const query={operation:'select',filters:[],single:false,payload:null,
+        select(){return this},eq(key,value){this.filters.push([key,value]);return this},order(){return this},limit(){return this},range(){return this},maybeSingle(){this.single=true;return this},
+        insert(payload){this.operation='insert';this.payload=payload;return this},update(payload){this.operation='update';this.payload=payload;return this},delete(){this.operation='delete';return this},
+        then(resolve,reject){return Promise.resolve().then(()=>{
+          const name=table.replace('bg3ro_',''),key={discussion_posts:'comments',bug_reports:'reports',project_updates:'updates'}[name];
+          if(name==='project_status'){
+            if(this.operation==='update')Object.assign(state.status,this.payload);
+            return{data:{...state.status},error:null};
+          }
+          if(this.operation==='insert'){
+            if(state.failInsert)return{data:null,error:{message:'Network error'}};
+            const row={id:`row-${Date.now()}-${Math.random()}`,created_at:new Date().toISOString(),published_at:new Date().toISOString(),status:key==='comments'?(moderator()?'approved':'pending'):'new',moderator_reply:'',...this.payload};
+            state[key].unshift(row);return{data:null,error:null};
+          }
+          const matches=row=>this.filters.every(([k,v])=>row[k]===v);
+          if(this.operation==='update'){state[key].filter(matches).forEach(row=>Object.assign(row,this.payload));return{data:null,error:null}}
+          if(this.operation==='delete'){state[key]=state[key].filter(row=>!matches(row));return{data:null,error:null}}
+          const data=state[key].filter(matches).filter(row=>moderator()||key==='updates'||(key==='comments'&&row.status==='approved')||row.author_id===state.user?.id);
+          return{data:JSON.parse(JSON.stringify(data)),count:data.length,error:null};
+        }).then(resolve,reject)}
+      };return query;
+    }
+  };return client;
+}
+(async()=>{
+  const browser=await chromium.launch({channel:'msedge',headless:true});
+  try{
+    for(const owner of [false,true]){
+      const p=await browser.newPage({viewport:{width:owner?1440:390,height:950}});
+      const errors=[];p.on('pageerror',e=>errors.push(e.message));
+      await p.route('**/portal-config.js*',r=>r.fulfill({contentType:'text/javascript',body:"window.BG3RO_CONFIG={supabaseUrl:'https://test-project.supabase.co',supabasePublishableKey:'test-public-key'};"}));
+      await p.route('https://esm.sh/**',r=>r.fulfill({contentType:'text/javascript',headers:{'Access-Control-Allow-Origin':'*'},body:`export const createClient=()=>(${syntheticSDK.toString()})();`}));
+      await p.goto(process.env.BG3RO_TEST_URL||'http://127.0.0.1:4173/portal/',{waitUntil:'networkidle'});await p.waitForSelector('html.portal-ready');
+      await p.locator('.topbar [data-auth-open]').click();await p.locator('#auth-email').fill(owner?'owner@example.test':'alice@example.test');await p.locator('#email-form input[type=checkbox]').check();await p.locator('#email-form button').click();
+      await p.locator('#auth-code').fill('123456');await p.locator('#otp-form button').click();await p.waitForSelector('#auth-dialog',{state:'hidden'});
+      await p.locator('#tab-discutii').click();await p.locator('#discussion-name').fill('Jucător de test');await p.locator('#discussion-title').fill('O întrebare');await p.locator('#discussion-body').fill('<img src=x onerror="window.injected=true"> Text de test.');
+      await p.locator('#discussion-form button[type=submit]').click();await p.waitForFunction(()=>document.querySelector('#discussion-form .form-status').textContent.includes('Mesaj'));
+      assert.equal(await p.locator('#discussion-list img').count(),0);assert.equal(await p.evaluate(()=>window.injected),undefined);
+      assert.equal(await p.evaluate(()=>window.__communityTest.comments.length),1);
+      assert.equal(await p.evaluate(()=>window.__communityTest.comments[0].status),owner?'approved':'pending');
+      await p.locator('#tab-erori').click();await p.locator('#report-title').fill('O eroare în traducere');await p.locator('#report-version').fill('Versiune de test');await p.locator('#report-body').fill('Un context de test care descrie suficient de clar eroarea.');
+      await p.evaluate(()=>window.__communityTest.failInsert=true);await p.locator('#report-form button[type=submit]').click();await p.waitForSelector('#report-form .form-status.error');assert.equal(await p.evaluate(()=>window.__communityTest.reports.length),0);
+      assert.equal(await p.locator('#report-title').inputValue(),'O eroare în traducere');
+      await p.evaluate(()=>window.__communityTest.failInsert=false);await p.locator('#report-form button[type=submit]').click();await p.waitForFunction(()=>document.querySelector('#report-form .form-status').textContent.includes('trimis'));
+      assert.equal(await p.locator('.report-item').count(),1);assert.equal(await p.evaluate(()=>window.__communityTest.reports.length),1);
+      if(owner){
+        await p.locator('.report-item select').selectOption('resolved');await p.locator('.report-item textarea').fill('Corectat.');await p.locator('.report-item button[type=submit]').click();await p.waitForFunction(()=>window.__communityTest.reports[0].status==='resolved');
+        await p.locator('#tab-actualizari').click();assert(await p.locator('#admin-tools').isVisible());await p.locator('#admin-tools details summary').nth(1).click();
+        await p.locator('#progress-value').fill('82');await p.locator('#progress-review').fill('Stadiu de test');await p.locator('#progress-testing').fill('Testare de test');await p.locator('#progress-form button').click();await p.waitForFunction(()=>document.querySelector('#progress-form .form-status').textContent.includes('actualizat'));
+        await p.locator('#tab-despre').click();assert.equal(await p.locator('#translation-percent').textContent(),'82%');
+        await p.locator('#tab-actualizari').click();await p.locator('#admin-tools details summary').first().click();await p.locator('#update-title').fill('Actualizare de test');await p.locator('#update-body').fill('O actualizare sintetică pentru testarea interfeței.');await p.locator('#update-form button').click();await p.waitForFunction(()=>document.querySelector('#updates-list').textContent.includes('Actualizare de test'));
+      }else assert.equal(await p.locator('#admin-tools:visible').count(),0);
+      await p.locator('#sign-out').click();await p.waitForSelector('#sign-out',{state:'hidden'});assert.equal(await p.locator('[data-user-form]:visible').count(),0);assert.equal(await p.locator('#my-reports:visible').count(),0);
+      assert.deepEqual(errors,[]);await p.close();
+    }
+    console.log('PASS: synthetic OTP login/logout, posting and failure recovery, plaintext/XSS protection, private-report UI, moderator response and publishing/progress controls. Hosted Supabase and SMTP still require integration testing.');
+  }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1});

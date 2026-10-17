@@ -1,0 +1,77 @@
+// Real PostgreSQL engine (PGlite), with a minimal stand-in for Supabase Auth.
+// This does NOT test hosted Supabase configuration or e-mail delivery.
+const { PGlite } = require('../.qa/db-test/node_modules/@electric-sql/pglite');
+const fs = require('node:fs');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const A = '11111111-1111-1111-1111-111111111111';
+const B = '22222222-2222-2222-2222-222222222222';
+const M = '33333333-3333-3333-3333-333333333333';
+(async () => {
+  const db = new PGlite();
+  try {
+    await db.exec(`create role anon; create role authenticated; create schema auth;
+      create table auth.users(id uuid primary key);
+      create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+      grant usage on schema auth to anon,authenticated;
+      grant execute on function auth.uid() to anon,authenticated;
+      insert into auth.users values('${A}'),('${B}'),('${M}');`);
+    const migrations = path.join(__dirname, '../supabase/migrations');
+    for (const file of fs.readdirSync(migrations).filter(name=>name.endsWith('.sql')).sort()) await db.exec(fs.readFileSync(path.join(migrations,file),'utf8'));
+    await db.query('insert into bg3ro_private.moderators values($1)', [M]);
+    const role = async (id = null) => {
+      await db.exec('reset role');
+      await db.query("select set_config('request.jwt.claim.sub',$1,false)", [id || '']);
+      await db.exec(`set role ${id ? 'authenticated' : 'anon'}`);
+    };
+    const denied = async (sql, args = []) => assert.rejects(db.query(sql, args));
+    const post = (author, title = 'O sugestie de traducere', parent = null) => db.query('insert into public.bg3ro_discussion_posts(author_id,author_name,title,body,parent_id) values($1,$2,$3,$4,$5) returning id,status', [author, 'Jucător', title, 'Un mesaj de test suficient de lung.', parent]);
+    const report = author => db.query("insert into public.bg3ro_bug_reports(author_id,title,body,category,platform,mod_version) values($1,'Acord greșit','Un context de test suficient de lung pentru raport.','gender','windows','test') returning id,status", [author]);
+    await role();
+    assert.equal((await db.query('select * from public.bg3ro_project_status')).rows[0].translation_percent, 80);
+    assert.equal((await db.query('select * from public.bg3ro_discussion_posts')).rows.length, 0);
+    await denied('select * from public.bg3ro_bug_reports');
+    await denied('select * from bg3ro_private.moderators');
+    await denied("update public.bg3ro_project_status set translation_percent=100");
+    await assert.rejects(post(A));
+    await role(A);
+    assert.equal((await db.query('select public.bg3ro_is_moderator() as moderator')).rows[0].moderator, false);
+    await assert.rejects(post(B));
+    const first = (await post(A)).rows[0]; assert.equal(first.status, 'pending');
+    const ownReport = (await report(A)).rows[0]; assert.equal(ownReport.status, 'new');
+    await assert.rejects(post(A), /30 de secunde/);
+    await denied("update public.bg3ro_discussion_posts set author_id=$1 where id=$2", [B,first.id]);
+    assert.equal((await db.query("update public.bg3ro_discussion_posts set status='approved' where id=$1 returning id", [first.id])).rows.length, 0);
+    await denied("insert into public.bg3ro_discussion_posts(author_name,title,body,status) values('Fake','Fake title','Fake message longer','approved')");
+    await role(B);
+    assert.equal((await db.query('select * from public.bg3ro_discussion_posts')).rows.length, 0);
+    assert.equal((await db.query('select * from public.bg3ro_bug_reports')).rows.length, 0);
+    assert.equal((await db.query('delete from public.bg3ro_bug_reports where id=$1 returning id', [ownReport.id])).rows.length, 0);
+    await role(M);
+    assert.equal((await db.query('select public.bg3ro_is_moderator() as moderator')).rows[0].moderator, true);
+    assert.equal((await db.query('select * from public.bg3ro_bug_reports')).rows.length, 1);
+    await db.query("update public.bg3ro_discussion_posts set status='approved' where id=$1", [first.id]);
+    await db.query("update public.bg3ro_bug_reports set status='resolved',moderator_reply='Corectat în test.' where id=$1", [ownReport.id]);
+    await db.query("insert into public.bg3ro_project_updates(title,body) values('Actualizare de test','Un text de test pentru actualizare.')");
+    await db.query('update public.bg3ro_project_status set translation_percent=81 where id=1');
+    await role();
+    assert.equal((await db.query('select * from public.bg3ro_discussion_posts')).rows.length, 1);
+    assert.equal((await db.query('select * from public.bg3ro_project_updates')).rows.length, 1);
+    assert.equal((await db.query('select * from public.bg3ro_project_status')).rows[0].translation_percent, 81);
+    await role(B);
+    const reply = (await post(B, 'Răspuns de test', first.id)).rows[0]; assert.equal(reply.status, 'pending');
+    await role(A);
+    assert.equal((await db.query('select * from public.bg3ro_bug_reports')).rows[0].moderator_reply, 'Corectat în test.');
+    // Deleting a post must not remove the rate limit record.
+    await db.query('delete from public.bg3ro_discussion_posts where id=$1', [first.id]);
+    await assert.rejects(post(A), /30 de secunde/);
+    // Privileged fixture clock manipulation; normal users cannot access this table.
+    await db.exec('reset role');
+    await db.query("update bg3ro_private.submission_limits set last_sent=now()-interval '31 seconds',submissions=20 where user_id=$1 and kind='bg3ro_discussion_posts'", [A]);
+    await role(A); await assert.rejects(post(A), /zilnic/);
+    await role(M);
+    await assert.rejects(db.query('update public.bg3ro_project_status set translation_percent=101'));
+    await role(B); await denied('select * from bg3ro_private.submission_limits');
+    console.log('PASS: migration executes; anonymous/owner/other-user/moderator isolation; private reports; pending moderation; column privileges; rate limits survive deletion; progress bounds.');
+  } finally { await db.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });
